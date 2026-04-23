@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Name -->
+        <TextView
+            android:text="Name der Übung"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <EditText
+            android:id="@+id/edit_name"
+            android:hint="z. B. Bankdrücken"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Sätze -->
+        <TextView
+            android:text="Sätze (von – bis)"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/edit_sets_min"
+            android:inputType="number"
+            android:hint="z. B. 3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/edit_sets_max"
+            android:inputType="number"
+            android:hint="z. B. 5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Wiederholungen -->
+        <TextView
+            android:text="Wiederholungen (von – bis – Schritt)"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/edit_reps_min"
+            android:inputType="number"
+            android:hint="z. B. 6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/edit_reps_max"
+            android:inputType="number"
+            android:hint="z. B. 12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/edit_reps_step"
+            android:inputType="number"
+            android:hint="z. B. 2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Gewichte -->
+        <TextView
+            android:text="Gewichte (von – bis – Schritt)"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/edit_min_weight"
+            android:inputType="numberDecimal"
+            android:hint="z. B. 20"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/edit_max_weight"
+            android:inputType="numberDecimal"
+            android:hint="z. B. 120"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/edit_weight_step"
+            android:inputType="numberDecimal"
+            android:hint="z. B. 2.5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Muskel-Suche -->
+        <TextView
+            android:text="Muskeln suchen"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <EditText
+            android:id="@+id/edit_search"
+            android:hint="z. B. Brust, Rücken..."
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Muskel-Liste -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_muscles"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Buttons -->
+        <Button
+            android:id="@+id/btn_save"
+            android:text="Speichern"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:text="Abbrechen"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+</ScrollView>

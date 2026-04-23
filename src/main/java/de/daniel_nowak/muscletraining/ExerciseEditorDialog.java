@@ -1,0 +1,172 @@
+package de.daniel_nowak.muscletraining;
+
+import android.app.Dialog;
+import android.content.Context;
+import android.os.Bundle;
+import android.widget.*;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import de.daniel_nowak.muscletraining.data.Database;
+import de.daniel_nowak.muscletraining.model.Exercise;
+import de.daniel_nowak.muscletraining.model.Muscle;
+
+public class ExerciseEditorDialog extends Dialog {
+
+    private final Database db;
+    private final Exercise ex;
+    private final Runnable onSaveCallback;
+
+    private EditText editName, editMinW, editMaxW, editStepW;
+    private EditText editSetsMin, editSetsMax;
+    private EditText editRepsMin, editRepsMax, editRepsStep;
+    private EditText editSearch;
+
+    private RecyclerView recycler;
+    private MuscleMultiSelectAdapter adapter;
+
+    private List<Muscle> allMuscles;
+
+    public ExerciseEditorDialog(Context ctx, Database db, Exercise ex, Runnable onSaveCallback) {
+        super(ctx);
+        this.db = db;
+        this.ex = ex;
+        this.onSaveCallback = onSaveCallback;
+    }
+
+    @Override
+    protected void onCreate(Bundle b) {
+        super.onCreate(b);
+        setContentView(R.layout.dialog_exercise_editor);
+
+        getWindow().setLayout(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        editName = findViewById(R.id.edit_name);
+        editMinW = findViewById(R.id.edit_min_weight);
+        editMaxW = findViewById(R.id.edit_max_weight);
+        editStepW = findViewById(R.id.edit_weight_step);
+
+        editSetsMin = findViewById(R.id.edit_sets_min);
+        editSetsMax = findViewById(R.id.edit_sets_max);
+
+        editRepsMin = findViewById(R.id.edit_reps_min);
+        editRepsMax = findViewById(R.id.edit_reps_max);
+        editRepsStep = findViewById(R.id.edit_reps_step);
+
+        editSearch = findViewById(R.id.edit_search);
+
+        recycler = findViewById(R.id.recycler_muscles);
+        recycler.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        allMuscles = new ArrayList<>(db.muscles.muscles.values());
+        Collections.sort(allMuscles, Comparator.comparing(Muscle::getName));
+
+        adapter = new MuscleMultiSelectAdapter(allMuscles, ex.muscleIds);
+        recycler.setAdapter(adapter);
+
+        fillFields();
+
+        editSearch.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterMuscles(s.toString());
+            }
+            @Override public void afterTextChanged(android.text.Editable s) {}
+        });
+
+        Button btnSave = findViewById(R.id.btn_save);
+        btnSave.setOnClickListener(v -> save());
+        Button btnCancel = findViewById(R.id.btn_cancel);
+        btnCancel.setOnClickListener(v -> dismiss());
+
+
+    }
+
+
+    private void fillFields() {
+        editName.setText(ex.getName());
+        editMinW.setText(String.valueOf(ex.getMinWeight()));
+        editMaxW.setText(String.valueOf(ex.getMaxWeight()));
+        editStepW.setText(String.valueOf(ex.getWeightStep()));
+
+        editSetsMin.setText(String.valueOf(ex.getSetsMin()));
+        editSetsMax.setText(String.valueOf(ex.getSetsMax()));
+
+        editRepsMin.setText(String.valueOf(ex.getRepsMin()));
+        editRepsMax.setText(String.valueOf(ex.getRepsMax()));
+        editRepsStep.setText(String.valueOf(ex.getRepsStep()));
+    }
+
+    private void filterMuscles(String query) {
+        List<Muscle> filtered = allMuscles.stream()
+                .filter(m -> m.getName().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+        adapter.updateList(filtered);
+    }
+
+    private void save() {
+        try {
+            String name = editName.getText().toString().trim();
+            if (name.isEmpty()) {
+                Toast.makeText(getContext(), "Name darf nicht leer sein", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            float minW = Float.parseFloat(editMinW.getText().toString());
+            float maxW = Float.parseFloat(editMaxW.getText().toString());
+            float stepW = Float.parseFloat(editStepW.getText().toString());
+
+            int setsMin = Integer.parseInt(editSetsMin.getText().toString());
+            int setsMax = Integer.parseInt(editSetsMax.getText().toString());
+
+            int repsMin = Integer.parseInt(editRepsMin.getText().toString());
+            int repsMax = Integer.parseInt(editRepsMax.getText().toString());
+            int repsStep = Integer.parseInt(editRepsStep.getText().toString());
+
+            if (minW <= 0 || maxW <= 0 || stepW <= 0) {
+                Toast.makeText(getContext(), "Gewichte müssen > 0 sein", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (setsMin <= 0 || setsMax <= 0) {
+                Toast.makeText(getContext(), "Sätze müssen > 0 sein", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (repsMin <= 0 || repsMax <= 0 || repsStep <= 0) {
+                Toast.makeText(getContext(), "Wiederholungen müssen > 0 sein", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            ex.setName(name);
+            ex.setMinWeight(minW);
+            ex.setMaxWeight(maxW);
+            ex.setWeightStep(stepW);
+
+            ex.setSetsMin(setsMin);
+            ex.setSetsMax(setsMax);
+
+            ex.setRepsMin(repsMin);
+            ex.setRepsMax(repsMax);
+            ex.setRepsStep(repsStep);
+
+            ex.muscleIds = adapter.getSelected();
+
+            db.exercises.save();
+
+            onSaveCallback.run();
+            dismiss();
+
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Bitte alle Felder korrekt ausfüllen", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+}
