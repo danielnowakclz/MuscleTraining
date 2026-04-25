@@ -8,14 +8,20 @@ public class Database {
     public final ExerciseDatabase exercises;
     public final TrainingDatabase trainings;
 
+    public final PlanDatabase plan;
+
+
     public Database(Context context) {
         muscles = new MuscleDatabase(context);
         exercises = new ExerciseDatabase(context);
         trainings = new TrainingDatabase(context);
+        plan = new PlanDatabase(context);
 
         muscles.load();
         exercises.load();
         trainings.load();
+        plan.load();
+
     }
 
     public void addDemoData() {

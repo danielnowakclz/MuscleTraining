@@ -38,6 +38,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = new Database(this);
+
+        selectedExercises.clear();
+        selectedExercises.addAll(db.plan.plan);
     }
 
     protected void setupToolbar(int toolbarId) {
@@ -100,6 +103,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         // Training erstellen
         if (id == R.id.menu_create_training) {
             createTrainingPlan();
+            db.plan.setPlan(selectedExercises);
             Toast.makeText(this, "Training erstellt", Toast.LENGTH_SHORT).show();
             return true;
         }
@@ -107,6 +111,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         // Training löschen
         if (id == R.id.menu_delete_training) {
             selectedExercises.clear();
+            db.plan.clear();
             onMenuRefresh();
             Toast.makeText(this, "Training gelöscht", Toast.LENGTH_SHORT).show();
             return true;

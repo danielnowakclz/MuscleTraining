@@ -15,7 +15,6 @@ public class Exercise {
 
     private int setsMin = 3;
     private int setsMax = 5;
-    private int setsStep = 1;   // <-- NEU
 
     private int repsMin = 5;
     private int repsMax = 15;
@@ -49,9 +48,6 @@ public class Exercise {
 
     public int getSetsMax() { return setsMax; }
     public void setSetsMax(int setsMax) { this.setsMax = setsMax; }
-
-    public int getSetsStep() { return setsStep; }   // <-- NEU
-    public void setSetsStep(int setsStep) { this.setsStep = setsStep; }
 
     public int getRepsMin() { return repsMin; }
     public void setRepsMin(int repsMin) { this.repsMin = repsMin; }

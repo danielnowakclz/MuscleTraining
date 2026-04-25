@@ -1,9 +1,5 @@
 package de.daniel_nowak.muscletraining.logic;
 
-import java.util.List;
-
-import de.daniel_nowak.muscletraining.model.Training;
-
 public class OneRmModel {
 
     // -----------------------------

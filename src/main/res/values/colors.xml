@@ -2,4 +2,35 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Sporty & Masculine Palette -->
+    <color name="primary">#D32F2F</color> <!-- Strong Red (Energy) -->
+    <color name="primary_container">#FFDAD4</color>
+    <color name="on_primary">#FFFFFF</color>
+
+    <color name="secondary">#212121</color> <!-- Charcoal (Sleek/Masculine) -->
+    <color name="secondary_container">#E0E0E0</color>
+    <color name="on_secondary">#FFFFFF</color>
+
+    <color name="tertiary">#C6FF00</color> <!-- Volt/Neon Yellow (Motivation/Highlight) -->
+    <color name="tertiary_container">#F4FF81</color>
+    <color name="on_tertiary">#000000</color>
+
+    <color name="background">#FAFAFA</color> <!-- Clean White/Grey -->
+    <color name="surface">#FAFAFA</color>
+
+    <!-- Dark Sporty Palette -->
+    <color name="primary_dark">#FFB4AB</color>
+    <color name="on_primary_dark">#690005</color>
+    <color name="primary_container_dark">#93000A</color>
+
+    <color name="secondary_dark">#C7C7C7</color>
+    <color name="on_secondary_dark">#2D2D2D</color>
+    <color name="secondary_container_dark">#444444</color>
+
+    <color name="tertiary_dark">#E1FF75</color>
+    <color name="on_tertiary_dark">#313300</color>
+    <color name="tertiary_container_dark">#484B00</color>
+
+    <color name="background_dark">#121212</color>
 </resources>

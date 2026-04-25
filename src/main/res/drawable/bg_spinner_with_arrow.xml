@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Hintergrund -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="?attr/colorSecondaryContainer"/>
+            <corners android:radius="12dp"/>
+            <padding
+                android:left="12dp"
+                android:top="8dp"
+                android:right="48dp"
+                android:bottom="8dp"/>
+        </shape>
+    </item>
+
+    <!-- Pfeil rechts -->
+    <item
+        android:gravity="center_vertical|right"
+        android:right="12dp">
+        <inset android:drawable="@drawable/ic_arrow_drop_down"/>
+    </item>
+
+</layer-list>

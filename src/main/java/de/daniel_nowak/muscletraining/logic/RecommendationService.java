@@ -8,27 +8,16 @@ import de.daniel_nowak.muscletraining.model.Training;
 
 public class RecommendationService extends OneRmModel {
 
+    // -----------------------------------------
+    // Recommendation-Datentransferobjekt
+    // -----------------------------------------
     public static class Recommendation {
         public final int sets;
         public final int reps;
         public final float weight;
+        public final float rm;   // RM-Wert für SeekBar
 
-        public Recommendation(int sets, int reps, float weight) {
-            this.sets = sets;
-            this.reps = reps;
-            this.weight = weight;
-        }
-
-    }
-
-
-    private static class Combo {
-        int sets;
-        int reps;
-        float weight;
-        float rm;
-
-        Combo(int sets, int reps, float weight, float rm) {
+        public Recommendation(int sets, int reps, float weight, float rm) {
             this.sets = sets;
             this.reps = reps;
             this.weight = weight;
@@ -36,14 +25,19 @@ public class RecommendationService extends OneRmModel {
         }
     }
 
-    // Sets als Multiplikator für RM
+    // -----------------------------------------
+    // Sets-Faktor (deine bestehende Logik)
+    // -----------------------------------------
     private static float setsFactor(int sets) {
         return 1f + 0.02f * (sets - 1);
     }
 
+    // -----------------------------------------
+    // NÄCHSTE EMPFEHLUNG (unverändert)
+    // -----------------------------------------
     public static Recommendation next(
             List<Training> trainings,
-            int minSets, int maxSets, int stepSets,
+            int minSets, int maxSets,
             int minReps, int maxReps, int stepReps,
             float minWeight, float maxWeight, float stepWeight
     ) {
@@ -56,38 +50,52 @@ public class RecommendationService extends OneRmModel {
                 * setsFactor(last.getSets());
 
         // Alle Kombinationen vorbereiten
-        List<Combo> combos = new ArrayList<>();
-
-        for (int sets = minSets; sets <= maxSets; sets += stepSets) {
-            for (int reps = minReps; reps <= maxReps; reps += stepReps) {
-                for (float weight = minWeight; weight <= maxWeight; weight += stepWeight) {
-
-                    float rm = estimateAverage1RM(weight, reps)
-                            * setsFactor(sets);
-
-                    combos.add(new Combo(sets, reps, weight, rm));
-                }
-            }
-        }
-
-        // Sortieren:
-        // 1. RM aufsteigend
-        // 2. bei gleichem RM → Gewicht aufsteigend
-        combos.sort(Comparator
-                .comparingDouble((Combo c1) -> c1.rm)
-                .thenComparingDouble(c1 -> c1.weight)
+        List<Recommendation> combos = allCombos(
+                minSets, maxSets,
+                minReps, maxReps, stepReps,
+                minWeight, maxWeight, stepWeight
         );
 
         // Nächst höheren RM finden
-        for (Combo c1 : combos) {
-            if (c1.rm > lastRM) {
-                return new Recommendation(c1.sets, c1.reps, c1.weight);
+        for (Recommendation c : combos) {
+            if (c.rm > lastRM) {
+                return c;
             }
         }
 
         // Falls nichts höheres existiert → minimal mögliche Steigerung
         float nextWeight = last.getWeight() + stepWeight;
-        return new Recommendation(last.getSets(), last.getReps(), nextWeight);
+        return new Recommendation(last.getSets(), last.getReps(), nextWeight,
+                estimateAverage1RM(nextWeight, last.getReps()) * setsFactor(last.getSets()));
     }
 
+    // -----------------------------------------
+    // ALLE RM-KOMBINATIONEN (für SeekBar)
+    // -----------------------------------------
+    public static List<Recommendation> allCombos(
+            int minSets, int maxSets,
+            int minReps, int maxReps, int stepReps,
+            float minWeight, float maxWeight, float stepWeight
+    ) {
+        List<Recommendation> list = new ArrayList<>();
+
+        for (int sets = minSets; sets <= maxSets; sets++) {
+            for (int reps = minReps; reps <= maxReps; reps += stepReps) {
+                for (float weight = minWeight; weight <= maxWeight; weight += stepWeight) {
+
+                    float rm = estimateAverage1RM(weight, reps) * setsFactor(sets);
+
+                    list.add(new Recommendation(sets, reps, weight, rm));
+                }
+            }
+        }
+
+        // Sortieren nach RM, dann Gewicht
+        list.sort(Comparator
+                .comparingDouble((Recommendation r) -> r.rm)
+                .thenComparingDouble(r -> r.weight)
+        );
+
+        return list;
+    }
 }
