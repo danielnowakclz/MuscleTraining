@@ -100,6 +100,12 @@ public abstract class BaseActivity extends AppCompatActivity {
             return true;
         }
 
+        // Muskeln
+        if (id == R.id.menu_muscles) {
+            navigateTo(MuscleActivity.class);
+            return true;
+        }
+
         // Training erstellen
         if (id == R.id.menu_create_training) {
             createTrainingPlan();

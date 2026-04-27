@@ -1,21 +1,25 @@
 package de.daniel_nowak.muscletraining;
 
 import android.os.Bundle;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 
-import de.daniel_nowak.muscletraining.data.Database;
 import de.daniel_nowak.muscletraining.model.Exercise;
 
 public class ExerciseActivity extends BaseActivity {
 
     private ListView listView;
-    private Button btnAdd, btnDelete, btnEdit;
+    private Button btnAdd;
 
     private ArrayAdapter<Exercise> adapter;
     private List<Exercise> exerciseList = new ArrayList<>();
-    private Exercise selected = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,34 +31,19 @@ public class ExerciseActivity extends BaseActivity {
 
         listView = findViewById(R.id.list_exercises);
         btnAdd = findViewById(R.id.btn_add);
-        btnDelete = findViewById(R.id.btn_delete);
-        btnEdit = findViewById(R.id.btn_edit);
 
         loadExercises();
 
-        listView.setOnItemClickListener((parent, view, position, id) ->
-                selected = exerciseList.get(position));
-
-        listView.setOnItemLongClickListener((parent, view, position, id) -> {
-            openEditor(exerciseList.get(position));
-            return true;
-        });
-
-        btnAdd.setOnClickListener(v -> {
-            Exercise ex = db.exercises.add(UUID.randomUUID().toString(), "Neue Übung");
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Exercise ex = exerciseList.get(position);
             openEditor(ex);
         });
 
-        btnEdit.setOnClickListener(v -> {
-            if (selected != null) openEditor(selected);
-        });
-
-        btnDelete.setOnClickListener(v -> {
-            if (selected != null) {
-                db.exercises.delete(selected.getId());
-                loadExercises();
-                selected = null;
-            }
+        btnAdd.setOnClickListener(v -> {
+            String id = UUID.randomUUID().toString();
+            db.exercises.add(id, "Neue Übung");
+            Exercise ex = db.exercises.exercises.get(id);
+            openEditor(ex);
         });
     }
 
@@ -75,4 +64,3 @@ public class ExerciseActivity extends BaseActivity {
         loadExercises();
     }
 }
-

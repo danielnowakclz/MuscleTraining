@@ -10,6 +10,10 @@
         android:id="@+id/menu_exercises"
         android:title="Übungen" />
 
+    <item
+        android:id="@+id/menu_muscles"
+        android:title="Muskeln" />
+
     <!-- Divider -->
     <item
         android:id="@+id/divider_1"

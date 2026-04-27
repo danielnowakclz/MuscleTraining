@@ -86,6 +86,12 @@ public class ExerciseEditorDialog extends Dialog {
         Button btnCancel = findViewById(R.id.btn_cancel);
         btnCancel.setOnClickListener(v -> dismiss());
 
+        Button btnDelete = findViewById(R.id.btn_delete);
+        btnDelete.setOnClickListener(v -> {
+            db.delExercise(ex.getId());
+            onSaveCallback.run();
+            dismiss();
+        });
 
     }
 
@@ -157,9 +163,9 @@ public class ExerciseEditorDialog extends Dialog {
             ex.setRepsMax(repsMax);
             ex.setRepsStep(repsStep);
 
-            ex.muscleIds = adapter.getSelected();
-
-            db.exercises.save();
+            ex.muscleIds.clear();
+            ex.muscleIds.addAll(adapter.getSelected());
+            db.syncExercise(ex);
 
             onSaveCallback.run();
             dismiss();

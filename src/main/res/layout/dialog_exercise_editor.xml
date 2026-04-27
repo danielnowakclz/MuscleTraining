@@ -10,109 +10,191 @@
         android:layout_height="wrap_content">
 
         <!-- Name -->
-        <TextView
-            android:text="Name der Übung"
-            android:textStyle="bold"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <EditText
-            android:id="@+id/edit_name"
-            android:hint="z. B. Bankdrücken"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:text="Name der Übung"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:id="@+id/edit_name"
+                android:hint="z. B. Bankdrücken"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:background="@drawable/edittext_rounded"
+                android:textSize="16sp"
+                android:layout_marginTop="6dp"/>
+        </LinearLayout>
 
         <!-- Sätze -->
-        <TextView
-            android:text="Sätze (von – bis)"
-            android:textStyle="bold"
-            android:layout_marginTop="12dp"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
 
-        <EditText
-            android:id="@+id/edit_sets_min"
-            android:inputType="number"
-            android:hint="z. B. 3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <TextView
+                android:text="Sätze (von – bis)"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <EditText
-            android:id="@+id/edit_sets_max"
-            android:inputType="number"
-            android:hint="z. B. 5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <EditText
+                android:id="@+id/edit_sets_min"
+                android:hint="Minimale Sätze"
+                android:inputType="number"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:background="@drawable/edittext_rounded"
+                android:textSize="16sp"
+                android:layout_marginTop="6dp"/>
+
+            <EditText
+                android:id="@+id/edit_sets_max"
+                android:hint="Maximale Sätze"
+                android:inputType="number"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:background="@drawable/edittext_rounded"
+                android:textSize="16sp"
+                android:layout_marginTop="6dp"/>
+        </LinearLayout>
+
 
         <!-- Wiederholungen -->
-        <TextView
-            android:text="Wiederholungen (von – bis – Schritt)"
-            android:textStyle="bold"
-            android:layout_marginTop="12dp"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
 
-        <EditText
-            android:id="@+id/edit_reps_min"
-            android:inputType="number"
-            android:hint="z. B. 6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <TextView
+                android:text="Wiederholungen (von – bis – Schritt)"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <EditText
-            android:id="@+id/edit_reps_max"
-            android:inputType="number"
-            android:hint="z. B. 12"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <EditText
+                android:id="@+id/edit_reps_min"
+                android:hint="Minimale Wiederholungen"
+                android:inputType="number"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:background="@drawable/edittext_rounded"
+                android:textSize="16sp"
+                android:layout_marginTop="6dp"/>
 
-        <EditText
-            android:id="@+id/edit_reps_step"
-            android:inputType="number"
-            android:hint="z. B. 2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <EditText
+                android:id="@+id/edit_reps_max"
+                android:hint="Maximale Wiederholungen"
+                android:inputType="number"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:background="@drawable/edittext_rounded"
+                android:textSize="16sp"
+                android:layout_marginTop="6dp"/>
+
+            <EditText
+                android:id="@+id/edit_reps_step"
+                android:hint="Schrittweite"
+                android:inputType="number"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:background="@drawable/edittext_rounded"
+                android:textSize="16sp"
+                android:layout_marginTop="6dp"/>
+        </LinearLayout>
+
 
         <!-- Gewichte -->
-        <TextView
-            android:text="Gewichte (von – bis – Schritt)"
-            android:textStyle="bold"
-            android:layout_marginTop="12dp"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
 
-        <EditText
-            android:id="@+id/edit_min_weight"
-            android:inputType="numberDecimal"
-            android:hint="z. B. 20"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <TextView
+                android:text="Gewichte (von – bis – Schritt)"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <EditText
-            android:id="@+id/edit_max_weight"
-            android:inputType="numberDecimal"
-            android:hint="z. B. 120"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <EditText
+                android:id="@+id/edit_min_weight"
+                android:hint="Minimales Gewicht"
+                android:inputType="numberDecimal"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:background="@drawable/edittext_rounded"
+                android:textSize="16sp"
+                android:layout_marginTop="6dp"/>
 
-        <EditText
-            android:id="@+id/edit_weight_step"
-            android:inputType="numberDecimal"
-            android:hint="z. B. 2.5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <EditText
+                android:id="@+id/edit_max_weight"
+                android:hint="Maximales Gewicht"
+                android:inputType="numberDecimal"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:background="@drawable/edittext_rounded"
+                android:textSize="16sp"
+                android:layout_marginTop="6dp"/>
+
+            <EditText
+                android:id="@+id/edit_weight_step"
+                android:hint="Schrittweite"
+                android:inputType="numberDecimal"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:background="@drawable/edittext_rounded"
+                android:textSize="16sp"
+                android:layout_marginTop="6dp"/>
+        </LinearLayout>
+
 
         <!-- Muskel-Suche -->
-        <TextView
-            android:text="Muskeln suchen"
-            android:textStyle="bold"
-            android:layout_marginTop="12dp"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <EditText
-            android:id="@+id/edit_search"
-            android:hint="z. B. Brust, Rücken..."
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:text="Muskeln suchen"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:id="@+id/edit_search"
+                android:hint="z. B. Brust, Rücken..."
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:background="@drawable/edittext_rounded"
+                android:textSize="16sp"
+                android:layout_marginTop="6dp"/>
+        </LinearLayout>
+
 
         <!-- Muskel-Liste -->
         <androidx.recyclerview.widget.RecyclerView
@@ -121,20 +203,49 @@
             android:layout_height="300dp"
             android:layout_marginTop="8dp"/>
 
-        <!-- Buttons -->
-        <Button
-            android:id="@+id/btn_save"
-            android:text="Speichern"
-            android:layout_marginTop="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+        <!-- ===================== -->
+        <!-- BUTTONS (Option A) -->
+        <!-- ===================== -->
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp">
+
+            <!-- Löschen (rot, links) -->
+            <Button
+                android:id="@+id/btn_delete"
+                android:text="Löschen"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                style="@style/PlusMinusButton.Rounded.Danger" />
+
+            <Space
+                android:layout_width="16dp"
+                android:layout_height="wrap_content" />
+
+            <!-- Speichern (Material3‑Style) -->
+            <Button
+                android:id="@+id/btn_save"
+                android:text="Speichern"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                style="@style/PlusMinusButton.Rounded" />
+        </LinearLayout>
+
+        <!-- Abbrechen (volle Breite) -->
         <Button
             android:id="@+id/btn_cancel"
             android:text="Abbrechen"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="48dp"
+            style="@style/PlusMinusButton.Rounded.Secondary" />
+
+
 
     </LinearLayout>
 </ScrollView>

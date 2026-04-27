@@ -18,6 +18,53 @@ public class ExerciseDatabase {
         file = new File(context.getFilesDir(), FILE_NAME);
     }
 
+    // ---------------------------------------------------------
+    // ESCAPING
+    // ---------------------------------------------------------
+
+    private String esc(String s) {
+        if (s == null) return "";
+        return s.replace("\\", "\\\\").replace(";", "\\;");
+    }
+
+    private String unesc(String s) {
+        if (s == null) return "";
+        return s.replace("\\;", ";").replace("\\\\", "\\");
+    }
+
+    // ---------------------------------------------------------
+    // ROBUSTER CSV-PARSER
+    // ---------------------------------------------------------
+
+    private List<String> parseLine(String line) {
+        List<String> out = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        boolean escMode = false;
+
+        for (int i = 0; i < line.length(); i++) {
+            char c = line.charAt(i);
+
+            if (escMode) {
+                sb.append(c);
+                escMode = false;
+            } else if (c == '\\') {
+                escMode = true;
+            } else if (c == ';') {
+                out.add(sb.toString());
+                sb.setLength(0);
+            } else {
+                sb.append(c);
+            }
+        }
+
+        out.add(sb.toString());
+        return out;
+    }
+
+    // ---------------------------------------------------------
+    // LOAD
+    // ---------------------------------------------------------
+
     public void load() {
         exercises.clear();
 
@@ -27,57 +74,72 @@ public class ExerciseDatabase {
             String line;
 
             while ((line = br.readLine()) != null) {
-                String[] p = line.split(";", 11);
 
-                Exercise ex = new Exercise(p[0], p[1]);
+                List<String> p = parseLine(line);
 
-                ex.setMinWeight(Float.parseFloat(p[2]));
-                ex.setMaxWeight(Float.parseFloat(p[3]));
-                ex.setWeightStep(Float.parseFloat(p[4]));
+                if (p.size() >= 10) {
 
-                ex.setSetsMin(Integer.parseInt(p[5]));
-                ex.setSetsMax(Integer.parseInt(p[6]));
+                    Exercise ex = new Exercise(p.get(0), unesc(p.get(1)));
 
-                ex.setRepsMin(Integer.parseInt(p[7]));
-                ex.setRepsMax(Integer.parseInt(p[8]));
-                ex.setRepsStep(Integer.parseInt(p[9]));
+                    ex.setMinWeight(Float.parseFloat(p.get(2)));
+                    ex.setMaxWeight(Float.parseFloat(p.get(3)));
+                    ex.setWeightStep(Float.parseFloat(p.get(4)));
 
-                if (p.length == 11 && !p[10].isEmpty()) {
-                    ex.muscleIds = new ArrayList<>(Arrays.asList(p[10].split(",")));
+                    ex.setSetsMin(Integer.parseInt(p.get(5)));
+                    ex.setSetsMax(Integer.parseInt(p.get(6)));
+
+                    ex.setRepsMin(Integer.parseInt(p.get(7)));
+                    ex.setRepsMax(Integer.parseInt(p.get(8)));
+                    ex.setRepsStep(Integer.parseInt(p.get(9)));
+
+                    if (p.size() >= 11 && !p.get(10).isEmpty()) {
+                        ex.muscleIds = new ArrayList<>(Arrays.asList(p.get(10).split(",")));
+                    }
+
+                    exercises.put(ex.getId(), ex);
                 }
-
-                exercises.put(ex.getId(), ex);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    // ---------------------------------------------------------
+    // SAVE
+    // ---------------------------------------------------------
 
     public void save() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+
             for (Exercise ex : exercises.values()) {
-                bw.write(ex.getId() + ";" +
-                        ex.getName() + ";" +
-                        ex.getMinWeight() + ";" +
-                        ex.getMaxWeight() + ";" +
-                        ex.getWeightStep() + ";" +
-                        ex.getSetsMin() + ";" +
-                        ex.getSetsMax() + ";" +
-                        ex.getRepsMin() + ";" +
-                        ex.getRepsMax() + ";" +
-                        ex.getRepsStep() + ";");
 
-                if (!ex.muscleIds.isEmpty()) {
-                    bw.write(String.join(",", ex.muscleIds));
-                }
+                String muscleList = String.join(",", ex.muscleIds);
 
-                bw.write("\n");
+                bw.write(
+                        ex.getId() + ";" +
+                                esc(ex.getName()) + ";" +
+                                ex.getMinWeight() + ";" +
+                                ex.getMaxWeight() + ";" +
+                                ex.getWeightStep() + ";" +
+                                ex.getSetsMin() + ";" +
+                                ex.getSetsMax() + ";" +
+                                ex.getRepsMin() + ";" +
+                                ex.getRepsMax() + ";" +
+                                ex.getRepsStep() + ";" +
+                                muscleList +
+                                "\n"
+                );
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    // ---------------------------------------------------------
+    // ADD
+    // ---------------------------------------------------------
 
     public Exercise add(String id, String name) {
         Exercise ex = new Exercise(id, name);
@@ -86,15 +148,12 @@ public class ExerciseDatabase {
         return ex;
     }
 
-    public void delete(String id) {
-        exercises.remove(id);
-        save();
-    }
-
+    // ---------------------------------------------------------
+    // DEMO-DATEN
+    // ---------------------------------------------------------
 
     public void addDemoData() {
 
-        // --- Kurzhanteln (5–32.5 kg, 2.5 kg Schritte) ---
         addExercise("kh_bank", "KH Bankdrücken",
                 5f, 32.5f, 2.5f,
                 2, 5,
@@ -143,7 +202,6 @@ public class ExerciseDatabase {
                 8, 40, 2,
                 "core");
 
-        // --- Kettlebell (2–18 kg, 2 kg Schritte) ---
         addExercise("kb_swing", "KB Swing",
                 2f, 18f, 2f,
                 2, 5,
@@ -200,5 +258,4 @@ public class ExerciseDatabase {
 
         exercises.put(id, ex);
     }
-
 }
