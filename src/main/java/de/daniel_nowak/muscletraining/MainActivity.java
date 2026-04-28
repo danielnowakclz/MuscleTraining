@@ -114,6 +114,42 @@ public class MainActivity extends BaseActivity {
         btnSave.setOnClickListener(v -> saveTraining());
     }
 
+    private void resetUI() {
+
+        // Texte
+        txtLast.setText("Letztes Training: –");
+        txtRec.setText("Empfehlung: –");
+        txtIntensity.setText("Intensität: –");
+
+        // Eingabefelder leeren
+        inputSets.setText("");
+        inputReps.setText("");
+        inputWeight.setText("");
+
+        // Hints zurücksetzen
+        hintSets.setText("Min – Max");
+        hintReps.setText("Min – Max – Schritt");
+        hintWeight.setText("Min – Max – Schritt");
+
+        // Buttons deaktivieren
+        btnSave.setEnabled(false);
+
+        findViewById(R.id.btn_sets_minus).setEnabled(false);
+        findViewById(R.id.btn_sets_plus).setEnabled(false);
+        findViewById(R.id.btn_reps_minus).setEnabled(false);
+        findViewById(R.id.btn_reps_plus).setEnabled(false);
+        findViewById(R.id.btn_weight_minus).setEnabled(false);
+        findViewById(R.id.btn_weight_plus).setEnabled(false);
+
+        // SeekBar neutralisieren
+        seekRM.setEnabled(false);
+        seekRM.setProgress(0);
+
+        // Optional: SeekBar optisch zurücksetzen
+        txtIntensity.setText("Intensität: –");
+    }
+
+
     private void adjustInt(EditText field, int step, int min, int max, boolean increase) {
         try {
             int value = Integer.parseInt(field.getText().toString());
@@ -151,8 +187,27 @@ public class MainActivity extends BaseActivity {
     }
 
     private void updateUI() {
+
         Exercise ex = (Exercise) spinner.getSelectedItem();
-        if (ex == null) return;
+
+        // ---------------------------------------------
+        // FALL: Keine Übung ausgewählt → UI zurücksetzen
+        // ---------------------------------------------
+        if (ex == null) {
+            resetUI();
+            return;
+        }
+
+        // Wenn eine Übung existiert → Buttons aktivieren
+        btnSave.setEnabled(true);
+        findViewById(R.id.btn_sets_minus).setEnabled(true);
+        findViewById(R.id.btn_sets_plus).setEnabled(true);
+        findViewById(R.id.btn_reps_minus).setEnabled(true);
+        findViewById(R.id.btn_reps_plus).setEnabled(true);
+        findViewById(R.id.btn_weight_minus).setEnabled(true);
+        findViewById(R.id.btn_weight_plus).setEnabled(true);
+        seekRM.setEnabled(true);
+
 
         hintSets.setText("Min: " + ex.getSetsMin() + " – Max: " + ex.getSetsMax());
         hintReps.setText("Min: " + ex.getRepsMin() + " – Max: " + ex.getRepsMax() +
@@ -254,7 +309,7 @@ public class MainActivity extends BaseActivity {
         int reps = Integer.parseInt(inputReps.getText().toString());
         float weight = Float.parseFloat(inputWeight.getText().toString());
 
-        db.trainings.add(ex.getId(), sets, reps, weight);
+        db.trainings.add(ex, sets, reps, weight);
 
         updateUI();
 

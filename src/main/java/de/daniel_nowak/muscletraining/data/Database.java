@@ -77,13 +77,7 @@ public class Database {
             m.exerciseIds.remove(id);
         }
 
-        Iterator<Map.Entry<String, Training>> it = trainings.trainings.entrySet().iterator();
-        while (it.hasNext()) {
-            Training t = it.next().getValue();
-            if (t.getExerciseId().equals(id)) {
-                it.remove();
-            }
-        }
+        trainings.markExerciseDeleted(id);
 
         exercises.save();
         muscles.save();
@@ -102,9 +96,13 @@ public class Database {
             ex.muscleIds.remove(id);
         }
 
+        trainings.markMuscleDeleted(id);
+
         muscles.save();
         exercises.save();
+        trainings.save();
     }
+
 
     // ---------------------------------------------------------
     // SYNC EXERCISE

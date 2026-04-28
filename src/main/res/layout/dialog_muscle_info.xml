@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- MUSKELNAME -->
+        <TextView
+            android:id="@+id/txt_muscle_name"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- LETZTES TRAINING -->
+        <TextView
+            android:text="Zuletzt trainiert:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txt_last_trained"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- TRAININGS LETZTE 7 TAGE -->
+        <TextView
+            android:text="Trainings letzte 7 Tage:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txt_week_count"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- WARNUNG -->
+        <TextView
+            android:text="Hinweis:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txt_warning"
+            android:textColor="#FF5722"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- INTENSITÄT -->
+        <TextView
+            android:text="Belastung:"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ListView
+            android:id="@+id/list_intensity"
+            android:layout_width="match_parent"
+            android:layout_height="150dp" />
+
+        <!-- VOLUMENVERLAUF (GRAFISCH) -->
+        <TextView
+            android:text="Volumenverlauf:"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- EIGENER SCROLLBEREICH FÜR DEN VOLUMENVERLAUF -->
+        <ScrollView
+            android:id="@+id/scroll_volume"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:id="@+id/container_volume"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </ScrollView>
+
+        <!-- TRAININGSVERLAUF -->
+        <TextView
+            android:text="Trainingsverlauf:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ListView
+            android:id="@+id/list_trainings"
+            android:layout_width="match_parent"
+            android:layout_height="150dp" />
+
+        <!-- OK BUTTON -->
+        <Button
+            android:id="@+id/btn_ok"
+            android:text="OK"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</ScrollView>

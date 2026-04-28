@@ -39,6 +39,12 @@ public class MuscleActivity extends BaseActivity {
             openEditor(m);
         });
 
+        listView.setOnItemLongClickListener((parent, view, position, id) -> {
+            Muscle m = muscleList.get(position);
+            new MuscleInfoDialog(this, db, m).show();
+            return true;
+        });
+
         btnAdd.setOnClickListener(v -> {
             String id = UUID.randomUUID().toString();
             db.muscles.add(id, "Neuer Muskel");
