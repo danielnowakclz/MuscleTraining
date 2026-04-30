@@ -6,10 +6,10 @@ import java.util.List;
 public class Training {
 
     private final String id;
-    private long time;
-    private int sets;
-    private int reps;
-    private float weight;
+    private final long time;
+    private final int sets;
+    private final int reps;
+    private final float weight;
 
     private String exerciseId;
 

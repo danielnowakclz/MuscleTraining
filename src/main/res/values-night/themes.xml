@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.MuscleTraining" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
+
+    <style name="Base.Theme.MuscleTraining" parent="Theme.Material3.Dark.NoActionBar">
+
         <item name="colorPrimary">@color/primary_dark</item>
         <item name="colorOnPrimary">@color/on_primary_dark</item>
         <item name="colorPrimaryContainer">@color/primary_container_dark</item>
@@ -16,7 +16,15 @@
 
         <item name="colorSurface">@color/background_dark</item>
         <item name="colorOnSurface">@color/white</item>
+
         <item name="android:windowBackground">@color/background_dark</item>
-        <item name="android:statusBarColor">@color/background_dark</item>
+
+        <!-- Statusbar modern -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+
     </style>
+
+    <style name="Theme.MuscleTraining" parent="Base.Theme.MuscleTraining" />
+
 </resources>

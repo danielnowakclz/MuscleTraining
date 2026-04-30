@@ -45,10 +45,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void setupToolbar(int toolbarId) {
         toolbar = findViewById(toolbarId);
-        setSupportActionBar(toolbar);
-
-        toolbar.setTitleTextColor(0xFF000000);
-        toolbar.setSubtitleTextColor(0xFF000000);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            toolbar.setTitleTextColor(0xFF000000);
+            toolbar.setSubtitleTextColor(0xFF000000);
+        }
     }
 
     protected void applyEdgeToEdge() {
@@ -180,10 +181,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         new File(dir, "muscles.db").delete();
         new File(dir, "exercises.db").delete();
         new File(dir, "trainings.db").delete();
+        new File(dir, "plan.db").delete();
 
         db.muscles.load();
         db.exercises.load();
         db.trainings.load();
+        db.plan.load();
 
         onMenuRefresh();
         Toast.makeText(this, "Alle Daten gelöscht", Toast.LENGTH_SHORT).show();

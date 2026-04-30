@@ -1,47 +1,55 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Navigation -->
+    <!-- Ansicht -->
     <item
-        android:id="@+id/menu_training"
-        android:title="Training" />
+        android:id="@+id/menu_group_view"
+        android:title="Ansicht">
+        <menu>
+            <item
+                android:id="@+id/menu_training"
+                android:title="Training"
+                android:icon="@drawable/ic_training" />
+            <item
+                android:id="@+id/menu_exercises"
+                android:title="Übungen"
+                android:icon="@drawable/ic_exercises" />
+            <item
+                android:id="@+id/menu_muscles"
+                android:title="Muskeln"
+                android:icon="@drawable/ic_muscles" />
+        </menu>
+    </item>
 
+    <!-- Training -->
     <item
-        android:id="@+id/menu_exercises"
-        android:title="Übungen" />
+        android:id="@+id/menu_group_training"
+        android:title="Training">
+        <menu>
+            <item
+                android:id="@+id/menu_create_training"
+                android:title="Training erstellen"
+                android:icon="@drawable/ic_add" />
+            <item
+                android:id="@+id/menu_delete_training"
+                android:title="Training löschen"
+                android:icon="@drawable/ic_delete" />
+        </menu>
+    </item>
 
+    <!-- Daten -->
     <item
-        android:id="@+id/menu_muscles"
-        android:title="Muskeln" />
-
-    <!-- Divider -->
-    <item
-        android:id="@+id/divider_1"
-        android:title="--"
-        android:enabled="false" />
-
-    <!-- Trainingsverwaltung -->
-    <item
-        android:id="@+id/menu_create_training"
-        android:title="Training erstellen" />
-
-    <item
-        android:id="@+id/menu_delete_training"
-        android:title="Training löschen" />
-
-    <!-- Divider -->
-    <item
-        android:id="@+id/divider_2"
-        android:title="--"
-        android:enabled="false" />
-
-    <!-- Aktionen -->
-    <item
-        android:id="@+id/menu_add_demo"
-        android:title="Demo-Daten hinzufügen" />
-
-    <item
-        android:id="@+id/menu_delete_all"
-        android:title="Alle Daten löschen" />
+        android:id="@+id/menu_group_data"
+        android:title="Daten">
+        <menu>
+            <item
+                android:id="@+id/menu_add_demo"
+                android:title="Demo-Daten hinzufügen"
+                android:icon="@drawable/ic_demo" />
+            <item
+                android:id="@+id/menu_delete_all"
+                android:title="Alle Daten löschen"
+                android:icon="@drawable/ic_delete_all" />
+        </menu>
+    </item>
 
 </menu>

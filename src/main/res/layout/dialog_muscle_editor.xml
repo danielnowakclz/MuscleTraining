@@ -36,6 +36,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
+        <EditText
+            android:id="@+id/edit_search_ex"
+            android:hint="Übungen suchen..."
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:background="@drawable/edittext_rounded"
+            android:textSize="16sp"
+            android:layout_marginTop="6dp"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_exercises"
             android:layout_width="match_parent"

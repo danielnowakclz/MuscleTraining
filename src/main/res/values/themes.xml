@@ -1,24 +1,35 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.MuscleTraining" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
+
+    <style name="Base.Theme.MuscleTraining" parent="Theme.Material3.Light.NoActionBar">
+
+        <!-- Primärfarben -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorOnPrimary">@color/on_primary</item>
         <item name="colorPrimaryContainer">@color/primary_container</item>
 
+        <!-- Sekundärfarben -->
         <item name="colorSecondary">@color/secondary</item>
         <item name="colorOnSecondary">@color/on_secondary</item>
         <item name="colorSecondaryContainer">@color/secondary_container</item>
 
+        <!-- Tertiärfarben -->
         <item name="colorTertiary">@color/tertiary</item>
         <item name="colorOnTertiary">@color/on_tertiary</item>
         <item name="colorTertiaryContainer">@color/tertiary_container</item>
 
+        <!-- Oberfläche -->
         <item name="colorSurface">@color/surface</item>
         <item name="colorOnSurface">@color/black</item>
+
+        <!-- Hintergrund -->
         <item name="android:windowBackground">@color/background</item>
-        <item name="android:statusBarColor">@color/primary</item>
+
+        <!-- Statusbar modern -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+
     </style>
 
     <style name="Theme.MuscleTraining" parent="Base.Theme.MuscleTraining" />
+
 </resources>

@@ -5,16 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_muscles"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Light"
+    <!-- Gemeinsame Toolbar -->
+    <include
+        android:id="@+id/include_toolbar"
+        layout="@layout/toolbar_common"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Muskelliste -->
     <ListView
         android:id="@+id/list_muscles"
         android:layout_width="0dp"
@@ -22,12 +21,12 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:dividerHeight="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_muscles"
+        app:layout_constraintTop_toBottomOf="@id/include_toolbar"
         app:layout_constraintBottom_toTopOf="@id/btn_add"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Neuer Muskel -->
     <Button
         android:id="@+id/btn_add"
         style="@style/PlusMinusButton.Rounded"
@@ -37,6 +36,6 @@
         android:layout_margin="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

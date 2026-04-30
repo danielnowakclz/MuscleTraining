@@ -26,9 +26,10 @@ public class MuscleEditorDialog extends Dialog {
     private final Runnable onSaveCallback;
 
     private EditText editName;
+    private EditText editSearchEx;
     private RecyclerView recycler;
-    private MuscleExerciseSelectAdapter adapter;
 
+    private MuscleExerciseSelectAdapter adapter;
     private List<Exercise> allExercises;
 
     public MuscleEditorDialog(Context ctx, Database db, Muscle muscle, Runnable onSaveCallback) {
@@ -49,17 +50,22 @@ public class MuscleEditorDialog extends Dialog {
         );
 
         editName = findViewById(R.id.edit_name);
+        editSearchEx = findViewById(R.id.edit_search_ex);
         recycler = findViewById(R.id.recycler_exercises);
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        // --- Übungen laden & sortieren ---
         allExercises = new ArrayList<>(db.exercises.exercises.values());
         Collections.sort(allExercises, Comparator.comparing(Exercise::getName));
 
+        // --- Adapter initialisieren ---
         adapter = new MuscleExerciseSelectAdapter(allExercises, muscle.exerciseIds);
         recycler.setAdapter(adapter);
 
+        // --- Name setzen ---
         editName.setText(muscle.getName());
 
+        // --- Buttons ---
         Button btnSave = findViewById(R.id.btn_save);
         btnSave.setOnClickListener(v -> save());
 
@@ -71,6 +77,15 @@ public class MuscleEditorDialog extends Dialog {
             db.delMuscle(muscle.getId());
             onSaveCallback.run();
             dismiss();
+        });
+
+        // --- Suchfeld ---
+        editSearchEx.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.filter(s.toString());   // <-- KORREKT
+            }
+            @Override public void afterTextChanged(android.text.Editable s) {}
         });
     }
 

@@ -11,23 +11,23 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
         android:paddingBottom="32dp">
 
+        <!-- Gemeinsame Toolbar -->
+        <include
+            android:id="@+id/include_toolbar"
+            layout="@layout/toolbar_common" />
+
+        <!-- MaxWidth-Container -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxWidth="600dp"
             android:orientation="vertical"
-            android:maxWidth="600dp">
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
-                android:theme="@style/ThemeOverlay.AppCompat.Light" />
-
+            <!-- Spinner -->
             <Spinner
                 android:id="@+id/spinner_exercise"
                 style="@style/TrainingSpinner"
@@ -35,6 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"/>
 
+            <!-- Letztes Training -->
             <TextView
                 android:id="@+id/txt_last_training"
                 android:layout_width="match_parent"
@@ -43,6 +44,7 @@
                 android:textSize="16sp"
                 android:layout_marginTop="16dp"/>
 
+            <!-- Empfehlung -->
             <TextView
                 android:id="@+id/txt_recommendation"
                 android:layout_width="match_parent"
@@ -50,6 +52,26 @@
                 android:text="Empfehlung: –"
                 android:textSize="16sp"
                 android:layout_marginTop="8dp"/>
+
+            <!-- Muskelwarnung -->
+            <TextView
+                android:id="@+id/txt_muscle_warning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="–"
+                android:textSize="15sp"
+                android:textColor="#777"
+                android:layout_marginTop="8dp"/>
+
+            <!-- Regeneration -->
+            <TextView
+                android:id="@+id/txt_regen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Regeneration: –"
+                android:textSize="15sp"
+                android:textColor="#777"
+                android:layout_marginTop="4dp"/>
 
             <!-- RM SeekBar -->
             <SeekBar

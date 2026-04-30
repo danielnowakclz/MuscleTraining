@@ -76,13 +76,34 @@ public class MuscleInfoDialog extends Dialog {
                 .count();
         txtWeekCount.setText(String.valueOf(weekCount));
 
-        // Übertrainings-Warnung (24h)
-        long dayAgo = System.currentTimeMillis() - 24L * 60 * 60 * 1000;
-        if (!trainings.isEmpty() && trainings.get(0).getTime() >= dayAgo) {
-            txtWarning.setText("⚠️ Dieser Muskel wurde innerhalb der letzten 24h trainiert.");
-        } else {
+        // ---------------------------------------------------------
+// WARNUNG / REGENERATION
+// ---------------------------------------------------------
+
+        if (trainings.isEmpty()) {
             txtWarning.setText("–");
+        } else {
+
+            long last = trainings.get(0).getTime();
+            long now = System.currentTimeMillis();
+            long diff = now - last;
+
+            long hours = diff / (1000 * 60 * 60);
+
+            if (hours < 6) {
+                txtWarning.setText("🔴 Zu früh: Letztes Training vor " + hours + "h");
+                txtWarning.setTextColor(0xFFFF4444); // Rot
+            }
+            else if (hours < 24) {
+                txtWarning.setText("🟡 Vorsicht: Letztes Training vor " + hours + "h");
+                txtWarning.setTextColor(0xFFFFBB33); // Gelb
+            }
+            else {
+                txtWarning.setText("🟢 OK: Letztes Training vor " + hours + "h");
+                txtWarning.setTextColor(0xFF99CC00); // Grün
+            }
         }
+
 
         // ---------------------------------------------------------
         // AUTOMATISCHE INTENSITÄTSBERECHNUNG
@@ -168,7 +189,8 @@ public class MuscleInfoDialog extends Dialog {
             float vol = t.getSets() * t.getReps() * t.getWeight();
             float ratio = vol / maxVol;
 
-            int barWidth = (int) (ratio * 600); // ~200dp
+            float density = getContext().getResources().getDisplayMetrics().density;
+            int barWidth = (int) (ratio * 200 * density); // 200dp
 
             int color;
             if (ratio >= 0.7f) color = 0xFFFF4444;      // Rot
