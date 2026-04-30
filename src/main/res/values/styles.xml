@@ -145,5 +145,10 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="ToolbarSubtitleStyle" parent="@style/TextAppearance.AppCompat.Subhead">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">#CCFFFFFF</item>
+    </style>
+
 
 </resources>

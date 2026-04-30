@@ -17,10 +17,20 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@drawable/toolbar"
+            android:elevation="8dp"
+
             app:titleCentered="true"
-            app:titleTextColor="@android:color/black"
-            app:navigationIconTint="@android:color/black" />
+            app:titleTextColor="@android:color/white"
+            app:subtitleTextColor="@android:color/white"
+
+            android:textStyle="bold"
+
+            android:shadowColor="#66000000"
+            android:shadowDx="0"
+            android:shadowDy="2"
+            android:shadowRadius="4" />
+
 
     </LinearLayout>
 

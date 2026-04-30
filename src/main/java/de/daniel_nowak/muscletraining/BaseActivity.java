@@ -1,8 +1,14 @@
 package de.daniel_nowak.muscletraining;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowInsets;
@@ -12,6 +18,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -44,13 +52,57 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void setupToolbar(int toolbarId) {
-        toolbar = findViewById(toolbarId);
+        MaterialToolbar toolbar = findViewById(toolbarId);
+        setSupportActionBar(toolbar);
+
         if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            toolbar.setTitleTextColor(0xFF000000);
-            toolbar.setSubtitleTextColor(0xFF000000);
+            toolbar.setTitleTextColor(Color.WHITE);
+            toolbar.setSubtitleTextColor(Color.WHITE);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                toolbar.setOutlineAmbientShadowColor(Color.WHITE);
+                toolbar.setOutlineSpotShadowColor(Color.WHITE);
+            }
+
+        }
+
+        // automatisch richtigen Subtitle setzen
+        applyAutoSubtitle();
+    }
+
+    protected void applyAutoSubtitle() {
+        String name = this.getClass().getSimpleName();
+
+        if (name.equals("MainActivity")) {
+            setToolbarSubtitle("Training");
+        }
+        else if (name.equals("ExerciseActivity")) {
+            setToolbarSubtitle("Übungen");
+        }
+        else if (name.equals("MuscleActivity")) {
+            setToolbarSubtitle("Muskeln");
+        } else {
+            setToolbarSubtitle("");
         }
     }
+
+    protected void setToolbarSubtitle(String text) {
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        if (toolbar == null) return;
+
+        toolbar.setSubtitle(text);
+
+        // Subtitle kleiner + transparent
+        toolbar.setSubtitleTextAppearance(this, R.style.ToolbarSubtitleStyle);
+
+        try {
+            toolbar.setSubtitleCentered(true);
+        } catch (Exception ignored) {
+        }
+    }
+
+
+
 
     protected void applyEdgeToEdge() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -240,6 +292,5 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         onMenuRefresh();
     }
-
 
 }
