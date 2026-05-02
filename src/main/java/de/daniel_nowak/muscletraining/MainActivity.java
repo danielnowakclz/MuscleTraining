@@ -13,20 +13,11 @@ import de.daniel_nowak.muscletraining.model.*;
 public class MainActivity extends BaseActivity {
 
     private Spinner spinner;
-    private TextView txtLast;
-    private TextView txtRec;
-
+    private TextView txtLast, txtRec, txtIntensity, txtMuscleWarning, txtRegen;
     private TextView hintSets, hintReps, hintWeight;
     private EditText inputSets, inputReps, inputWeight;
     private Button btnSave;
-
     private SeekBar seekRM;
-    private TextView txtIntensity;
-
-    private TextView txtMuscleWarning;
-    private TextView txtRegen;
-
-
 
     private List<RecommendationService.Recommendation> rmCombos;
 
@@ -41,6 +32,9 @@ public class MainActivity extends BaseActivity {
         spinner = findViewById(R.id.spinner_exercise);
         txtLast = findViewById(R.id.txt_last_training);
         txtRec = findViewById(R.id.txt_recommendation);
+        txtIntensity = findViewById(R.id.txt_intensity);
+        txtMuscleWarning = findViewById(R.id.txt_muscle_warning);
+        txtRegen = findViewById(R.id.txt_regen);
 
         inputSets = findViewById(R.id.input_sets);
         inputReps = findViewById(R.id.input_reps);
@@ -51,24 +45,12 @@ public class MainActivity extends BaseActivity {
         hintWeight = findViewById(R.id.hint_weight);
 
         btnSave = findViewById(R.id.btn_save_training);
-
         seekRM = findViewById(R.id.seek_rm);
-        txtIntensity = findViewById(R.id.txt_intensity);
 
-        txtMuscleWarning = findViewById(R.id.txt_muscle_warning);
-        txtRegen = findViewById(R.id.txt_regen);
-
-
-        // ---------------------------------------------
-        // SeekBar Farbverlauf (grün → gelb → rot)
-        // ---------------------------------------------
+        // SeekBar Farbverlauf
         GradientDrawable gradient = new GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
-                new int[]{
-                        0xFF4CAF50, // Grün
-                        0xFFFFEB3B, // Gelb
-                        0xFFF44336  // Rot
-                }
+                new int[]{0xFF4CAF50, 0xFFFFEB3B, 0xFFF44336}
         );
         seekRM.setProgressDrawable(gradient);
 
@@ -82,32 +64,38 @@ public class MainActivity extends BaseActivity {
 
         btnSetsMinus.setOnClickListener(v -> {
             Exercise ex = (Exercise) spinner.getSelectedItem();
-            adjustInt(inputSets, 1, ex.getSetsMin(), ex.getSetsMax(), false);
+            if (ex != null)
+                adjustInt(inputSets, 1, ex.getSetsMin(), ex.getSetsMax(), false);
         });
 
         btnSetsPlus.setOnClickListener(v -> {
             Exercise ex = (Exercise) spinner.getSelectedItem();
-            adjustInt(inputSets, 1, ex.getSetsMin(), ex.getSetsMax(), true);
+            if (ex != null)
+                adjustInt(inputSets, 1, ex.getSetsMin(), ex.getSetsMax(), true);
         });
 
         btnRepsMinus.setOnClickListener(v -> {
             Exercise ex = (Exercise) spinner.getSelectedItem();
-            adjustInt(inputReps, ex.getRepsStep(), ex.getRepsMin(), ex.getRepsMax(), false);
+            if (ex != null)
+                adjustInt(inputReps, ex.getRepsStep(), ex.getRepsMin(), ex.getRepsMax(), false);
         });
 
         btnRepsPlus.setOnClickListener(v -> {
             Exercise ex = (Exercise) spinner.getSelectedItem();
-            adjustInt(inputReps, ex.getRepsStep(), ex.getRepsMin(), ex.getRepsMax(), true);
+            if (ex != null)
+                adjustInt(inputReps, ex.getRepsStep(), ex.getRepsMin(), ex.getRepsMax(), true);
         });
 
         btnWeightMinus.setOnClickListener(v -> {
             Exercise ex = (Exercise) spinner.getSelectedItem();
-            adjustFloat(inputWeight, ex.getWeightStep(), ex.getMinWeight(), ex.getMaxWeight(), false);
+            if (ex != null)
+                adjustFloat(inputWeight, ex.getWeightStep(), ex.getMinWeight(), ex.getMaxWeight(), false);
         });
 
         btnWeightPlus.setOnClickListener(v -> {
             Exercise ex = (Exercise) spinner.getSelectedItem();
-            adjustFloat(inputWeight, ex.getWeightStep(), ex.getMinWeight(), ex.getMaxWeight(), true);
+            if (ex != null)
+                adjustFloat(inputWeight, ex.getWeightStep(), ex.getMinWeight(), ex.getMaxWeight(), true);
         });
 
         refreshExerciseSpinner();
@@ -124,10 +112,6 @@ public class MainActivity extends BaseActivity {
     }
 
     private void resetUI() {
-
-        // -------------------------------------------------------------
-        // Texte neutralisieren
-        // -------------------------------------------------------------
         txtLast.setText("Letztes Training: –");
         txtRec.setText("Empfehlung: –");
         txtIntensity.setText("Intensität: –");
@@ -136,25 +120,18 @@ public class MainActivity extends BaseActivity {
         txtRegen.setText("Regeneration: –");
         txtRegen.setTextColor(0xFF777777);
 
-        // -------------------------------------------------------------
-        // Eingabefelder leeren
-        // -------------------------------------------------------------
         inputSets.setText("");
         inputReps.setText("");
         inputWeight.setText("");
+        inputSets.setHint("");
+        inputReps.setHint("");
+        inputWeight.setHint("");
 
-        // -------------------------------------------------------------
-        // Hints zurücksetzen
-        // -------------------------------------------------------------
         hintSets.setText("Min – Max");
         hintReps.setText("Min – Max – Schritt");
         hintWeight.setText("Min – Max – Schritt");
 
-        // -------------------------------------------------------------
-        // Buttons deaktivieren
-        // -------------------------------------------------------------
         btnSave.setEnabled(false);
-
         findViewById(R.id.btn_sets_minus).setEnabled(false);
         findViewById(R.id.btn_sets_plus).setEnabled(false);
         findViewById(R.id.btn_reps_minus).setEnabled(false);
@@ -162,17 +139,9 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.btn_weight_minus).setEnabled(false);
         findViewById(R.id.btn_weight_plus).setEnabled(false);
 
-        // -------------------------------------------------------------
-        // SeekBar neutralisieren
-        // -------------------------------------------------------------
         seekRM.setEnabled(false);
         seekRM.setProgress(0);
-
-        // Optional: Intensität neutral anzeigen
-        txtIntensity.setText("Intensität: –");
     }
-
-
 
     private void adjustInt(EditText field, int step, int min, int max, boolean increase) {
         try {
@@ -191,7 +160,6 @@ public class MainActivity extends BaseActivity {
             field.setText(formatWeight(value));
         } catch (Exception ignored) {}
     }
-
     private void refreshExerciseSpinner() {
         List<Exercise> list = new ArrayList<>(db.exercises.exercises.values());
 
@@ -210,44 +178,43 @@ public class MainActivity extends BaseActivity {
         spinner.setAdapter(adapter);
     }
 
+
     private void updateUI() {
 
         // -------------------------------------------------------------
         // 0. Spinner leer? → UI zurücksetzen
         // -------------------------------------------------------------
-        if (spinner.getSelectedItem() == null) {
-            resetUI();
-            return;
-        }
-
         Exercise ex = (Exercise) spinner.getSelectedItem();
-
-        // -------------------------------------------------------------
-        // 1. Exercise null? → UI zurücksetzen
-        // -------------------------------------------------------------
         if (ex == null) {
             resetUI();
             return;
         }
 
         // -------------------------------------------------------------
-        // 2. muscleIds null? → leere Liste statt Crash
+        // 1. Hints setzen
         // -------------------------------------------------------------
-        if (ex.muscleIds == null) {
-            ex.muscleIds = new ArrayList<>();
-        }
+        hintSets.setText("Min: " + ex.getSetsMin() + " – Max: " + ex.getSetsMax());
+        hintReps.setText("Min: " + ex.getRepsMin() + " – Max: " + ex.getRepsMax() + " – Schritt: " + ex.getRepsStep());
+        hintWeight.setText("Min: " + ex.getMinWeight() + " – Max: " + ex.getMaxWeight() + " – Schritt: " + ex.getWeightStep());
 
         // -------------------------------------------------------------
-        // 3. MUSKEL-WARNUNG
+        // 2. Muskeln laden (sicher)
         // -------------------------------------------------------------
+        if (ex.muscleIds == null)
+            ex.muscleIds = new ArrayList<>();
+
         List<Muscle> muscles = ex.muscleIds.stream()
                 .map(id -> db.muscles.muscles.get(id))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
         long now = System.currentTimeMillis();
+
+        // -------------------------------------------------------------
+        // 3. Muskel-Warnung berechnen
+        // -------------------------------------------------------------
         List<String> warnings = new ArrayList<>();
-        int worstLevel = 0; // 0 = grün, 1 = gelb, 2 = rot
+        int worstLevel = 0;
 
         for (Muscle m : muscles) {
 
@@ -262,22 +229,16 @@ public class MainActivity extends BaseActivity {
             }
 
             long last = mTrainings.get(0).getTime();
-            long diff = now - last;
-            long hours = diff / (1000 * 60 * 60);
+            long hours = (now - last) / (1000 * 60 * 60);
 
-            if (hours < 6) {
-                warnings.add(m.getName() + " (" + hours + "h)");
-                worstLevel = Math.max(worstLevel, 2);
-            } else if (hours < 24) {
-                warnings.add(m.getName() + " (" + hours + "h)");
-                worstLevel = Math.max(worstLevel, 1);
-            } else {
-                warnings.add(m.getName() + " (" + hours + "h)");
-            }
+            warnings.add(m.getName() + " (" + hours + "h)");
+
+            if (hours < 6) worstLevel = Math.max(worstLevel, 2);
+            else if (hours < 24) worstLevel = Math.max(worstLevel, 1);
         }
 
         // -------------------------------------------------------------
-        // 4. MUSKEL-WARNUNG anzeigen
+        // 4. Muskel-Warnung anzeigen
         // -------------------------------------------------------------
         if (warnings.isEmpty()) {
             txtMuscleWarning.setText("–");
@@ -294,7 +255,7 @@ public class MainActivity extends BaseActivity {
         }
 
         // -------------------------------------------------------------
-        // 5. REGENERATIONSPROZENT
+        // 5. Regeneration berechnen
         // -------------------------------------------------------------
         float regenPercent = 100f;
 
@@ -356,9 +317,16 @@ public class MainActivity extends BaseActivity {
             inputSets.setText(String.valueOf(ex.getSetsMin()));
             inputReps.setText(String.valueOf(ex.getRepsMin()));
             inputWeight.setText(formatWeight(ex.getMinWeight()));
+            inputSets.setHint(String.valueOf(ex.getSetsMin()));
+            inputReps.setHint(String.valueOf(ex.getRepsMin()));
+            inputWeight.setHint(formatWeight(ex.getMinWeight()));
+
         } else {
             Training last = trainings.get(trainings.size() - 1);
-            txtLast.setText("Letztes Training: " + last.getSets() + "×" + last.getReps() + " @ " + formatWeight(last.getWeight()) + " kg");
+
+            txtLast.setText("Letztes Training: " +
+                    last.getSets() + "×" + last.getReps() +
+                    " @ " + formatWeight(last.getWeight()) + " kg");
 
             rec = RecommendationService.next(
                     trainings,
@@ -367,15 +335,20 @@ public class MainActivity extends BaseActivity {
                     ex.getMinWeight(), ex.getMaxWeight(), ex.getWeightStep()
             );
 
-            txtRec.setText("Empfehlung: " + rec.sets + "×" + rec.reps + " @ " + formatWeight(rec.weight) + " kg");
+            txtRec.setText("Empfehlung: " +
+                    rec.sets + "×" + rec.reps +
+                    " @ " + formatWeight(rec.weight) + " kg");
 
             inputSets.setText(String.valueOf(rec.sets));
             inputReps.setText(String.valueOf(rec.reps));
             inputWeight.setText(formatWeight(rec.weight));
+            inputSets.setHint(String.valueOf(rec.sets));
+            inputReps.setHint(String.valueOf(rec.reps));
+            inputWeight.setHint(formatWeight(rec.weight));
         }
 
         // -------------------------------------------------------------
-        // 8. RM-Kombinationen
+        // 8. RM-Kombinationen (SeekBar bleibt passiv!)
         // -------------------------------------------------------------
         rmCombos = RecommendationService.allCombos(
                 ex.getSetsMin(), ex.getSetsMax(),
@@ -383,11 +356,9 @@ public class MainActivity extends BaseActivity {
                 ex.getMinWeight(), ex.getMaxWeight(), ex.getWeightStep()
         );
 
-        float minRM = rmCombos.get(0).rm;
-        float maxRM = rmCombos.get(rmCombos.size() - 1).rm;
-
         seekRM.setMax(rmCombos.size() - 1);
 
+        // Empfehlung → SeekBar initial setzen
         int recIndex = 0;
         if (rec != null) {
             for (int i = 0; i < rmCombos.size(); i++) {
@@ -402,13 +373,32 @@ public class MainActivity extends BaseActivity {
         seekRM.setProgress(recIndex);
 
         // -------------------------------------------------------------
-        // 9. SeekBar Listener
+// Intensität initial setzen (SeekBar bleibt passiv!)
+// -------------------------------------------------------------
+        if (!rmCombos.isEmpty()) {
+            RecommendationService.Recommendation c = rmCombos.get(recIndex);
+
+            float minRM = rmCombos.get(0).rm;
+            float maxRM = rmCombos.get(rmCombos.size() - 1).rm;
+            float range = maxRM - minRM;
+
+            if (range <= 0.0001f) {
+                txtIntensity.setText("Intensität: 0 %");
+            } else {
+                float percent = (c.rm - minRM) / range * 100f;
+                percent = Math.max(0, Math.min(100, percent));
+                txtIntensity.setText("Intensität: " + Math.round(percent) + " %");
+            }
+        }
+
+
+        // -------------------------------------------------------------
+        // 9. SeekBar Listener (passiv!)
         // -------------------------------------------------------------
         seekRM.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (!fromUser) return; // PASSIV: nur reagieren, wenn der Nutzer zieht
 
-                if (rmCombos == null || rmCombos.isEmpty()) return;
                 if (progress < 0 || progress >= rmCombos.size()) return;
 
                 RecommendationService.Recommendation c = rmCombos.get(progress);
@@ -417,7 +407,10 @@ public class MainActivity extends BaseActivity {
                 inputReps.setText(String.valueOf(c.reps));
                 inputWeight.setText(formatWeight(c.weight));
 
+                float minRM = rmCombos.get(0).rm;
+                float maxRM = rmCombos.get(rmCombos.size() - 1).rm;
                 float range = maxRM - minRM;
+
                 if (range <= 0.0001f) {
                     txtIntensity.setText("Intensität: 0 %");
                     return;
@@ -433,7 +426,6 @@ public class MainActivity extends BaseActivity {
             @Override public void onStopTrackingTouch(SeekBar seekBar) {}
         });
     }
-
     private void saveTraining() {
         Exercise ex = (Exercise) spinner.getSelectedItem();
         if (ex == null) return;
@@ -448,13 +440,16 @@ public class MainActivity extends BaseActivity {
 
         updateUI();
 
+        // -------------------------------------------------------------
         // Variante B: Nur zu aktiven Übungen springen
+        // -------------------------------------------------------------
         int count = spinner.getCount();
         if (count == 0) return;
 
         int currentPos = spinner.getSelectedItemPosition();
         int nextPos = -1;
 
+        // nach unten suchen
         for (int i = currentPos + 1; i < count; i++) {
             Exercise nextEx = (Exercise) spinner.getItemAtPosition(i);
             if (selectedExercises.contains(nextEx.getId())) {
@@ -463,6 +458,7 @@ public class MainActivity extends BaseActivity {
             }
         }
 
+        // wenn nichts gefunden → oben weitersuchen
         if (nextPos == -1) {
             for (int i = 0; i < currentPos; i++) {
                 Exercise nextEx = (Exercise) spinner.getItemAtPosition(i);
@@ -478,11 +474,13 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+
     @Override
     protected void onMenuRefresh() {
         refreshExerciseSpinner();
         updateUI();
     }
+
 
     private String normalizeNumberInput(String s) {
         if (s == null) return "";
@@ -495,6 +493,7 @@ public class MainActivity extends BaseActivity {
 
         return s;
     }
+
 
     private boolean validateInputs() {
         String sSets = inputSets.getText().toString().trim();
@@ -516,6 +515,7 @@ public class MainActivity extends BaseActivity {
                 return false;
             }
 
+            // korrigierte Eingabe zurückschreiben
             inputWeight.setText(sWeight);
 
         } catch (Exception e) {

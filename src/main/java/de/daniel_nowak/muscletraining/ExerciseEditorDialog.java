@@ -60,6 +60,51 @@ public class ExerciseEditorDialog extends Dialog {
         editRepsMax = findViewById(R.id.edit_reps_max);
         editRepsStep = findViewById(R.id.edit_reps_step);
 
+        // Buttons
+        // Sätze
+        findViewById(R.id.btn_sets_min_minus).setOnClickListener(v ->
+                adjustInt(editSetsMin, 1, 1, 999, false));
+        findViewById(R.id.btn_sets_min_plus).setOnClickListener(v ->
+                adjustInt(editSetsMin, 1, 1, 999, true));
+
+        findViewById(R.id.btn_sets_max_minus).setOnClickListener(v ->
+                adjustInt(editSetsMax, 1, 1, 999, false));
+        findViewById(R.id.btn_sets_max_plus).setOnClickListener(v ->
+                adjustInt(editSetsMax, 1, 1, 999, true));
+
+        // Wiederholungen
+        findViewById(R.id.btn_reps_min_minus).setOnClickListener(v ->
+                adjustInt(editRepsMin, 1, 1, 999, false));
+        findViewById(R.id.btn_reps_min_plus).setOnClickListener(v ->
+                adjustInt(editRepsMin, 1, 1, 999, true));
+
+        findViewById(R.id.btn_reps_max_minus).setOnClickListener(v ->
+                adjustInt(editRepsMax, 1, 1, 999, false));
+        findViewById(R.id.btn_reps_max_plus).setOnClickListener(v ->
+                adjustInt(editRepsMax, 1, 1, 999, true));
+
+        findViewById(R.id.btn_reps_step_minus).setOnClickListener(v ->
+                adjustInt(editRepsStep, 1, 1, 999, false));
+        findViewById(R.id.btn_reps_step_plus).setOnClickListener(v ->
+                adjustInt(editRepsStep, 1, 1, 999, true));
+
+        // Gewichte
+        findViewById(R.id.btn_min_weight_minus).setOnClickListener(v ->
+                adjustFloat(editMinW, 0.5f, 0.5f, 999f, false));
+        findViewById(R.id.btn_min_weight_plus).setOnClickListener(v ->
+                adjustFloat(editMinW, 0.5f, 0.5f, 999f, true));
+
+        findViewById(R.id.btn_max_weight_minus).setOnClickListener(v ->
+                adjustFloat(editMaxW, 0.5f, 0.5f, 999f, false));
+        findViewById(R.id.btn_max_weight_plus).setOnClickListener(v ->
+                adjustFloat(editMaxW, 0.5f, 0.5f, 999f, true));
+
+        findViewById(R.id.btn_weight_step_minus).setOnClickListener(v ->
+                adjustFloat(editStepW, 0.5f, 0.5f, 999f, false));
+        findViewById(R.id.btn_weight_step_plus).setOnClickListener(v ->
+                adjustFloat(editStepW, 0.5f, 0.5f, 999f, true));
+
+
         editSearch = findViewById(R.id.edit_search);
 
         recycler = findViewById(R.id.recycler_muscles);
@@ -93,6 +138,24 @@ public class ExerciseEditorDialog extends Dialog {
             dismiss();
         });
 
+    }
+
+    private void adjustInt(EditText field, int step, int min, int max, boolean increase) {
+        try {
+            int value = Integer.parseInt(field.getText().toString());
+            value = increase ? value + step : value - step;
+            value = Math.max(min, Math.min(max, value));
+            field.setText(String.valueOf(value));
+        } catch (Exception ignored) {}
+    }
+
+    private void adjustFloat(EditText field, float step, float min, float max, boolean increase) {
+        try {
+            float value = Float.parseFloat(field.getText().toString());
+            value = increase ? value + step : value - step;
+            value = Math.max(min, Math.min(max, value));
+            field.setText(String.valueOf(value));
+        } catch (Exception ignored) {}
     }
 
 

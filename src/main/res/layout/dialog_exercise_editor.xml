@@ -34,7 +34,7 @@
                 android:layout_marginTop="6dp"/>
         </LinearLayout>
 
-        <!-- Sätze -->
+        <!-- Sätze (von – bis) -->
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -48,29 +48,78 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <EditText
-                android:id="@+id/edit_sets_min"
-                android:hint="Minimale Sätze"
-                android:inputType="number"
+            <!-- Min -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:padding="12dp"
-                android:background="@drawable/edittext_rounded"
-                android:textSize="16sp"
-                android:layout_marginTop="6dp"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="6dp">
 
-            <EditText
-                android:id="@+id/edit_sets_max"
-                android:hint="Maximale Sätze"
-                android:inputType="number"
+                <EditText
+                    android:id="@+id/edit_sets_min"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:padding="12dp"
+                    android:background="@drawable/edittext_rounded"
+                    android:hint="Min"/>
+
+                <Button
+                    android:id="@+id/btn_sets_min_minus"
+                    style="@style/PlusMinusButton.Rounded.Secondary"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="-"
+                    android:layout_marginStart="8dp"/>
+
+                <Button
+                    android:id="@+id/btn_sets_min_plus"
+                    style="@style/PlusMinusButton.Rounded"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="+"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <!-- Max -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:padding="12dp"
-                android:background="@drawable/edittext_rounded"
-                android:textSize="16sp"
-                android:layout_marginTop="6dp"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="6dp">
+
+                <EditText
+                    android:id="@+id/edit_sets_max"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:padding="12dp"
+                    android:background="@drawable/edittext_rounded"
+                    android:hint="Max"/>
+
+                <Button
+                    android:id="@+id/btn_sets_max_minus"
+                    style="@style/PlusMinusButton.Rounded.Secondary"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="-"
+                    android:layout_marginStart="8dp"/>
+
+                <Button
+                    android:id="@+id/btn_sets_max_plus"
+                    style="@style/PlusMinusButton.Rounded"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="+"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
         </LinearLayout>
-
 
         <!-- Wiederholungen -->
         <LinearLayout
@@ -86,40 +135,114 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <EditText
-                android:id="@+id/edit_reps_min"
-                android:hint="Minimale Wiederholungen"
-                android:inputType="number"
+            <!-- Min -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:padding="12dp"
-                android:background="@drawable/edittext_rounded"
-                android:textSize="16sp"
-                android:layout_marginTop="6dp"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="6dp">
 
-            <EditText
-                android:id="@+id/edit_reps_max"
-                android:hint="Maximale Wiederholungen"
-                android:inputType="number"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:padding="12dp"
-                android:background="@drawable/edittext_rounded"
-                android:textSize="16sp"
-                android:layout_marginTop="6dp"/>
+                <EditText
+                    android:id="@+id/edit_reps_min"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:padding="12dp"
+                    android:background="@drawable/edittext_rounded"
+                    android:hint="Min"/>
 
-            <EditText
-                android:id="@+id/edit_reps_step"
-                android:hint="Schrittweite"
-                android:inputType="number"
+                <Button
+                    android:id="@+id/btn_reps_min_minus"
+                    style="@style/PlusMinusButton.Rounded.Secondary"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="-"
+                    android:layout_marginStart="8dp"/>
+
+                <Button
+                    android:id="@+id/btn_reps_min_plus"
+                    style="@style/PlusMinusButton.Rounded"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="+"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <!-- Max -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:padding="12dp"
-                android:background="@drawable/edittext_rounded"
-                android:textSize="16sp"
-                android:layout_marginTop="6dp"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="6dp">
+
+                <EditText
+                    android:id="@+id/edit_reps_max"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:padding="12dp"
+                    android:background="@drawable/edittext_rounded"
+                    android:hint="Max"/>
+
+                <Button
+                    android:id="@+id/btn_reps_max_minus"
+                    style="@style/PlusMinusButton.Rounded.Secondary"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="-"
+                    android:layout_marginStart="8dp"/>
+
+                <Button
+                    android:id="@+id/btn_reps_max_plus"
+                    style="@style/PlusMinusButton.Rounded"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="+"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <!-- Step -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="6dp">
+
+                <EditText
+                    android:id="@+id/edit_reps_step"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:padding="12dp"
+                    android:background="@drawable/edittext_rounded"
+                    android:hint="Schritt"/>
+
+                <Button
+                    android:id="@+id/btn_reps_step_minus"
+                    style="@style/PlusMinusButton.Rounded.Secondary"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="-"
+                    android:layout_marginStart="8dp"/>
+
+                <Button
+                    android:id="@+id/btn_reps_step_plus"
+                    style="@style/PlusMinusButton.Rounded"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="+"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
         </LinearLayout>
-
 
         <!-- Gewichte -->
         <LinearLayout
@@ -135,40 +258,114 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <EditText
-                android:id="@+id/edit_min_weight"
-                android:hint="Minimales Gewicht"
-                android:inputType="numberDecimal"
+            <!-- Min -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:padding="12dp"
-                android:background="@drawable/edittext_rounded"
-                android:textSize="16sp"
-                android:layout_marginTop="6dp"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="6dp">
 
-            <EditText
-                android:id="@+id/edit_max_weight"
-                android:hint="Maximales Gewicht"
-                android:inputType="numberDecimal"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:padding="12dp"
-                android:background="@drawable/edittext_rounded"
-                android:textSize="16sp"
-                android:layout_marginTop="6dp"/>
+                <EditText
+                    android:id="@+id/edit_min_weight"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:padding="12dp"
+                    android:background="@drawable/edittext_rounded"
+                    android:hint="Min"/>
 
-            <EditText
-                android:id="@+id/edit_weight_step"
-                android:hint="Schrittweite"
-                android:inputType="numberDecimal"
+                <Button
+                    android:id="@+id/btn_min_weight_minus"
+                    style="@style/PlusMinusButton.Rounded.Secondary"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="-"
+                    android:layout_marginStart="8dp"/>
+
+                <Button
+                    android:id="@+id/btn_min_weight_plus"
+                    style="@style/PlusMinusButton.Rounded"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="+"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <!-- Max -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:padding="12dp"
-                android:background="@drawable/edittext_rounded"
-                android:textSize="16sp"
-                android:layout_marginTop="6dp"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="6dp">
+
+                <EditText
+                    android:id="@+id/edit_max_weight"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:padding="12dp"
+                    android:background="@drawable/edittext_rounded"
+                    android:hint="Max"/>
+
+                <Button
+                    android:id="@+id/btn_max_weight_minus"
+                    style="@style/PlusMinusButton.Rounded.Secondary"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="-"
+                    android:layout_marginStart="8dp"/>
+
+                <Button
+                    android:id="@+id/btn_max_weight_plus"
+                    style="@style/PlusMinusButton.Rounded"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="+"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <!-- Step -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="6dp">
+
+                <EditText
+                    android:id="@+id/edit_weight_step"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:padding="12dp"
+                    android:background="@drawable/edittext_rounded"
+                    android:hint="Schritt"/>
+
+                <Button
+                    android:id="@+id/btn_weight_step_minus"
+                    style="@style/PlusMinusButton.Rounded.Secondary"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="-"
+                    android:layout_marginStart="8dp"/>
+
+                <Button
+                    android:id="@+id/btn_weight_step_plus"
+                    style="@style/PlusMinusButton.Rounded"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="+"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
         </LinearLayout>
-
 
         <!-- Muskel-Suche -->
         <LinearLayout
