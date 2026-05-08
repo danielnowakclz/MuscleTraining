@@ -62,14 +62,20 @@ public class MuscleInfoDialog extends Dialog {
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
         SimpleDateFormat sdfShort = new SimpleDateFormat("dd.MM.", Locale.getDefault());
 
-        // Zuletzt trainiert
-        if (trainings.isEmpty()) {
+        // ---------------------------------------------------------
+        // LETZTES TRAINING (optimiert)
+        // ---------------------------------------------------------
+        long last = muscle.getLastTraining();
+
+        if (last == 0L) {
             txtLast.setText("–");
         } else {
-            txtLast.setText(sdf.format(new Date(trainings.get(0).getTime())));
+            txtLast.setText(sdf.format(new Date(last)));
         }
 
-        // Trainings letzte 7 Tage
+        // ---------------------------------------------------------
+        // TRAININGS DER LETZTEN 7 TAGE
+        // ---------------------------------------------------------
         long weekAgo = System.currentTimeMillis() - 7L * 24 * 60 * 60 * 1000;
         long weekCount = trainings.stream()
                 .filter(t -> t.getTime() >= weekAgo)
@@ -77,38 +83,33 @@ public class MuscleInfoDialog extends Dialog {
         txtWeekCount.setText(String.valueOf(weekCount));
 
         // ---------------------------------------------------------
-// WARNUNG / REGENERATION
-// ---------------------------------------------------------
-
-        if (trainings.isEmpty()) {
+        // WARNUNG / REGENERATION 2.1
+        // ---------------------------------------------------------
+        if (last == 0L) {
             txtWarning.setText("–");
+            txtWarning.setTextColor(0xFF777777);
         } else {
 
-            long last = trainings.get(0).getTime();
-            long now = System.currentTimeMillis();
-            long diff = now - last;
+            float regen = db.calculateRegeneration(muscle.getId()) * 100f;
+            int regenInt = Math.round(regen);
 
-            long hours = diff / (1000 * 60 * 60);
-
-            if (hours < 6) {
-                txtWarning.setText("🔴 Zu früh: Letztes Training vor " + hours + "h");
-                txtWarning.setTextColor(0xFFFF4444); // Rot
+            if (regenInt < 40) {
+                txtWarning.setText("🔴 Zu früh: " + regenInt + "% regeneriert");
+                txtWarning.setTextColor(0xFFFF4444);
             }
-            else if (hours < 24) {
-                txtWarning.setText("🟡 Vorsicht: Letztes Training vor " + hours + "h");
-                txtWarning.setTextColor(0xFFFFBB33); // Gelb
+            else if (regenInt < 70) {
+                txtWarning.setText("🟡 Vorsicht: " + regenInt + "% regeneriert");
+                txtWarning.setTextColor(0xFFFFBB33);
             }
             else {
-                txtWarning.setText("🟢 OK: Letztes Training vor " + hours + "h");
-                txtWarning.setTextColor(0xFF99CC00); // Grün
+                txtWarning.setText("🟢 OK: " + regenInt + "% regeneriert");
+                txtWarning.setTextColor(0xFF99CC00);
             }
         }
-
 
         // ---------------------------------------------------------
         // AUTOMATISCHE INTENSITÄTSBERECHNUNG
         // ---------------------------------------------------------
-
         List<Exercise> exercises = db.exercises.exercises.values().stream()
                 .filter(ex -> ex.muscleIds.contains(muscle.getId()))
                 .collect(Collectors.toList());
@@ -127,17 +128,14 @@ public class MuscleInfoDialog extends Dialog {
             volumeMap.put(ex.getId(), totalVolume);
         }
 
-        // Maximum finden
-        float maxVolume = 0f;
-        for (float v : volumeMap.values()) {
-            if (v > maxVolume) maxVolume = v;
-        }
+        float maxVolume = volumeMap.values().stream()
+                .max(Float::compare)
+                .orElse(0f);
 
-        // Übungen nach Intensität sortieren
         exercises.sort((a, b) -> Float.compare(volumeMap.get(b.getId()), volumeMap.get(a.getId())));
 
         // ---------------------------------------------------------
-        // Intensitätsliste mit Farben
+        // INTENSITÄTSLISTE MIT FARBEN
         // ---------------------------------------------------------
         List<SpannableString> intensityColored = new ArrayList<>();
 
@@ -149,9 +147,9 @@ public class MuscleInfoDialog extends Dialog {
             SpannableString span = new SpannableString(text);
 
             int color;
-            if (percent >= 70) color = 0xFFFF4444;      // Rot
-            else if (percent >= 40) color = 0xFFFFBB33; // Gelb
-            else color = 0xFF99CC00;                    // Grün
+            if (percent >= 70) color = 0xFFFF4444;
+            else if (percent >= 40) color = 0xFFFFBB33;
+            else color = 0xFF99CC00;
 
             span.setSpan(new ForegroundColorSpan(color),
                     text.indexOf("["), text.length(),
@@ -165,7 +163,7 @@ public class MuscleInfoDialog extends Dialog {
         listIntensity.setAdapter(intAdapter);
 
         // ---------------------------------------------------------
-        // Trainingsliste (kurzform)
+        // TRAININGSLISTE (kurzform)
         // ---------------------------------------------------------
         List<String> trainingStrings = trainings.stream()
                 .map(t -> sdf.format(new Date(t.getTime())) + " — " +
@@ -190,12 +188,12 @@ public class MuscleInfoDialog extends Dialog {
             float ratio = vol / maxVol;
 
             float density = getContext().getResources().getDisplayMetrics().density;
-            int barWidth = (int) (ratio * 200 * density); // 200dp
+            int barWidth = (int) (ratio * 200 * density);
 
             int color;
-            if (ratio >= 0.7f) color = 0xFFFF4444;      // Rot
-            else if (ratio >= 0.4f) color = 0xFFFFBB33; // Gelb
-            else color = 0xFF99CC00;                    // Grün
+            if (ratio >= 0.7f) color = 0xFFFF4444;
+            else if (ratio >= 0.4f) color = 0xFFFFBB33;
+            else color = 0xFF99CC00;
 
             LinearLayout row = new LinearLayout(getContext());
             row.setOrientation(LinearLayout.HORIZONTAL);

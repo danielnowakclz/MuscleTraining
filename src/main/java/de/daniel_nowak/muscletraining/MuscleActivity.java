@@ -26,7 +26,6 @@ public class MuscleActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_muscles);
 
-        // ⭐ Einheitliche Toolbar-ID
         setupToolbar(R.id.toolbar);
         applyEdgeToEdge();
 
@@ -35,23 +34,20 @@ public class MuscleActivity extends BaseActivity {
 
         loadMuscles();
 
-        // ⭐ Editor öffnen
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Muscle m = muscleList.get(position);
             openEditor(m);
         });
 
-        // ⭐ Info-Dialog per Long-Click
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
             Muscle m = muscleList.get(position);
             new MuscleInfoDialog(this, db, m).show();
             return true;
         });
 
-        // ⭐ Neuer Muskel
         btnAdd.setOnClickListener(v -> {
             String id = UUID.randomUUID().toString();
-            db.muscles.add(id, "Neuer Muskel");
+            db.muscles.add(id, "Neuer Muskel", Muscle.Category.CORE);
             Muscle m = db.muscles.muscles.get(id);
             openEditor(m);
         });
@@ -68,7 +64,6 @@ public class MuscleActivity extends BaseActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, muscleList);
         listView.setAdapter(adapter);
 
-        // ⭐ Optional: Scroll nach oben
         listView.post(() -> listView.setSelection(0));
     }
 

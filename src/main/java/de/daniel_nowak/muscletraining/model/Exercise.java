@@ -20,6 +20,11 @@ public class Exercise {
     private int repsMax = 15;
     private int repsStep = 1;
 
+    private long lastTraining = 0l;
+    private int lastSets = 0;
+    private int lastReps = 0;
+    private float lastWeight = 0f;
+
     // Zugehörige Muskeln
     public List<String> muscleIds = new ArrayList<>();
 
@@ -61,5 +66,40 @@ public class Exercise {
     @Override
     public String toString() {
         return name;
+    }
+
+    public long getLastTraining() {
+        return lastTraining;
+    }
+
+    public void setLastTraining(long lastTraining) {
+        this.lastTraining = lastTraining;
+    }
+
+    public int getLastSets() {
+        return lastSets;
+    }
+
+    public void setLastSets(int lastSets) {
+        this.lastSets = lastSets;
+    }
+
+    public int getLastReps() {
+        return lastReps;
+    }
+
+    public void setLastReps(int lastReps) {
+        this.lastReps = lastReps;
+    }
+
+    public float getLastWeight() {
+        return lastWeight;
+    }
+
+    public void setLastWeight(float lastWeight) {
+        this.lastWeight = lastWeight;
+    }
+
+    public float getLastVolume() { return lastSets * lastReps * lastWeight;
     }
 }

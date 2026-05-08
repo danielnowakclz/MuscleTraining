@@ -109,26 +109,6 @@ public class TrainingDatabase {
     }
 
     // ---------------------------------------------------------
-    // ADD (mit Muskel-IDs)
-    // ---------------------------------------------------------
-
-    public Training add(Exercise ex, int sets, int reps, float weight) {
-
-        String id = UUID.randomUUID().toString();
-        long time = System.currentTimeMillis();
-
-        Training t = new Training(id, time, sets, reps, weight, ex.getId());
-
-        // NEU: trainierte Muskeln speichern
-        t.muscleIds.clear();
-        t.muscleIds.addAll(ex.muscleIds);
-
-        trainings.put(id, t);
-        save();
-        return t;
-    }
-
-    // ---------------------------------------------------------
     // DELETE EXERCISE → Trainings NICHT löschen!
     // ---------------------------------------------------------
 

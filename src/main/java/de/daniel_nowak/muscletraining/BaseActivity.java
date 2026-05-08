@@ -27,13 +27,17 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.Comparator;
+import java.util.stream.Collectors;
 
 
 import de.daniel_nowak.muscletraining.data.Database;
 import de.daniel_nowak.muscletraining.model.Exercise;
+import de.daniel_nowak.muscletraining.model.Muscle;
 import de.daniel_nowak.muscletraining.model.Training;
+import de.daniel_nowak.muscletraining.ui.MuscleRegenView;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -47,8 +51,21 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         db = new Database(this);
 
+        // NICHTS mehr mit Trainingsplan hier machen!
         selectedExercises.clear();
         selectedExercises.addAll(db.plan.plan);
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        float ageHours = hoursSince(db.plan.lastPlanTime);
+
+        if (db.plan.plan.isEmpty() || ageHours > 6f) {
+            createTrainingPlan();
+            db.plan.setPlan(selectedExercises);
+        }
     }
 
     protected void setupToolbar(int toolbarId) {
@@ -194,8 +211,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-
     private void navigateTo(Class<?> target) {
         if (!this.getClass().equals(target)) {
             startActivity(new Intent(this, target));
@@ -215,7 +230,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         return s;
     }
-
 
     public void addDemoData() {
         db.addDemoData();
@@ -240,6 +254,19 @@ public abstract class BaseActivity extends AppCompatActivity {
         db.trainings.load();
         db.plan.load();
 
+        selectedExercises.clear();
+
+        // Heatmap leeren (falls MainActivity aktiv ist)
+        if (this instanceof MainActivity) {
+            MuscleRegenView regenView = findViewById(R.id.view_regen);
+            if (regenView != null) {
+                regenView.setMuscles(new HashMap<>());
+                regenView.setRegenData(new HashMap<>());
+                regenView.invalidate();
+            }
+        }
+
+
         onMenuRefresh();
         Toast.makeText(this, "Alle Daten gelöscht", Toast.LENGTH_SHORT).show();
     }
@@ -256,41 +283,133 @@ public abstract class BaseActivity extends AppCompatActivity {
         // 1. Pool aller Übungen
         List<Exercise> pool = new ArrayList<>(db.exercises.exercises.values());
 
-        // 2. Trainings nach Zeit sortieren
-        Map<String, Long> lastTime = new HashMap<>();
+        // 2. Zielkategorien
+        Muscle.Category[] targetCats = {
+                Muscle.Category.ARM,
+                Muscle.Category.SHOULDER,
+                Muscle.Category.CHEST,
+                Muscle.Category.BACK,
+                Muscle.Category.CORE,
+                Muscle.Category.LEG
+        };
 
-        for (Exercise ex : pool) {
-            long t = db.trainings.trainings.values().stream()
-                    .filter(tr -> tr.getExerciseId().equals(ex.getId()))
-                    .mapToLong(Training::getTime)
-                    .max()
-                    .orElse(0L);
+        // 3. Kategorien, die wir schon haben
+        Set<Muscle.Category> usedCategories = new HashSet<>();
 
-            lastTime.put(ex.getId(), t);
+        // 4. Für jede Kategorie eine Übung wählen
+        for (Muscle.Category targetCat : targetCats) {
+
+            Exercise best = null;
+            float bestScore = -1f;
+
+            for (Exercise ex : pool) {
+
+                // ---------------------------------------------------------
+                // Kategorie bestimmen (aus allen Muskeln der Übung)
+                // ---------------------------------------------------------
+                Set<Muscle.Category> cats = ex.muscleIds.stream()
+                        .map(id -> db.muscles.muscles.get(id))
+                        .filter(Objects::nonNull)
+                        .map(m -> m.category)
+                        .collect(Collectors.toSet());
+
+                // passt die Übung zur Zielkategorie?
+                if (!cats.contains(targetCat)) continue;
+
+                // Kategorie schon benutzt?
+                if (cats.stream().anyMatch(usedCategories::contains)) continue;
+
+                // ---------------------------------------------------------
+                // A) Regeneration (Minimum aller Muskeln)
+                // ---------------------------------------------------------
+                float regen = ex.muscleIds.stream()
+                        .map(id -> db.calculateRegeneration(id) * 100f)
+                        .min(Float::compare)
+                        .orElse(100f);
+
+                // ---------------------------------------------------------
+                // B) Muskelrotation (schlechtester Muskel)
+                // ---------------------------------------------------------
+                long muscleLast = ex.muscleIds.stream()
+                        .map(id -> db.muscles.muscles.get(id))
+                        .filter(Objects::nonNull)
+                        .mapToLong(Muscle::getLastTraining)
+                        .min()
+                        .orElse(0L);
+
+                float hoursMuscle = hoursSince(muscleLast);
+                float muscleRotationScore = Math.min(100f, (hoursMuscle / 72f) * 100f);
+
+                // ---------------------------------------------------------
+                // C) Volumen (letzte Belastung)
+                // ---------------------------------------------------------
+                float lastVolume = ex.getLastVolume(); // sets * reps * weight
+                float maxVolume = db.getMaxVolumeForCategory(targetCat);
+
+                float volumeScore = (maxVolume <= 0f)
+                        ? 100f
+                        : Math.max(0f, 100f - (lastVolume / maxVolume * 100f));
+
+                // ---------------------------------------------------------
+                // D) Übungsrotation (Hard Rotation)
+                // ---------------------------------------------------------
+                long exerciseLast = ex.getLastTraining();
+                float hoursEx = hoursSince(exerciseLast);
+                float exerciseRotationScore = Math.min(100f, (hoursEx / 168f) * 100f); // 7 Tage
+
+                // ---------------------------------------------------------
+                // Gesamtscore
+                // ---------------------------------------------------------
+                float score =
+                        regen * 0.40f +
+                                muscleRotationScore * 0.20f +
+                                volumeScore * 0.20f +
+                                exerciseRotationScore * 0.20f;
+
+                // ---------------------------------------------------------
+                // Beste Übung wählen
+                // ---------------------------------------------------------
+                if (score > bestScore) {
+                    bestScore = score;
+                    best = ex;
+                }
+            }
+
+            if (best != null) {
+
+                selectedExercises.add(best.getId());
+
+                // Kategorien merken
+                best.muscleIds.stream()
+                        .map(id -> db.muscles.muscles.get(id))
+                        .filter(Objects::nonNull)
+                        .map(m -> m.category)
+                        .forEach(usedCategories::add);
+
+                // Primärmuskeln extrahieren
+                Set<String> primaryMuscles = new HashSet<>(best.muscleIds);
+
+                // Übungen entfernen, die Primärmuskeln teilen
+                Exercise finalBest = best;
+                pool.removeIf(ex ->
+                        ex.getId().equals(finalBest.getId()) ||
+                                ex.muscleIds.stream().anyMatch(primaryMuscles::contains)
+                );
+            }
         }
 
-        // 3. Solange Pool nicht leer
-        while (!pool.isEmpty()) {
-
-            // 3a. Übung wählen, die am längsten nicht trainiert wurde
-            Exercise chosen = pool.stream()
-                    .min(Comparator.comparingLong(ex -> lastTime.get(ex.getId())))
-                    .orElse(null);
-
-            if (chosen == null) break;
-
-            selectedExercises.add(chosen.getId());
-
-            // 3b. Alle Übungen entfernen, die dieselben Muskeln trainieren
-            Set<String> muscles = new HashSet<>(chosen.muscleIds);
-
-            pool.removeIf(ex ->
-                    ex.getId().equals(chosen.getId()) ||
-                            ex.muscleIds.stream().anyMatch(muscles::contains)
-            );
-        }
-
+        db.plan.setPlan(selectedExercises);
         onMenuRefresh();
     }
+
+    // ---------------------------------------------------------
+// Hilfsfunktion
+// ---------------------------------------------------------
+    private float hoursSince(long time) {
+        if (time <= 0L) return 9999f;
+        long diff = System.currentTimeMillis() - time;
+        return diff / 1000f / 60f / 60f;
+    }
+
 
 }

@@ -27,6 +27,72 @@
             android:textSize="16sp"
             android:layout_marginTop="6dp"/>
 
+        <!-- KATEGORIE -->
+        <TextView
+            android:text="Kategorie"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Spinner
+            android:id="@+id/spinner_category"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/edittext_rounded"
+            android:padding="8dp" />
+
+        <!-- POSITION AUF DEM KÖRPER -->
+        <TextView
+            android:text="Position auf dem Körper"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- FRONT / BACK SWITCH -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/btn_front"
+                android:text="Vorderseite"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"/>
+
+            <Space
+                android:layout_width="12dp"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/btn_back"
+                android:text="Rückseite"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+        <!-- BODY VIEW -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:padding="0dp">
+
+            <de.daniel_nowak.muscletraining.ui.MuscleBodyView
+                android:id="@+id/view_body"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
+
+
         <!-- ÜBUNGEN -->
         <TextView
             android:text="Zugehörige Übungen"

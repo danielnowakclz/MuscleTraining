@@ -129,7 +129,10 @@ public class ExerciseEditorDialog extends Dialog {
         Button btnSave = findViewById(R.id.btn_save);
         btnSave.setOnClickListener(v -> save());
         Button btnCancel = findViewById(R.id.btn_cancel);
-        btnCancel.setOnClickListener(v -> dismiss());
+        btnCancel.setOnClickListener(v -> {
+            onSaveCallback.run();
+            dismiss();
+        });
 
         Button btnDelete = findViewById(R.id.btn_delete);
         btnDelete.setOnClickListener(v -> {

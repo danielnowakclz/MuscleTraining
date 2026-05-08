@@ -4,6 +4,10 @@ import android.content.Context;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import de.daniel_nowak.muscletraining.model.Exercise;
 import de.daniel_nowak.muscletraining.model.Muscle;
@@ -29,6 +33,70 @@ public class Database {
     }
 
     // ---------------------------------------------------------
+    // ADD (mit Muskel-IDs)
+    // ---------------------------------------------------------
+
+    public Training addTraining(Exercise ex, int sets, int reps, float weight) {
+
+        String id = UUID.randomUUID().toString();
+        long time = System.currentTimeMillis();
+
+        Training t = new Training(id, time, sets, reps, weight, ex.getId());
+
+        // NEU: trainierte Muskeln speichern
+        t.muscleIds.clear();
+        t.muscleIds.addAll(ex.muscleIds);
+
+        trainings.trainings.put(id, t);
+        trainings.save();
+
+        ex.setLastTraining(time);
+        ex.setLastSets(sets);
+        ex.setLastReps(reps);
+        ex.setLastWeight(weight);
+        exercises.save();
+
+        for (String mId:ex.muscleIds) {
+            Muscle m = muscles.muscles.get(mId);
+            if (null!=m) {
+            m.setLastTraining(time);
+            m.setLastSets(sets);
+            m.setLastReps(reps);
+            m.setLastWeight(weight);
+            }
+        }
+        muscles.save();
+
+        return t;
+    }
+
+    public float getMaxVolumeForCategory(Muscle.Category cat) {
+
+        float max = 0f;
+
+        for (Training t : trainings.trainings.values()) {
+
+            Exercise ex = exercises.exercises.get(t.getExerciseId());
+            if (ex == null) continue;
+
+            // Kategorie der Übung bestimmen
+            Set<Muscle.Category> cats = ex.muscleIds.stream()
+                    .map(id -> muscles.muscles.get(id))
+                    .filter(Objects::nonNull)
+                    .map(m -> m.category)
+                    .collect(Collectors.toSet());
+
+            if (!cats.contains(cat)) continue;
+
+            float vol = t.getSets() * t.getReps() * t.getWeight();
+            if (vol > max) max = vol;
+        }
+
+        return max;
+    }
+
+
+    // ---------------------------------------------------------
     // DEMO-DATEN
     // ---------------------------------------------------------
 
@@ -36,6 +104,30 @@ public class Database {
         muscles.addDemoData();
         exercises.addDemoData();
         syncAllRelations();
+    }
+
+    public float calculateRegeneration(String muscleId) {
+
+        Muscle m = muscles.muscles.get(muscleId);
+        if (m == null) return 1.0f;
+
+        long last = m.getLastTraining();
+
+        // nie trainiert → vollständig regeneriert
+        if (last == 0L) return 1.0f;
+
+        long now = System.currentTimeMillis();
+        float hours = (now - last) / 1000f / 3600f;
+
+        float regenHours = m.getRegenerationHours();
+        if (regenHours <= 0f) return 1.0f;
+
+        float regen = hours / regenHours;
+
+        if (regen > 1f) regen = 1f;
+        if (regen < 0f) regen = 0f;
+
+        return regen;
     }
 
     public void syncAllRelations() {
