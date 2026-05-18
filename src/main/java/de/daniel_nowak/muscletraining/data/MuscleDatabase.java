@@ -95,9 +95,6 @@ public class MuscleDatabase {
 
                 List<String> p = parseLine(line);
 
-                // Format:
-                // 0=id ; 1=name ; 2=exerciseIds ; 3=posX ; 4=posY ; 5=side ; 6=category
-                if (p.size() >= 7) {
 
                     Muscle m = new Muscle(p.get(0), unesc(p.get(1)));
 
@@ -117,36 +114,28 @@ public class MuscleDatabase {
                         m.setLastWeight(Float.parseFloat(p.get(5)));
                     } catch (Exception ignored) {
                     }
-
-
-                    try {
-                        if (!p.get(6).isEmpty())
+                   try {
                             m.exerciseIds = new ArrayList<>(Arrays.asList(p.get(6).split(",")));
                     } catch (Exception ignored) {
                     }
                     try {
-                        if (!p.get(7).isEmpty())
                             m.posXList = parseFloatList(p.get(7));
                     } catch (Exception ignored) {
                     }
                     try {
-                        if (!p.get(8).isEmpty())
                             m.posYList = parseFloatList(p.get(8));
                     } catch (Exception ignored) {
                     }
                     try {
-                        if (!p.get(9).isEmpty())
                             m.sideList = new ArrayList<>(Arrays.asList(p.get(9).split(",")));
                     } catch (Exception ignored) {
                     }
                     try {
-                        if (!p.get(10).isEmpty())
                             m.category = Muscle.Category.valueOf(p.get(10));
                     } catch (Exception ignored) {
                     }
-
                     muscles.put(m.getId(), m);
-                }
+
             }
 
         } catch (Exception e) {

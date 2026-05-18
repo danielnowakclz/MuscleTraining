@@ -20,7 +20,7 @@ public class TrainingDatabase {
     }
 
     // ---------------------------------------------------------
-    // LOAD (abwärtskompatibel)
+    // LOAD
     // ---------------------------------------------------------
 
     public void load() {
@@ -33,12 +33,7 @@ public class TrainingDatabase {
 
             while ((line = br.readLine()) != null) {
 
-                // Format alt: 6 Felder
-                // Format neu: 7 Felder (muscleIds)
                 String[] p = line.split(";", -1);
-
-                if (p.length >= 6) {
-
                     Training t = new Training(
                             p[0],
                             Long.parseLong(p[1]),
@@ -48,13 +43,14 @@ public class TrainingDatabase {
                             p[5]
                     );
 
-                    // NEU: Muskel-IDs laden (falls vorhanden)
-                    if (p.length >= 7 && !p[6].isEmpty()) {
                         t.muscleIds = new ArrayList<>(Arrays.asList(p[6].split(",")));
-                    }
+                        try {
+                            t.difficulty = Integer.parseInt(p[7]);
+                        } catch (Exception ignored) {
+                        }
 
                     trainings.put(t.getId(), t);
-                }
+
             }
 
         } catch (Exception e) {
@@ -63,7 +59,7 @@ public class TrainingDatabase {
     }
 
     // ---------------------------------------------------------
-    // SAVE (neues Format)
+    // SAVE
     // ---------------------------------------------------------
 
     public void save() {
@@ -97,9 +93,11 @@ public class TrainingDatabase {
                                 t.getReps() + ";" +
                                 t.getWeight() + ";" +
                                 t.getExerciseId() + ";" +
-                                muscleList +
+                                muscleList + ";" +
+                                t.difficulty +
                                 "\n"
                 );
+
             }
 
 

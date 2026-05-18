@@ -22,6 +22,8 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.appbar.MaterialToolbar;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -193,6 +195,18 @@ public abstract class BaseActivity extends AppCompatActivity {
             return true;
         }
 
+        // XML EXPORT
+        if (id == R.id.menu_export_xml) {
+            exportXmlDialog();
+            return true;
+        }
+
+        // XML IMPORT
+        if (id == R.id.menu_import_xml) {
+            importXmlDialog();
+            return true;
+        }
+
 
         // Demo-Daten
         if (id == R.id.menu_add_demo) {
@@ -211,6 +225,51 @@ public abstract class BaseActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void exportXmlDialog() {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/xml");
+        intent.putExtra(Intent.EXTRA_TITLE, "muscletraining_backup.xml");
+        startActivityForResult(intent, 1001);
+    }
+
+    private void importXmlDialog() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/xml");
+        startActivityForResult(intent, 1002);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode != RESULT_OK || data == null) return;
+
+        if (requestCode == 1001) {
+            // EXPORT
+            exportXmlToUri(data.getData());
+        }
+
+        if (requestCode == 1002) {
+            // IMPORT
+            importXmlFromUri(data.getData());
+        }
+    }
+
+    private void exportXmlToUri(android.net.Uri uri) {
+        try {
+            String xml = db.exportToXml();
+            try (OutputStream os = getContentResolver().openOutputStream(uri)) {
+                os.write(xml.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            }
+            Toast.makeText(this, "Export erfolgreich", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "Fehler beim Export", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+
     private void navigateTo(Class<?> target) {
         if (!this.getClass().equals(target)) {
             startActivity(new Intent(this, target));
@@ -218,6 +277,20 @@ public abstract class BaseActivity extends AppCompatActivity {
             onMenuRefresh();
         }
     }
+
+    private void importXmlFromUri(android.net.Uri uri) {
+        try {
+            try (InputStream is = getContentResolver().openInputStream(uri)) {
+                db.importFromXml(is);
+            }
+            Toast.makeText(this, "Import erfolgreich", Toast.LENGTH_SHORT).show();
+            onMenuRefresh();
+        } catch (Exception e) {
+            Toast.makeText(this, "Fehler beim Import", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+
 
     public String formatWeight(float w) {
         // Immer Punkt statt Komma

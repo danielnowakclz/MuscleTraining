@@ -9,8 +9,8 @@ public class Exercise {
     private String name;
 
     // Trainingsparameter
-    private float minWeight = 20f;
-    private float maxWeight = 200f;
+    private float weightMin = 20f;
+    private float weightMax = 200f;
     private float weightStep = 2.5f;
 
     private int setsMin = 3;
@@ -24,6 +24,8 @@ public class Exercise {
     private int lastSets = 0;
     private int lastReps = 0;
     private float lastWeight = 0f;
+
+    private int lastDifficulty = -1;
 
     // Zugehörige Muskeln
     public List<String> muscleIds = new ArrayList<>();
@@ -39,11 +41,11 @@ public class Exercise {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public float getMinWeight() { return minWeight; }
-    public void setMinWeight(float minWeight) { this.minWeight = minWeight; }
+    public float getWeightMin() { return weightMin; }
+    public void setWeightMin(float weightMin) { this.weightMin = weightMin; }
 
-    public float getMaxWeight() { return maxWeight; }
-    public void setMaxWeight(float maxWeight) { this.maxWeight = maxWeight; }
+    public float getWeightMax() { return weightMax; }
+    public void setWeightMax(float weightMax) { this.weightMax = weightMax; }
 
     public float getWeightStep() { return weightStep; }
     public void setWeightStep(float weightStep) { this.weightStep = weightStep; }
@@ -101,5 +103,13 @@ public class Exercise {
     }
 
     public float getLastVolume() { return lastSets * lastReps * lastWeight;
+    }
+
+    public int getLastDifficulty() {
+        return lastDifficulty;
+    }
+
+    public void setLastDifficulty(int lastDifficulty) {
+        this.lastDifficulty = lastDifficulty;
     }
 }

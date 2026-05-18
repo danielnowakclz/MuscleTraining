@@ -164,8 +164,8 @@ public class ExerciseEditorDialog extends Dialog {
 
     private void fillFields() {
         editName.setText(ex.getName());
-        editMinW.setText(String.valueOf(ex.getMinWeight()));
-        editMaxW.setText(String.valueOf(ex.getMaxWeight()));
+        editMinW.setText(String.valueOf(ex.getWeightMin()));
+        editMaxW.setText(String.valueOf(ex.getWeightMax()));
         editStepW.setText(String.valueOf(ex.getWeightStep()));
 
         editSetsMin.setText(String.valueOf(ex.getSetsMin()));
@@ -218,8 +218,8 @@ public class ExerciseEditorDialog extends Dialog {
             }
 
             ex.setName(name);
-            ex.setMinWeight(minW);
-            ex.setMaxWeight(maxW);
+            ex.setWeightMin(minW);
+            ex.setWeightMax(maxW);
             ex.setWeightStep(stepW);
 
             ex.setSetsMin(setsMin);

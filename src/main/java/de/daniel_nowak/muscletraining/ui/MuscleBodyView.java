@@ -3,7 +3,9 @@ package de.daniel_nowak.muscletraining.ui;
 import android.content.Context;
 import android.graphics.*;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -21,8 +23,24 @@ public class MuscleBodyView extends View {
     private RectF dstRect = new RectF();
     private Side currentSide = Side.FRONT;
 
+    private Paint bitmapPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
     private Paint markerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private float markerRadius = 14f;
+
+    private float markerRadius;
+
+    // ZOOM + PAN
+    private float scaleFactor = 1f;
+    private float minScale = 1f;
+    private float maxScale = 8f;
+
+    private float translateX = 0f;
+    private float translateY = 0f;
+
+    private float lastFocusX = 0f;
+    private float lastFocusY = 0f;
+
+    private ScaleGestureDetector scaleDetector;
+    private GestureDetector gestureDetector;
 
     public static class Marker {
         public float xNorm;
@@ -46,13 +64,66 @@ public class MuscleBodyView extends View {
 
         markerPaint.setColor(Color.RED);
         markerPaint.setStyle(Paint.Style.FILL);
+
+        markerRadius = 14f * getResources().getDisplayMetrics().density;
+
+        setupGestureDetectors();
     }
+
+    private void setupGestureDetectors() {
+
+        scaleDetector = new ScaleGestureDetector(getContext(),
+                new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+
+                    @Override
+                    public boolean onScale(ScaleGestureDetector detector) {
+
+                        float scale = detector.getScaleFactor();
+                        scaleFactor *= scale;
+
+                        scaleFactor = Math.max(minScale, Math.min(scaleFactor, maxScale));
+
+                        invalidate();
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onScaleBegin(ScaleGestureDetector detector) {
+                        lastFocusX = detector.getFocusX();
+                        lastFocusY = detector.getFocusY();
+                        return true;
+                    }
+                });
+
+        gestureDetector = new GestureDetector(getContext(),
+                new GestureDetector.SimpleOnGestureListener() {
+
+                    @Override
+                    public boolean onScroll(MotionEvent e1, MotionEvent e2, float dx, float dy) {
+
+                        translateX -= dx;
+                        translateY -= dy;
+
+                        invalidate();
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onSingleTapUp(MotionEvent e) {
+                        handleTap(e.getX(), e.getY());
+                        return true;
+                    }
+                });
+    }
+
+    // ---------------------------------------------------------
+    // PUBLIC API
+    // ---------------------------------------------------------
 
     public void setSide(Side s) {
         if (currentSide != s) {
             currentSide = s;
             requestLayout();
-            forceLayout();
             invalidate();
         }
     }
@@ -67,10 +138,15 @@ public class MuscleBodyView extends View {
         return new ArrayList<>(markers);
     }
 
+    // ---------------------------------------------------------
+    // LAYOUT
+    // ---------------------------------------------------------
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 
         Bitmap bmp = (currentSide == Side.FRONT) ? frontBitmap : backBitmap;
+        if (bmp == null) return;
 
         float viewW = w;
         float viewH = h;
@@ -87,16 +163,34 @@ public class MuscleBodyView extends View {
         float top  = (viewH - scaledH) / 2f;
 
         dstRect.set(left, top, left + scaledW, top + scaledH);
+
+        // Zoom zurücksetzen beim Seitenwechsel
+        scaleFactor = 1f;
+        translateX = 0f;
+        translateY = 0f;
     }
+
+    // ---------------------------------------------------------
+    // DRAW
+    // ---------------------------------------------------------
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         Bitmap bmp = (currentSide == Side.FRONT) ? frontBitmap : backBitmap;
+        if (bmp == null) return;
 
-        canvas.drawBitmap(bmp, null, dstRect, null);
+        canvas.save();
 
+        // PAN + ZOOM
+        canvas.translate(translateX, translateY);
+        canvas.scale(scaleFactor, scaleFactor, getWidth()/2f, getHeight()/2f);
+
+        // BODY
+        canvas.drawBitmap(bmp, null, dstRect, bitmapPaint);
+
+        // MARKER
         for (Marker m : markers) {
 
             if (currentSide == Side.FRONT && !"front".equals(m.side)) continue;
@@ -108,45 +202,63 @@ public class MuscleBodyView extends View {
             canvas.drawCircle(x, y, markerRadius, markerPaint);
         }
 
+        canvas.restore();
     }
 
+    // ---------------------------------------------------------
+    // TOUCH HANDLING
+    // ---------------------------------------------------------
+
     @Override
-    public boolean onTouchEvent(MotionEvent e) {
+    public boolean onTouchEvent(MotionEvent event) {
 
-        if (e.getAction() == MotionEvent.ACTION_DOWN) {
+        scaleDetector.onTouchEvent(event);
+        gestureDetector.onTouchEvent(event);
 
-            float x = e.getX();
-            float y = e.getY();
+        return true;
+    }
 
-            if (!dstRect.contains(x, y)) return true;
+    private void handleTap(float x, float y) {
 
-            float nx = (x - dstRect.left) / dstRect.width();
-            float ny = (y - dstRect.top)  / dstRect.height();
+        // Koordinaten zurücktransformieren (Zoom + Pan)
+        float[] pts = new float[]{x, y};
+        Matrix inv = new Matrix();
 
-            String side = (currentSide == Side.FRONT) ? "front" : "back";
+        Matrix m = new Matrix();
+        m.postTranslate(translateX, translateY);
+        m.postScale(scaleFactor, scaleFactor, getWidth()/2f, getHeight()/2f);
 
-            float touchRadius = 0.05f;
+        if (!m.invert(inv)) return;
+        inv.mapPoints(pts);
 
-            for (int i = 0; i < markers.size(); i++) {
-                Marker m = markers.get(i);
+        float tx = pts[0];
+        float ty = pts[1];
 
-                if (!m.side.equals(side)) continue;
+        if (!dstRect.contains(tx, ty)) return;
 
-                float dx = Math.abs(nx - m.xNorm);
-                float dy = Math.abs(ny - m.yNorm);
+        float nx = (tx - dstRect.left) / dstRect.width();
+        float ny = (ty - dstRect.top)  / dstRect.height();
 
-                if (dx < touchRadius && dy < touchRadius) {
-                    markers.remove(i);
-                    invalidate();
-                    return true;
-                }
+        String side = (currentSide == Side.FRONT) ? "front" : "back";
+
+        float touchRadius = 0.05f;
+
+        for (int i = 0; i < markers.size(); i++) {
+            Marker mkr = markers.get(i);
+
+            if (!mkr.side.equals(side)) continue;
+
+            float dx = nx - mkr.xNorm;
+            float dy = ny - mkr.yNorm;
+
+            if (dx * dx + dy * dy < touchRadius * touchRadius) {
+                markers.remove(i);
+                invalidate();
+                return;
             }
-
-            markers.add(new Marker(nx, ny, side));
-            invalidate();
-            return true;
         }
 
-        return super.onTouchEvent(e);
+        markers.add(new Marker(nx, ny, side));
+        invalidate();
     }
 }

@@ -80,11 +80,11 @@ public class ExerciseDatabase {
                 Exercise ex = new Exercise(p.get(0), unesc(p.get(1)));
 
                 try {
-                    ex.setMinWeight(Float.parseFloat(p.get(2)));
+                    ex.setWeightMin(Float.parseFloat(p.get(2)));
                 } catch (Exception ignored) {
                 }
                 try {
-                    ex.setMaxWeight(Float.parseFloat(p.get(3)));
+                    ex.setWeightMax(Float.parseFloat(p.get(3)));
                 } catch (Exception ignored) {
                 }
                 try {
@@ -130,11 +130,13 @@ public class ExerciseDatabase {
                     ex.setLastWeight(Float.parseFloat(p.get(13)));
                 } catch (Exception ignored) {
                 }
+                try {
+                    ex.setLastDifficulty(Integer.parseInt(p.get(14)));
+                } catch (Exception ignored) {
+                }
 
                 try {
-                    if (!p.get(14).isEmpty()) {
-                        ex.muscleIds = new ArrayList<>(Arrays.asList(p.get(14).split(",")));
-                    }
+                        ex.muscleIds = new ArrayList<>(Arrays.asList(p.get(15).split(",")));
                 } catch (Exception ignored) {
                 }
 
@@ -161,8 +163,8 @@ public class ExerciseDatabase {
                 bw.write(
                         ex.getId() + ";" +
                                 esc(ex.getName()) + ";" +
-                                ex.getMinWeight() + ";" +
-                                ex.getMaxWeight() + ";" +
+                                ex.getWeightMin() + ";" +
+                                ex.getWeightMax() + ";" +
                                 ex.getWeightStep() + ";" +
                                 ex.getSetsMin() + ";" +
                                 ex.getSetsMax() + ";" +
@@ -173,6 +175,7 @@ public class ExerciseDatabase {
                                 ex.getLastSets() + ";" +
                                 ex.getLastReps() + ";" +
                                 ex.getLastWeight() + ";" +
+                                ex.getLastDifficulty() + ";" +
                                 muscleList +
                                 "\n"
                 );
@@ -200,19 +203,19 @@ public class ExerciseDatabase {
             ex.setSetsMin(2);
             ex.setSetsMax(5);
             ex.setRepsMin(8);
-            ex.setRepsMax(50);
+            ex.setRepsMax(30);
             ex.setRepsStep(2);
-            ex.setMinWeight(5.0f);
-            ex.setMaxWeight(32.0f);
+            ex.setWeightMin(5.0f);
+            ex.setWeightMax(32.0f);
             ex.setWeightStep(2.5f);
         } else {
             ex.setSetsMin(2);
             ex.setSetsMax(5);
             ex.setRepsMin(8);
-            ex.setRepsMax(50);
+            ex.setRepsMax(30);
             ex.setRepsStep(2);
-            ex.setMinWeight(2.0f);
-            ex.setMaxWeight(18.0f);
+            ex.setWeightMin(2.0f);
+            ex.setWeightMax(18.0f);
             ex.setWeightStep(2.0f);
         }
         return ex;

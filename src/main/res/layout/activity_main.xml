@@ -292,6 +292,35 @@
                     android:textSize="12sp"
                     android:textColor="#777"/>
 
+                <!-- Schwierigkeit / subjektive Belastung -->
+                <TextView
+                    android:id="@+id/label_difficulty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Wie schwer war die Übung?"
+                    android:textStyle="bold"
+                    android:layout_marginTop="24dp"
+                    android:gravity="center_horizontal"/>
+
+                <SeekBar
+                    android:id="@+id/seek_difficulty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:max="2"
+                    android:progress="1" />
+
+                <TextView
+                    android:id="@+id/txt_difficulty_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Angenehm"
+                    android:textSize="14sp"
+                    android:textColor="#777"
+                    android:gravity="center_horizontal"
+                    android:layout_marginBottom="16dp"/>
+
+
                 <Button
                     android:id="@+id/btn_save_training"
                     android:layout_width="wrap_content"
