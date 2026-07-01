@@ -20,7 +20,7 @@
 
         <!-- LETZTES TRAINING -->
         <TextView
-            android:text="Zuletzt trainiert:"
+            android:text="@string/label_last_trained_colon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -32,7 +32,7 @@
 
         <!-- TRAININGS LETZTE 7 TAGE -->
         <TextView
-            android:text="Trainings letzte 7 Tage:"
+            android:text="@string/label_trainings_last_7_days_colon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -44,7 +44,7 @@
 
         <!-- WARNUNG -->
         <TextView
-            android:text="Hinweis:"
+            android:text="@string/label_note_colon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -57,7 +57,7 @@
 
         <!-- INTENSITÄT -->
         <TextView
-            android:text="Belastung:"
+            android:text="@string/label_load_colon"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -69,7 +69,7 @@
 
         <!-- VOLUMENVERLAUF (GRAFISCH) -->
         <TextView
-            android:text="Volumenverlauf:"
+            android:text="@string/label_volume_history_colon"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -91,7 +91,7 @@
 
         <!-- TRAININGSVERLAUF -->
         <TextView
-            android:text="Trainingsverlauf:"
+            android:text="@string/label_training_history_colon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -103,7 +103,7 @@
         <!-- OK BUTTON -->
         <Button
             android:id="@+id/btn_ok"
-            android:text="OK"
+            android:text="@string/btn_ok"
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

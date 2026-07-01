@@ -18,7 +18,6 @@ public class ExerciseActivity extends BaseActivity {
     private ListView listView;
     private Button btnAdd;
 
-    private ArrayAdapter<Exercise> adapter;
     private List<Exercise> exerciseList = new ArrayList<>();
 
     @Override
@@ -26,25 +25,22 @@ public class ExerciseActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercises);
 
-        // ⭐ Einheitliche Toolbar-ID
         setupToolbar(R.id.toolbar);
-        applyEdgeToEdge();
+        applyOrientationLayout();
 
         listView = findViewById(R.id.list_exercises);
         btnAdd = findViewById(R.id.btn_add);
 
         loadExercises();
 
-        // ⭐ Editor öffnen
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Exercise ex = exerciseList.get(position);
             openEditor(ex);
         });
 
-        // ⭐ Neue Übung
         btnAdd.setOnClickListener(v -> {
             String id = UUID.randomUUID().toString();
-            db.exercises.add(id, "Neue Übung");
+            db.exercises.add(id, getString(R.string.default_new_exercise_name));
             Exercise ex = db.exercises.exercises.get(id);
             openEditor(ex);
         });
@@ -58,10 +54,9 @@ public class ExerciseActivity extends BaseActivity {
         exerciseList = new ArrayList<>(db.exercises.exercises.values());
         Collections.sort(exerciseList, Comparator.comparing(Exercise::getName));
 
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, exerciseList);
+        ArrayAdapter<Exercise> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, exerciseList);
         listView.setAdapter(adapter);
 
-        // ⭐ Optional: Scroll nach oben
         listView.post(() -> listView.setSelection(0));
     }
 

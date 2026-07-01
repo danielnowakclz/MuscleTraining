@@ -19,10 +19,6 @@ public class TrainingDatabase {
         file = new File(context.getFilesDir(), FILE_NAME);
     }
 
-    // ---------------------------------------------------------
-    // LOAD
-    // ---------------------------------------------------------
-
     public void load() {
         trainings.clear();
 
@@ -34,22 +30,22 @@ public class TrainingDatabase {
             while ((line = br.readLine()) != null) {
 
                 String[] p = line.split(";", -1);
-                    Training t = new Training(
-                            p[0],
-                            Long.parseLong(p[1]),
-                            Integer.parseInt(p[2]),
-                            Integer.parseInt(p[3]),
-                            Float.parseFloat(p[4]),
-                            p[5]
-                    );
+                Training t = new Training(
+                        p[0],
+                        Long.parseLong(p[1]),
+                        Integer.parseInt(p[2]),
+                        Integer.parseInt(p[3]),
+                        Float.parseFloat(p[4]),
+                        p[5]
+                );
 
-                        t.muscleIds = new ArrayList<>(Arrays.asList(p[6].split(",")));
-                        try {
-                            t.difficulty = Integer.parseInt(p[7]);
-                        } catch (Exception ignored) {
-                        }
+                t.muscleIds = new ArrayList<>(Arrays.asList(p[6].split(",")));
+                try {
+                    t.difficulty = Integer.parseInt(p[7]);
+                } catch (Exception ignored) {
+                }
 
-                    trainings.put(t.getId(), t);
+                trainings.put(t.getId(), t);
 
             }
 
@@ -57,10 +53,6 @@ public class TrainingDatabase {
             e.printStackTrace();
         }
     }
-
-    // ---------------------------------------------------------
-    // SAVE
-    // ---------------------------------------------------------
 
     public void save() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
@@ -77,11 +69,8 @@ public class TrainingDatabase {
                     }
                 }
 
-                // ---------------------------------------------
-                // TRAINING ENTFERNEN, WENN ES KOMPLETT WERTLOS IST
-                // ---------------------------------------------
                 if (exerciseDeleted && allMusclesDeleted) {
-                    continue; // NICHT speichern
+                    continue;
                 }
 
                 String muscleList = String.join(",", t.muscleIds);
@@ -105,10 +94,6 @@ public class TrainingDatabase {
             e.printStackTrace();
         }
     }
-
-    // ---------------------------------------------------------
-    // DELETE EXERCISE → Trainings NICHT löschen!
-    // ---------------------------------------------------------
 
     public void markExerciseDeleted(String exerciseId) {
 

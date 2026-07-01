@@ -8,45 +8,32 @@ import de.daniel_nowak.muscletraining.model.Exercise;
 
 public class RecommendationService {
 
-    // ---------------------------------------------------------
-    // Moderne ETL-Berechnung: exponentielle Kraftkurve + RIR-Effort
-    // ---------------------------------------------------------
     public static float calcETL(int sets, int reps, float weight, int difficulty) {
 
-        // 1) Volumen
+        // 1RM Schätzung (Epley)
+        float oneRm = weight * (1f + reps / 30f);
+
+        // Intensität als %1RM
+        float intensity = weight / oneRm;
+
+        // Volume Load
         float volume = sets * reps * weight;
 
-        // 2) Moderne Intensität (exponentielle Kraftkurve)
-        float intensity = (float) Math.exp(-0.035f * reps);
-
-        // 3) RIR aus Difficulty ableiten
+        // RIR basierter Effort
         int rir;
         switch (difficulty) {
-            case 0:
-                rir = 5;
-                break; // leicht
-            case 1:
-                rir = 2;
-                break; // angenehm
-            case 2:
-                rir = 0;
-                break; // schwer
-            default:
-                rir = 3;
-                break;
+            case 0: rir = 0; break;
+            case 1: rir = 2; break;
+            case 2: rir = 4; break;
+            case 3: rir = 6; break; // besser als 5
+            default: rir = 3; break;
         }
 
-        // 4) Effort-Faktor
         float effort = 1f - (rir / 10f);
 
-        // 5) Moderne ETL-Formel
         return volume * intensity * effort;
     }
 
-
-    // ---------------------------------------------------------
-    // Zielverschiebung
-    // ---------------------------------------------------------
     public static Recommendation next(Exercise ex, List<Recommendation> all) {
 
         int lastSets = ex.getLastSets();
@@ -54,9 +41,6 @@ public class RecommendationService {
         float lastWeight = ex.getLastWeight();
         int diff = ex.getLastDifficulty();
 
-        // ---------------------------------------------------------
-        // 1. Startindex suchen: exakte Kombination
-        // ---------------------------------------------------------
         int index = -1;
 
         for (int i = 0; i < all.size(); i++) {
@@ -69,10 +53,6 @@ public class RecommendationService {
             }
         }
 
-        // ---------------------------------------------------------
-        // 2. Wenn exakte Kombination nicht existiert:
-        //    → Kombination mit minimaler ETL-Differenz finden
-        // ---------------------------------------------------------
         if (index == -1) {
             float lastETL = RecommendationService.calcETL(
                     lastSets, lastReps, lastWeight, 1
@@ -92,44 +72,32 @@ public class RecommendationService {
             index = bestIndex;
         }
 
-        // ---------------------------------------------------------
-        // 3. Zeigerbewegung abhängig von Difficulty
-        // ---------------------------------------------------------
         int newIndex = index;
 
         switch (diff) {
-            case 0: // leicht → 2 Schritte nach oben
-                newIndex = index + 2;
+            case 0:
+                newIndex = index  - 1;
                 break;
 
-            case 1: // angenehm → 1 Schritt nach oben
+            case 2:
                 newIndex = index + 1;
                 break;
 
-            case 2: // schwer → 1 Schritt nach unten
-                newIndex = index - 1;
+            case 3:
+                newIndex = index + 2;
                 break;
 
             default:
                 newIndex = index;
         }
 
-        // ---------------------------------------------------------
-        // 4. Grenzen einhalten
-        // ---------------------------------------------------------
         if (newIndex < 0) newIndex = 0;
         if (newIndex >= all.size()) newIndex = all.size() - 1;
 
-        // ---------------------------------------------------------
-        // 5. Empfehlung zurückgeben
-        // ---------------------------------------------------------
         return all.get(newIndex);
     }
 
 
-    // ---------------------------------------------------------
-    // Moderne allCombos(): ETL-Deduplizierung + exponentielle Kurve
-    // ---------------------------------------------------------
     public static List<Recommendation> allCombos(
             int minSets, int maxSets,
             int minReps, int maxReps, int stepReps,
@@ -141,10 +109,8 @@ public class RecommendationService {
             for (int reps = minReps; reps <= maxReps; reps += stepReps) {
                 for (float weight = minWeight; weight <= maxWeight; weight += stepWeight) {
 
-                    // Difficulty = 1 (neutral) für ETL-Basisberechnung
                     float etl = calcETL(sets, reps, weight, 1);
 
-                    // ETL runden, um Float-Duplikate zu vermeiden
                     float key = Math.round(etl * 1000f) / 1000f;
 
                     Recommendation candidate =
@@ -166,9 +132,6 @@ public class RecommendationService {
     }
 
 
-    // ---------------------------------------------------------
-    // Recommendation-Datenklasse
-    // ---------------------------------------------------------
     public static class Recommendation {
         public final int sets;
         public final int reps;

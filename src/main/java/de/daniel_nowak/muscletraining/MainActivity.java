@@ -1,12 +1,21 @@
 package de.daniel_nowak.muscletraining;
 
 import android.os.Bundle;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import de.daniel_nowak.muscletraining.logic.RecommendationService;
-import de.daniel_nowak.muscletraining.model.*;
+import de.daniel_nowak.muscletraining.model.Exercise;
+import de.daniel_nowak.muscletraining.model.Muscle;
 import de.daniel_nowak.muscletraining.ui.MuscleRegenView;
 
 public class MainActivity extends BaseActivity {
@@ -26,7 +35,7 @@ public class MainActivity extends BaseActivity {
 
     SeekBar seekDifficulty;
     TextView txtDifficultyLabel;
-    int selectedDifficulty = 1; // Default = angenehm
+    int selectedDifficulty = 1;
 
     List<RecommendationService.Recommendation> etlCombos;
 
@@ -40,11 +49,11 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         setupToolbar(R.id.toolbar);
-        applyEdgeToEdge();
+        applyOrientationLayout();
 
         binder = new MainUiBinder(this);
         binder.bind();
-
+        
         highlightFront();
 
         ui = new MainUiController(this);
@@ -99,33 +108,33 @@ public class MainActivity extends BaseActivity {
         float range = maxRM - minRM;
 
         if (range <= 0.0001f) {
-            txtIntensity.setText("Intensität: 0 %");
+            txtIntensity.setText(R.string.intensity_label_zero);
             return;
         }
 
         float percent = (etl - minRM) / range * 100f;
         percent = Math.max(0, Math.min(100, percent));
 
-        txtIntensity.setText("Intensität: " + Math.round(percent) + " %");
+        txtIntensity.setText(getString(R.string.intensity_label_format, Math.round(percent)));
     }
 
     void resetUI() {
 
-        txtLast.setText("Letztes Training: –");
-        txtRec.setText("Empfehlung: –");
-        txtIntensity.setText("Intensität: –");
-        txtMuscleWarning.setText("–");
+        txtLast.setText(R.string.label_last_training);
+        txtRec.setText(R.string.label_recommendation);
+        txtIntensity.setText(R.string.label_intensity);
+        txtMuscleWarning.setText(R.string.placeholder_dash);
         txtMuscleWarning.setTextColor(0xFF777777);
-        txtRegen.setText("Regeneration: –");
+        txtRegen.setText(R.string.label_regeneration);
         txtRegen.setTextColor(0xFF777777);
 
         inputSets.setText("");
         inputReps.setText("");
         inputWeight.setText("");
 
-        hintSets.setText("Min – Max");
-        hintReps.setText("Min – Max – Schritt");
-        hintWeight.setText("Min – Max – Schritt");
+        hintSets.setText(R.string.hint_min_max);
+        hintReps.setText(R.string.hint_min_max_step);
+        hintWeight.setText(R.string.hint_min_max_step);
 
         btnSave.setEnabled(false);
         btnSetsMinus.setEnabled(false);
@@ -140,7 +149,7 @@ public class MainActivity extends BaseActivity {
 
         selectedDifficulty = -1;
         seekDifficulty.setEnabled(false);
-        seekDifficulty.setProgress(0);
+        seekDifficulty.setProgress(2);
     }
 
     boolean validateInputs() {
@@ -149,7 +158,7 @@ public class MainActivity extends BaseActivity {
         String sWeight = normalizeNumberInput(inputWeight.getText().toString());
 
         if (sSets.isEmpty() || sReps.isEmpty() || sWeight.isEmpty()) {
-            Toast.makeText(this, "Bitte alle Felder ausfüllen.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_fill_all_fields, Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -159,14 +168,14 @@ public class MainActivity extends BaseActivity {
             float weight = Float.parseFloat(sWeight);
 
             if (sets <= 0 || reps <= 0 || weight <= 0) {
-                Toast.makeText(this, "Ungültige Werte: Sätze, Wiederholungen und Gewicht müssen > 0 sein.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.toast_invalid_values_positive, Toast.LENGTH_SHORT).show();
                 return false;
             }
 
             inputWeight.setText(sWeight);
 
         } catch (Exception e) {
-            Toast.makeText(this, "Bitte gültige Zahlen eingeben.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_invalid_numbers, Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -233,12 +242,6 @@ public class MainActivity extends BaseActivity {
         return map;
     }
 
-    String formatDate(long time) {
-        java.text.SimpleDateFormat sdf =
-                new java.text.SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
-        return sdf.format(new java.util.Date(time));
-    }
-
     void refreshExerciseSpinner() {
         List<Exercise> list = new ArrayList<>(db.exercises.exercises.values());
 
@@ -261,7 +264,8 @@ public class MainActivity extends BaseActivity {
             value = increase ? value + step : value - step;
             value = Math.max(min, Math.min(max, value));
             field.setText(String.valueOf(value));
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     void adjustFloat(EditText field, float step, float min, float max, boolean increase) {
@@ -270,7 +274,8 @@ public class MainActivity extends BaseActivity {
             value = increase ? value + step : value - step;
             value = Math.max(min, Math.min(max, value));
             field.setText(formatWeight(value));
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
 }

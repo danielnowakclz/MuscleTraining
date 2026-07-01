@@ -1,3 +1,189 @@
 <resources>
     <string name="app_name">ETL Muskel Training</string>
+
+    <!-- Common -->
+    <string name="placeholder_dash" translatable="false">–</string>
+    <string name="btn_minus">-</string>
+    <string name="btn_plus">+</string>
+    <string name="hint_zero">0</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Abbrechen</string>
+    <string name="btn_save">Speichern</string>
+    <string name="btn_delete">Löschen</string>
+
+    <!-- Main Activity -->
+    <string name="btn_front">Vorderseite</string>
+    <string name="btn_back">Rückseite</string>
+    <string name="label_last_training">Letztes Training: –</string>
+    <string name="label_last_training_format">Letztes Training: %1$d×%2$d @ %3$s kg%4$s</string>
+    <string name="label_recommendation">Empfehlung: –</string>
+    <string name="label_recommendation_format">Empfehlung: %1$d×%2$d @ %3$s kg</string>
+    <string name="label_intensity">Intensität: –</string>
+    <string name="intensity_label_zero">Intensität: 0 %%</string>
+    <string name="intensity_label_format">Intensität: %1$d %%</string>
+    <string name="label_regeneration">Regeneration: –</string>
+    <string name="label_regeneration_format">Regeneration: %1$d %%</string>
+    <string name="label_sets">Sätze</string>
+    <string name="hint_min_max">Min – Max</string>
+    <string name="hint_sets_format">Min: %1$d – Max: %2$d</string>
+    <string name="label_reps">Wiederholungen</string>
+    <string name="hint_min_max_step">Min – Max – Schritt</string>
+    <string name="hint_reps_format">Min: %1$d – Max: %2$d – Schritt: %3$d</string>
+    <string name="label_weight">Gewicht (kg)</string>
+    <string name="hint_weight_format">Min: %1$s – Max: %2$s – Schritt: %3$s</string>
+    <string name="label_difficulty_question">Wie schwer war die Übung?</string>
+    <string name="difficulty_hard">Schwer</string>
+    <string name="difficulty_repeatable">Wiederholbar</string>
+    <string name="difficulty_pleasant">Angenehm</string>
+    <string name="difficulty_easy">Leicht</string>
+    <string name="warning_too_early">🔴 Zu früh: %1$s</string>
+    <string name="warning_caution">🟡 Vorsicht: %1$s</string>
+    <string name="warning_ok">🟢 OK: %1$s</string>
+
+    <!-- Activities Toolbar Subtitles -->
+    <string name="subtitle_training">Training</string>
+    <string name="subtitle_exercises">Übungen</string>
+    <string name="subtitle_muscles">Muskeln</string>
+
+    <!-- Exercise Activity -->
+    <string name="btn_new_exercise">Neue Übung</string>
+    <string name="default_new_exercise_name">Neue Übung</string>
+
+    <!-- Muscle Activity -->
+    <string name="btn_new_muscle">Neuer Muskel</string>
+    <string name="default_new_muscle_name">Neuer Muskel</string>
+
+    <!-- Exercise Editor Dialog -->
+    <string name="label_exercise_name">Name der Übung</string>
+    <string name="hint_exercise_name_example">z. B. Bankdrücken</string>
+    <string name="label_sets_range">Sätze (von – bis)</string>
+    <string name="hint_min">Min</string>
+    <string name="hint_max">Max</string>
+    <string name="label_reps_range_step">Wiederholungen (von – bis – Schritt)</string>
+    <string name="hint_step">Schritt</string>
+    <string name="label_weights_range_step">Gewichte (von – bis – Schritt)</string>
+    <string name="label_search_muscles">Muskeln suchen</string>
+    <string name="hint_search_muscles_example">z. B. Brust, Rücken&#8230;</string>
+
+    <!-- Muscle Editor Dialog -->
+    <string name="label_muscle_name">Name des Muskels</string>
+    <string name="hint_muscle_name_example">z. B. Pectoralis Major</string>
+    <string name="label_category">Kategorie</string>
+    <string name="label_body_position">Position auf dem Körper</string>
+    <string name="label_related_exercises">Zugehörige Übungen</string>
+    <string name="hint_search_exercises">Übungen suchen...</string>
+    <string name="category_arms">Arme</string>
+    <string name="category_shoulders">Schultern</string>
+    <string name="category_chest">Brust</string>
+    <string name="category_back">Rücken</string>
+    <string name="category_core">Rumpf</string>
+    <string name="category_legs">Beine</string>
+
+    <!-- Muscle Info Dialog -->
+    <string name="label_last_trained_colon">Zuletzt trainiert:</string>
+    <string name="label_trainings_last_7_days_colon">Trainings letzte 7 Tage:</string>
+    <string name="label_note_colon">Hinweis:</string>
+    <string name="label_load_colon">Belastung:</string>
+    <string name="label_volume_history_colon">Volumenverlauf:</string>
+    <string name="label_training_history_colon">Trainingsverlauf:</string>
+    <string name="warning_too_early_percent">🔴 Zu früh: %1$d%% regeneriert</string>
+    <string name="warning_caution_percent">🟡 Vorsicht: %1$d%% regeneriert</string>
+    <string name="warning_ok_percent">🟢 OK: %1$d%% regeneriert</string>
+
+    <!-- Menu -->
+    <string name="menu_view">Ansicht</string>
+    <string name="menu_training">Training</string>
+    <string name="menu_exercises">Übungen</string>
+    <string name="menu_muscles">Muskeln</string>
+    <string name="menu_create_training">Training erstellen</string>
+    <string name="menu_delete_training">Training löschen</string>
+    <string name="menu_data">Daten</string>
+    <string name="menu_add_demo">Demo-Daten hinzufügen</string>
+    <string name="menu_import_xml">Importieren (XML)</string>
+    <string name="menu_export_xml">Exportieren (XML)</string>
+    <string name="menu_delete_all">Alle Daten löschen</string>
+
+    <!-- Toasts -->
+    <string name="toast_training_created">Training erstellt</string>
+    <string name="toast_training_deleted">Training gelöscht</string>
+    <string name="toast_export_success">Export erfolgreich</string>
+    <string name="toast_export_error">Fehler beim Export</string>
+    <string name="toast_import_success">Import erfolgreich</string>
+    <string name="toast_import_error">Fehler beim Import</string>
+    <string name="toast_demo_data_added">Demo-Daten hinzugefügt</string>
+    <string name="toast_all_data_deleted">Alle Daten gelöscht</string>
+    <string name="toast_fill_all_fields">Bitte alle Felder ausfüllen.</string>
+    <string name="toast_invalid_values_positive">Ungültige Werte: Sätze, Wiederholungen und Gewicht müssen > 0 sein.</string>
+    <string name="toast_invalid_numbers">Bitte gültige Zahlen eingeben.</string>
+    <string name="toast_name_not_empty">Name darf nicht leer sein</string>
+    <string name="toast_weights_positive">Gewichte müssen > 0 sein</string>
+    <string name="toast_sets_positive">Sätze müssen > 0 sein</string>
+    <string name="toast_reps_positive">Wiederholungen müssen > 0 sein</string>
+    <string name="toast_fill_all_fields_correctly">Bitte alle Felder korrekt ausfüllen</string>
+
+    <!-- Demo Exercises KH -->
+    <string name="exercise_kh01">KH01: Alternierender Bizeps‑Curl im Stand</string>
+    <string name="exercise_kh03">KH03: Einarmiger Bizeps‑Curl im Sitzen</string>
+    <string name="exercise_kh02">KH02: Trizeps‑Kickback</string>
+    <string name="exercise_kh04">KH04: Einarmiges Trizeps‑Strecken im Stütz</string>
+    <string name="exercise_kh06">KH06: Seitheben</string>
+    <string name="exercise_kh11">KH11: Schulterdrücken</string>
+    <string name="exercise_kh15">KH15: Brustdrücken mit Kurzhanteln</string>
+    <string name="exercise_kh16">KH16: Butterfly (Dumbbell Flys)</string>
+    <string name="exercise_kh13">KH13: Einarmiges Rudern</string>
+    <string name="exercise_kh36">KH36: Vorgebeugtes Rudern</string>
+    <string name="exercise_kh40">KH40: Beinbeugen in Bauchlage</string>
+    <string name="exercise_kh49">KH49: Kreuzheben mit Kurzhanteln</string>
+    <string name="exercise_kh18">KH18: Crunch mit Kurzhantel</string>
+    <string name="exercise_kh20">KH20: Crunch mit Beinhub</string>
+    <string name="exercise_kh19">KH19: Seitliches Kniependel</string>
+    <string name="exercise_kh30">KH30: Rotations‑Crunch aus dem Stütz</string>
+    <string name="exercise_kh24">KH24: Ausrollen mit Kurzhantel</string>
+    <string name="exercise_kh28">KH28: Seitstütz mit Hüftlift</string>
+    <string name="exercise_kh38">KH38: Kniebeuge tief</string>
+    <string name="exercise_kh41">KH41: Ausfallschritt mit Vorhalte</string>
+    <string name="exercise_kh43">KH43: Beinheben seitlich (Abduktoren)</string>
+    <string name="exercise_kh44">KH44: Beinheben innen (Adduktoren)</string>
+    <string name="exercise_kh42">KH42: Hüftkick im Vierfüßler</string>
+    <string name="exercise_kh45">KH45: Beckenlift mit Kurzhantel</string>
+
+    <!-- Demo Exercises KB -->
+    <string name="exercise_kb01">KB01: Hip Hinge</string>
+    <string name="exercise_kb49">KB49: Kreuzheben mit Kettlebell</string>
+    <string name="exercise_kb03">KB03: Kettlebell Swing (Double Arm)</string>
+    <string name="exercise_kb15">KB15: Kettlebell Clean</string>
+    <string name="exercise_kb16">KB16: Push Press</string>
+    <string name="exercise_kb47">KB47: Single Arm Thruster</string>
+    <string name="exercise_kb31">KB31: Push‑Up mit Kettlebell</string>
+    <string name="exercise_kb32">KB32: Floor Press</string>
+    <string name="exercise_kb33">KB33: Vorgebeugtes Rudern</string>
+    <string name="exercise_kb35">KB35: Renegade Row</string>
+    <string name="exercise_kb38">KB38: Overhead Sit‑Up</string>
+    <string name="exercise_kb40">KB40: Leg Raise</string>
+    <string name="exercise_kb39">KB39: Russian Twist</string>
+    <string name="exercise_kb30">KB30: Twist (Rotation)</string>
+    <string name="exercise_kb12">KB12: Farmers Walk</string>
+    <string name="exercise_kb41">KB41: Side Plank Hip Lift</string>
+    <string name="exercise_kb48">KB48: Overhead Squat</string>
+    <string name="exercise_kb50">KB50: Squat Flip</string>
+    <string name="exercise_kb42">KB42: Side Plank Leg Lift</string>
+    <string name="exercise_kb46">KB46: Side Lunge&amp; Pass</string>
+
+    <string name="muscle_shoulders">Schultern</string>
+    <string name="muscle_chest">Brust</string>
+    <string name="muscle_biceps">Bizeps</string>
+    <string name="muscle_abs_straight">Gerade Bauchmuskeln</string>
+    <string name="muscle_abs_oblique">Schräge Bauchmuskeln</string>
+    <string name="muscle_core_rotators">Rumpfrotatoren</string>
+    <string name="muscle_core_stabilizers">Rumpfstabilisatoren</string>
+    <string name="muscle_adductors">Adduktoren</string>
+    <string name="muscle_abductors">Abduktoren</string>
+    <string name="muscle_quadriceps">Quadrizeps</string>
+    <string name="muscle_neck">Nacken</string>
+    <string name="muscle_back_upper">Oberer Rücken</string>
+    <string name="muscle_back_lower">Unterer Rücken</string>
+    <string name="muscle_triceps">Trizeps</string>
+    <string name="muscle_gluteus">Gluteus</string>
+    <string name="muscle_hamstrings">Hamstrings</string>
+
 </resources>

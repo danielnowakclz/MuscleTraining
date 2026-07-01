@@ -17,27 +17,23 @@ public class MuscleBodyView extends View {
 
     public enum Side { FRONT, BACK }
 
-    private Bitmap frontBitmap;
-    private Bitmap backBitmap;
+    private final Bitmap frontBitmap;
+    private final Bitmap backBitmap;
 
-    private RectF dstRect = new RectF();
+    private final RectF dstRect = new RectF();
     private Side currentSide = Side.FRONT;
 
-    private Paint bitmapPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-    private Paint markerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint bitmapPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+    private final Paint markerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-    private float markerRadius;
+    private final float markerRadius;
 
-    // ZOOM + PAN
     private float scaleFactor = 1f;
-    private float minScale = 1f;
-    private float maxScale = 8f;
+    private final float minScale = 1f;
+    private final float maxScale = 8f;
 
     private float translateX = 0f;
     private float translateY = 0f;
-
-    private float lastFocusX = 0f;
-    private float lastFocusY = 0f;
 
     private ScaleGestureDetector scaleDetector;
     private GestureDetector gestureDetector;
@@ -87,12 +83,6 @@ public class MuscleBodyView extends View {
                         return true;
                     }
 
-                    @Override
-                    public boolean onScaleBegin(ScaleGestureDetector detector) {
-                        lastFocusX = detector.getFocusX();
-                        lastFocusY = detector.getFocusY();
-                        return true;
-                    }
                 });
 
         gestureDetector = new GestureDetector(getContext(),
@@ -116,10 +106,6 @@ public class MuscleBodyView extends View {
                 });
     }
 
-    // ---------------------------------------------------------
-    // PUBLIC API
-    // ---------------------------------------------------------
-
     public void setSide(Side s) {
         if (currentSide != s) {
             currentSide = s;
@@ -137,10 +123,6 @@ public class MuscleBodyView extends View {
     public List<Marker> getMarkers() {
         return new ArrayList<>(markers);
     }
-
-    // ---------------------------------------------------------
-    // LAYOUT
-    // ---------------------------------------------------------
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -164,15 +146,10 @@ public class MuscleBodyView extends View {
 
         dstRect.set(left, top, left + scaledW, top + scaledH);
 
-        // Zoom zurücksetzen beim Seitenwechsel
         scaleFactor = 1f;
         translateX = 0f;
         translateY = 0f;
     }
-
-    // ---------------------------------------------------------
-    // DRAW
-    // ---------------------------------------------------------
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -183,14 +160,11 @@ public class MuscleBodyView extends View {
 
         canvas.save();
 
-        // PAN + ZOOM
         canvas.translate(translateX, translateY);
         canvas.scale(scaleFactor, scaleFactor, getWidth()/2f, getHeight()/2f);
 
-        // BODY
         canvas.drawBitmap(bmp, null, dstRect, bitmapPaint);
 
-        // MARKER
         for (Marker m : markers) {
 
             if (currentSide == Side.FRONT && !"front".equals(m.side)) continue;
@@ -205,10 +179,6 @@ public class MuscleBodyView extends View {
         canvas.restore();
     }
 
-    // ---------------------------------------------------------
-    // TOUCH HANDLING
-    // ---------------------------------------------------------
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
@@ -220,7 +190,6 @@ public class MuscleBodyView extends View {
 
     private void handleTap(float x, float y) {
 
-        // Koordinaten zurücktransformieren (Zoom + Pan)
         float[] pts = new float[]{x, y};
         Matrix inv = new Matrix();
 

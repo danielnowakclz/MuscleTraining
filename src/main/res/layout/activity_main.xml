@@ -1,338 +1,360 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:layout_height="match_parent">
 
+    <!-- Fixierte Toolbar oben -->
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/container"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:paddingBottom="32dp">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Gemeinsame Toolbar -->
-        <include
-            android:id="@+id/include_toolbar"
-            layout="@layout/toolbar_common" />
+        <include layout="@layout/toolbar_common" />
+    </LinearLayout>
 
-        <!-- MaxWidth-Container (zentriert, ohne wirkungsloses maxWidth) -->
+
+    <!-- Scrollbarer Inhalt unter der Toolbar -->
+    <ScrollView
+        android:id="@+id/scroll_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/container"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Dein kompletter Inhalt unverändert -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_horizontal"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp">
+            android:paddingBottom="32dp">
 
-            <!-- Inhalt auf sinnvolle Breite begrenzen -->
+            <!-- MaxWidth-Container -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="0dp">
-
-                <!-- Spinner -->
-                <Spinner
-                    android:id="@+id/spinner_exercise"
-                    style="@style/TrainingSpinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"/>
-
-                <!-- Letztes Training -->
-                <TextView
-                    android:id="@+id/txt_last_training"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Letztes Training: –"
-                    android:textSize="16sp"
-                    android:layout_marginTop="16dp"/>
-
-                <!-- Empfehlung -->
-                <TextView
-                    android:id="@+id/txt_recommendation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Empfehlung: –"
-                    android:textSize="16sp"
-                    android:layout_marginTop="8dp"/>
-
-                <!-- Muskelwarnung -->
-                <TextView
-                    android:id="@+id/txt_muscle_warning"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="–"
-                    android:textSize="15sp"
-                    android:textColor="#777"
-                    android:layout_marginTop="8dp"/>
-
-                <!-- Regeneration -->
-                <TextView
-                    android:id="@+id/txt_regen"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Regeneration: –"
-                    android:textSize="15sp"
-                    android:textColor="#777"
-                    android:layout_marginTop="4dp"/>
-
-                <!-- Regenerations-Heatmap -->
-                <de.daniel_nowak.muscletraining.ui.MuscleRegenView
-                    android:id="@+id/view_regen"
-                    android:layout_width="match_parent"
-                    android:layout_height="420dp"
-                    android:layout_marginTop="16dp"/>
+                android:gravity="center_horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
 
                 <LinearLayout
-                    android:id="@+id/layout_side_switch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_marginTop="12dp">
+                    android:orientation="vertical">
 
+                    <!-- Spinner -->
+                    <Spinner
+                        android:id="@+id/spinner_exercise"
+                        style="@style/TrainingSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"/>
+
+                    <!-- Letztes Training -->
+                    <TextView
+                        android:id="@+id/txt_last_training"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_last_training"
+                        android:textSize="16sp"
+                        android:layout_marginTop="16dp"/>
+
+                    <!-- Empfehlung -->
+                    <TextView
+                        android:id="@+id/txt_recommendation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_recommendation"
+                        android:textSize="16sp"
+                        android:layout_marginTop="8dp"/>
+
+                    <!-- Muskelwarnung -->
+                    <TextView
+                        android:id="@+id/txt_muscle_warning"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/placeholder_dash"
+                        android:textSize="15sp"
+                        android:textColor="#777"
+                        android:layout_marginTop="8dp"/>
+
+                    <!-- Regeneration -->
+                    <TextView
+                        android:id="@+id/txt_regen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_regeneration"
+                        android:textSize="15sp"
+                        android:textColor="#777"
+                        android:layout_marginTop="4dp"/>
+
+                    <!-- Regenerations-Heatmap -->
+                    <de.daniel_nowak.muscletraining.ui.MuscleRegenView
+                        android:id="@+id/view_regen"
+                        android:layout_width="match_parent"
+                        android:layout_height="420dp"
+                        android:layout_marginTop="16dp"/>
+
+                    <!-- Front/Back Buttons -->
+                    <LinearLayout
+                        android:id="@+id/layout_side_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_marginTop="12dp">
+
+                        <Button
+                            android:id="@+id/btn_front"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/btn_front" />
+
+                        <Button
+                            android:id="@+id/btn_back"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/btn_back"
+                            android:layout_marginStart="16dp" />
+
+                    </LinearLayout>
+
+                    <!-- RM SeekBar -->
+                    <SeekBar
+                        android:id="@+id/seek_etl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="4dp"/>
+
+                    <!-- Intensität -->
+                    <TextView
+                        android:id="@+id/txt_intensity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_intensity"
+                        android:textSize="14sp"
+                        android:textColor="#777"
+                        android:gravity="center_horizontal"
+                        android:layout_marginBottom="16dp"/>
+
+                    <!-- Sätze -->
+                    <TextView
+                        android:id="@+id/label_sets"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_sets"
+                        android:textStyle="bold"
+                        android:layout_marginTop="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="start|center_vertical">
+
+                        <EditText
+                            android:id="@+id/input_sets"
+                            android:layout_width="80dp"
+                            android:layout_height="48dp"
+                            android:padding="12dp"
+                            android:background="@drawable/edittext_rounded"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:hint="@string/hint_zero"/>
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"/>
+
+                        <Button
+                            android:id="@+id/btn_sets_minus"
+                            style="@style/PlusMinusButton.Rounded.Secondary"
+                            android:layout_width="56dp"
+                            android:layout_height="48dp"
+                            android:text="@string/btn_minus"/>
+
+                        <Button
+                            android:id="@+id/btn_sets_plus"
+                            style="@style/PlusMinusButton.Rounded"
+                            android:layout_width="56dp"
+                            android:layout_height="48dp"
+                            android:text="@string/btn_plus"
+                            android:layout_marginStart="8dp"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/hint_sets"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hint_min_max"
+                        android:textSize="12sp"
+                        android:textColor="#777"/>
+
+                    <!-- Wiederholungen -->
+                    <TextView
+                        android:id="@+id/label_reps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_reps"
+                        android:textStyle="bold"
+                        android:layout_marginTop="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="start|center_vertical">
+
+                        <EditText
+                            android:id="@+id/input_reps"
+                            android:layout_width="80dp"
+                            android:layout_height="48dp"
+                            android:padding="12dp"
+                            android:background="@drawable/edittext_rounded"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:hint="@string/hint_zero"/>
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"/>
+
+                        <Button
+                            android:id="@+id/btn_reps_minus"
+                            style="@style/PlusMinusButton.Rounded.Secondary"
+                            android:layout_width="56dp"
+                            android:layout_height="48dp"
+                            android:text="@string/btn_minus"/>
+
+                        <Button
+                            android:id="@+id/btn_reps_plus"
+                            style="@style/PlusMinusButton.Rounded"
+                            android:layout_width="56dp"
+                            android:layout_height="48dp"
+                            android:text="@string/btn_plus"
+                            android:layout_marginStart="8dp"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/hint_reps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hint_min_max_step"
+                        android:textSize="12sp"
+                        android:textColor="#777"/>
+
+                    <!-- Gewicht -->
+                    <TextView
+                        android:id="@+id/label_weight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_weight"
+                        android:textStyle="bold"
+                        android:layout_marginTop="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="start|center_vertical">
+
+                        <EditText
+                            android:id="@+id/input_weight"
+                            android:layout_width="80dp"
+                            android:layout_height="48dp"
+                            android:padding="12dp"
+                            android:background="@drawable/edittext_rounded"
+                            android:gravity="center"
+                            android:inputType="numberDecimal"
+                            android:hint="@string/hint_zero"/>
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"/>
+
+                        <Button
+                            android:id="@+id/btn_weight_minus"
+                            style="@style/PlusMinusButton.Rounded.Secondary"
+                            android:layout_width="56dp"
+                            android:layout_height="48dp"
+                            android:text="@string/btn_minus"/>
+
+                        <Button
+                            android:id="@+id/btn_weight_plus"
+                            style="@style/PlusMinusButton.Rounded"
+                            android:layout_width="56dp"
+                            android:layout_height="48dp"
+                            android:text="@string/btn_plus"
+                            android:layout_marginStart="8dp"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/hint_weight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hint_min_max_step"
+                        android:textSize="12sp"
+                        android:textColor="#777"/>
+
+                    <!-- Schwierigkeit -->
+                    <TextView
+                        android:id="@+id/label_difficulty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_difficulty_question"
+                        android:textStyle="bold"
+                        android:layout_marginTop="24dp"
+                        android:gravity="center_horizontal"/>
+
+                    <SeekBar
+                        android:id="@+id/seek_difficulty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:max="3"
+                        android:progress="2" />
+
+                    <TextView
+                        android:id="@+id/txt_difficulty_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/difficulty_pleasant"
+                        android:textSize="14sp"
+                        android:textColor="#777"
+                        android:gravity="center_horizontal"
+                        android:layout_marginBottom="16dp"/>
+
+                    <!-- Speichern -->
                     <Button
-                        android:id="@+id/btn_front"
+                        android:id="@+id/btn_save_training"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Vorderseite" />
-
-                    <Button
-                        android:id="@+id/btn_back"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Rückseite"
-                        android:layout_marginStart="16dp" />
+                        android:text="@string/btn_save"
+                        android:layout_marginTop="24dp"
+                        android:layout_gravity="center_horizontal"/>
 
                 </LinearLayout>
-
-                <!-- RM SeekBar -->
-                <SeekBar
-                    android:id="@+id/seek_etl"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="4dp"/>
-
-                <!-- Intensität -->
-                <TextView
-                    android:id="@+id/txt_intensity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Intensität: –"
-                    android:textSize="14sp"
-                    android:textColor="#777"
-                    android:gravity="center_horizontal"
-                    android:layout_marginBottom="16dp"/>
-
-                <!-- Sätze -->
-                <TextView
-                    android:id="@+id/label_sets"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Sätze"
-                    android:textStyle="bold"
-                    android:layout_marginTop="16dp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="start|center_vertical">
-
-                    <EditText
-                        android:id="@+id/input_sets"
-                        android:layout_width="80dp"
-                        android:layout_height="48dp"
-                        android:padding="12dp"
-                        android:background="@drawable/edittext_rounded"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:hint="0"/>
-
-                    <Space
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"/>
-
-                    <Button
-                        android:id="@+id/btn_sets_minus"
-                        style="@style/PlusMinusButton.Rounded.Secondary"
-                        android:layout_width="56dp"
-                        android:layout_height="48dp"
-                        android:text="-"/>
-
-                    <Button
-                        android:id="@+id/btn_sets_plus"
-                        style="@style/PlusMinusButton.Rounded"
-                        android:layout_width="56dp"
-                        android:layout_height="48dp"
-                        android:text="+"
-                        android:layout_marginStart="8dp"/>
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/hint_sets"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Min – Max"
-                    android:textSize="12sp"
-                    android:textColor="#777"/>
-
-                <!-- Wiederholungen -->
-                <TextView
-                    android:id="@+id/label_reps"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Wiederholungen"
-                    android:textStyle="bold"
-                    android:layout_marginTop="16dp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="start|center_vertical">
-
-                    <EditText
-                        android:id="@+id/input_reps"
-                        android:layout_width="80dp"
-                        android:layout_height="48dp"
-                        android:padding="12dp"
-                        android:background="@drawable/edittext_rounded"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:hint="0"/>
-
-                    <Space
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"/>
-
-                    <Button
-                        android:id="@+id/btn_reps_minus"
-                        style="@style/PlusMinusButton.Rounded.Secondary"
-                        android:layout_width="56dp"
-                        android:layout_height="48dp"
-                        android:text="-"/>
-
-                    <Button
-                        android:id="@+id/btn_reps_plus"
-                        style="@style/PlusMinusButton.Rounded"
-                        android:layout_width="56dp"
-                        android:layout_height="48dp"
-                        android:text="+"
-                        android:layout_marginStart="8dp"/>
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/hint_reps"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Min – Max – Schritt"
-                    android:textSize="12sp"
-                    android:textColor="#777"/>
-
-                <!-- Gewicht -->
-                <TextView
-                    android:id="@+id/label_weight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Gewicht (kg)"
-                    android:textStyle="bold"
-                    android:layout_marginTop="16dp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="start|center_vertical">
-
-                    <EditText
-                        android:id="@+id/input_weight"
-                        android:layout_width="80dp"
-                        android:layout_height="48dp"
-                        android:padding="12dp"
-                        android:background="@drawable/edittext_rounded"
-                        android:gravity="center"
-                        android:inputType="numberDecimal"
-                        android:hint="0"/>
-
-                    <Space
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"/>
-
-                    <Button
-                        android:id="@+id/btn_weight_minus"
-                        style="@style/PlusMinusButton.Rounded.Secondary"
-                        android:layout_width="56dp"
-                        android:layout_height="48dp"
-                        android:text="-"/>
-
-                    <Button
-                        android:id="@+id/btn_weight_plus"
-                        style="@style/PlusMinusButton.Rounded"
-                        android:layout_width="56dp"
-                        android:layout_height="48dp"
-                        android:text="+"
-                        android:layout_marginStart="8dp"/>
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/hint_weight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Min – Max – Schritt"
-                    android:textSize="12sp"
-                    android:textColor="#777"/>
-
-                <!-- Schwierigkeit / subjektive Belastung -->
-                <TextView
-                    android:id="@+id/label_difficulty"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Wie schwer war die Übung?"
-                    android:textStyle="bold"
-                    android:layout_marginTop="24dp"
-                    android:gravity="center_horizontal"/>
-
-                <SeekBar
-                    android:id="@+id/seek_difficulty"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:max="2"
-                    android:progress="1" />
-
-                <TextView
-                    android:id="@+id/txt_difficulty_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Angenehm"
-                    android:textSize="14sp"
-                    android:textColor="#777"
-                    android:gravity="center_horizontal"
-                    android:layout_marginBottom="16dp"/>
-
-
-                <Button
-                    android:id="@+id/btn_save_training"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Speichern"
-                    android:layout_marginTop="24dp"
-                    android:layout_gravity="center_horizontal"/>
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </ScrollView>
 
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

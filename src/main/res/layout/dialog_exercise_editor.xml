@@ -17,7 +17,7 @@
             android:layout_marginTop="20dp">
 
             <TextView
-                android:text="Name der Übung"
+                android:text="@string/label_exercise_name"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_width="match_parent"
@@ -25,7 +25,7 @@
 
             <EditText
                 android:id="@+id/edit_name"
-                android:hint="z. B. Bankdrücken"
+                android:hint="@string/hint_exercise_name_example"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:padding="12dp"
@@ -42,7 +42,7 @@
             android:layout_marginTop="20dp">
 
             <TextView
-                android:text="Sätze (von – bis)"
+                android:text="@string/label_sets_range"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_width="match_parent"
@@ -65,14 +65,14 @@
                     android:inputType="number"
                     android:padding="12dp"
                     android:background="@drawable/edittext_rounded"
-                    android:hint="Min"/>
+                    android:hint="@string/hint_min"/>
 
                 <Button
                     android:id="@+id/btn_sets_min_minus"
                     style="@style/PlusMinusButton.Rounded.Secondary"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:text="-"
+                    android:text="@string/btn_minus"
                     android:layout_marginStart="8dp"/>
 
                 <Button
@@ -80,7 +80,7 @@
                     style="@style/PlusMinusButton.Rounded"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:text="+"
+                    android:text="@string/btn_plus"
                     android:layout_marginStart="8dp"/>
             </LinearLayout>
 
@@ -101,14 +101,14 @@
                     android:inputType="number"
                     android:padding="12dp"
                     android:background="@drawable/edittext_rounded"
-                    android:hint="Max"/>
+                    android:hint="@string/hint_max"/>
 
                 <Button
                     android:id="@+id/btn_sets_max_minus"
                     style="@style/PlusMinusButton.Rounded.Secondary"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:text="-"
+                    android:text="@string/btn_minus"
                     android:layout_marginStart="8dp"/>
 
                 <Button
@@ -116,7 +116,7 @@
                     style="@style/PlusMinusButton.Rounded"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:text="+"
+                    android:text="@string/btn_plus"
                     android:layout_marginStart="8dp"/>
             </LinearLayout>
         </LinearLayout>
@@ -129,7 +129,7 @@
             android:layout_marginTop="20dp">
 
             <TextView
-                android:text="Wiederholungen (von – bis – Schritt)"
+                android:text="@string/label_reps_range_step"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_width="match_parent"
@@ -152,14 +152,14 @@
                     android:inputType="number"
                     android:padding="12dp"
                     android:background="@drawable/edittext_rounded"
-                    android:hint="Min"/>
+                    android:hint="@string/hint_min"/>
 
                 <Button
                     android:id="@+id/btn_reps_min_minus"
                     style="@style/PlusMinusButton.Rounded.Secondary"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:text="-"
+                    android:text="@string/btn_minus"
                     android:layout_marginStart="8dp"/>
 
                 <Button
@@ -167,7 +167,7 @@
                     style="@style/PlusMinusButton.Rounded"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:text="+"
+                    android:text="@string/btn_plus"
                     android:layout_marginStart="8dp"/>
             </LinearLayout>
 
@@ -188,14 +188,14 @@
                     android:inputType="number"
                     android:padding="12dp"
                     android:background="@drawable/edittext_rounded"
-                    android:hint="Max"/>
+                    android:hint="@string/hint_max"/>
 
                 <Button
                     android:id="@+id/btn_reps_max_minus"
                     style="@style/PlusMinusButton.Rounded.Secondary"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:text="-"
+                    android:text="@string/btn_minus"
                     android:layout_marginStart="8dp"/>
 
                 <Button
@@ -203,7 +203,7 @@
                     style="@style/PlusMinusButton.Rounded"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:text="+"
+                    android:text="@string/btn_plus"
                     android:layout_marginStart="8dp"/>
             </LinearLayout>
 
@@ -224,14 +224,14 @@
                     android:inputType="number"
                     android:padding="12dp"
                     android:background="@drawable/edittext_rounded"
-                    android:hint="Schritt"/>
+                    android:hint="@string/hint_step"/>
 
                 <Button
                     android:id="@+id/btn_reps_step_minus"
                     style="@style/PlusMinusButton.Rounded.Secondary"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:text="-"
+                    android:text="@string/btn_minus"
                     android:layout_marginStart="8dp"/>
 
                 <Button
@@ -239,7 +239,7 @@
                     style="@style/PlusMinusButton.Rounded"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:text="+"
+                    android:text="@string/btn_plus"
                     android:layout_marginStart="8dp"/>
             </LinearLayout>
         </LinearLayout>
@@ -252,7 +252,7 @@
             android:layout_marginTop="20dp">
 
             <TextView
-                android:text="Gewichte (von – bis – Schritt)"
+                android:text="@string/label_weights_range_step"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_width="match_parent"
@@ -275,14 +275,14 @@
                     android:inputType="numberDecimal"
                     android:padding="12dp"
                     android:background="@drawable/edittext_rounded"
-                    android:hint="Min"/>
+                    android:hint="@string/hint_min"/>
 
                 <Button
                     android:id="@+id/btn_min_weight_minus"
                     style="@style/PlusMinusButton.Rounded.Secondary"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:text="-"
+                    android:text="@string/btn_minus"
                     android:layout_marginStart="8dp"/>
 
                 <Button
@@ -290,7 +290,7 @@
                     style="@style/PlusMinusButton.Rounded"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:text="+"
+                    android:text="@string/btn_plus"
                     android:layout_marginStart="8dp"/>
             </LinearLayout>
 
@@ -311,14 +311,14 @@
                     android:inputType="numberDecimal"
                     android:padding="12dp"
                     android:background="@drawable/edittext_rounded"
-                    android:hint="Max"/>
+                    android:hint="@string/hint_max"/>
 
                 <Button
                     android:id="@+id/btn_max_weight_minus"
                     style="@style/PlusMinusButton.Rounded.Secondary"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:text="-"
+                    android:text="@string/btn_minus"
                     android:layout_marginStart="8dp"/>
 
                 <Button
@@ -326,7 +326,7 @@
                     style="@style/PlusMinusButton.Rounded"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:text="+"
+                    android:text="@string/btn_plus"
                     android:layout_marginStart="8dp"/>
             </LinearLayout>
 
@@ -347,14 +347,14 @@
                     android:inputType="numberDecimal"
                     android:padding="12dp"
                     android:background="@drawable/edittext_rounded"
-                    android:hint="Schritt"/>
+                    android:hint="@string/hint_step"/>
 
                 <Button
                     android:id="@+id/btn_weight_step_minus"
                     style="@style/PlusMinusButton.Rounded.Secondary"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:text="-"
+                    android:text="@string/btn_minus"
                     android:layout_marginStart="8dp"/>
 
                 <Button
@@ -362,7 +362,7 @@
                     style="@style/PlusMinusButton.Rounded"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:text="+"
+                    android:text="@string/btn_plus"
                     android:layout_marginStart="8dp"/>
             </LinearLayout>
         </LinearLayout>
@@ -375,7 +375,7 @@
             android:layout_marginTop="20dp">
 
             <TextView
-                android:text="Muskeln suchen"
+                android:text="@string/label_search_muscles"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_width="match_parent"
@@ -383,7 +383,7 @@
 
             <EditText
                 android:id="@+id/edit_search"
-                android:hint="z. B. Brust, Rücken..."
+                android:hint="@string/hint_search_muscles_example"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:padding="12dp"
@@ -413,7 +413,7 @@
             <!-- Löschen (rot, links) -->
             <Button
                 android:id="@+id/btn_delete"
-                android:text="Löschen"
+                android:text="@string/btn_delete"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
@@ -426,7 +426,7 @@
             <!-- Speichern (Material3‑Style) -->
             <Button
                 android:id="@+id/btn_save"
-                android:text="Speichern"
+                android:text="@string/btn_save"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
@@ -436,7 +436,7 @@
         <!-- Abbrechen (volle Breite) -->
         <Button
             android:id="@+id/btn_cancel"
-            android:text="Abbrechen"
+            android:text="@string/btn_cancel"
             android:layout_marginTop="12dp"
             android:layout_width="match_parent"
             android:layout_height="48dp"

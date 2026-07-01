@@ -59,7 +59,7 @@ public class Muscle {
         return 48f;
     }
 
-    private long lastTraining = 0l;
+    private long lastTraining = 0L;
     private int lastSets = 0;
     private int lastReps = 0;
     private float lastWeight = 0f;
@@ -88,9 +88,6 @@ public class Muscle {
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-
-    public Category getCategory() { return category; }
-    public void setCategory(Category category) { this.category = category; }
 
     @Override
     public String toString() {

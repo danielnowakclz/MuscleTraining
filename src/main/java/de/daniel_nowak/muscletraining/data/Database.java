@@ -9,7 +9,6 @@ import org.w3c.dom.NodeList;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -43,10 +42,6 @@ public class Database {
         plan.load();
     }
 
-    // ---------------------------------------------------------
-    // ADD (mit Muskel-IDs)
-    // ---------------------------------------------------------
-
     public Training addTraining(Exercise ex, int sets, int reps, float weight, int difficulty) {
 
         String id = UUID.randomUUID().toString();
@@ -55,7 +50,6 @@ public class Database {
         Training t = new Training(id, time, sets, reps, weight, ex.getId());
         t.setDifficulty(difficulty);
 
-    // NEU: trainierte Muskeln speichern
         t.muscleIds.clear();
         t.muscleIds.addAll(ex.muscleIds);
 
@@ -92,7 +86,6 @@ public class Database {
             Exercise ex = exercises.exercises.get(t.getExerciseId());
             if (ex == null) continue;
 
-            // Kategorie der Übung bestimmen
             Set<Muscle.Category> cats = ex.muscleIds.stream()
                     .map(id -> muscles.muscles.get(id))
                     .filter(Objects::nonNull)
@@ -109,10 +102,6 @@ public class Database {
     }
 
 
-    // ---------------------------------------------------------
-    // DEMO-DATEN
-    // ---------------------------------------------------------
-
     public void addDemoData() {
         muscles.addDemoData();
         exercises.addDemoData();
@@ -125,9 +114,6 @@ public class Database {
         sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         sb.append("<MuscleTraining version=\"1.0\">\n");
 
-        // ---------------------------------------------------------
-        // MUSCLES
-        // ---------------------------------------------------------
         sb.append("  <Muscles>\n");
         for (Muscle m : muscles.muscles.values()) {
             sb.append("    <Muscle id=\"").append(m.getId()).append("\">\n");
@@ -150,9 +136,6 @@ public class Database {
         }
         sb.append("  </Muscles>\n");
 
-        // ---------------------------------------------------------
-        // EXERCISES
-        // ---------------------------------------------------------
         sb.append("  <Exercises>\n");
         for (Exercise ex : exercises.exercises.values()) {
             sb.append("    <Exercise id=\"").append(ex.getId()).append("\">\n");
@@ -183,9 +166,6 @@ public class Database {
         }
         sb.append("  </Exercises>\n");
 
-        // ---------------------------------------------------------
-        // TRAININGS
-        // ---------------------------------------------------------
         sb.append("  <Trainings>\n");
         for (Training t : trainings.trainings.values()) {
             sb.append("    <Training id=\"").append(t.getId()).append("\">\n");
@@ -214,17 +194,13 @@ public class Database {
 
     public void importFromXml(InputStream in) throws Exception {
 
-        // 1) XML parsen
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(in);
 
         Element root = doc.getDocumentElement();
-        String version = root.getAttribute("version"); // später für Migrationen
+        @SuppressWarnings("unused") String version = root.getAttribute("version");
 
-        // ---------------------------------------------------------
-        // MUSCLES
-        // ---------------------------------------------------------
         muscles.muscles.clear();
         NodeList muscleNodes = doc.getElementsByTagName("Muscle");
 
@@ -253,9 +229,6 @@ public class Database {
             muscles.muscles.put(id, m);
         }
 
-        // ---------------------------------------------------------
-        // EXERCISES
-        // ---------------------------------------------------------
         exercises.exercises.clear();
         NodeList exNodes = doc.getElementsByTagName("Exercise");
 
@@ -289,9 +262,6 @@ public class Database {
             exercises.exercises.put(id, ex);
         }
 
-        // ---------------------------------------------------------
-        // TRAININGS
-        // ---------------------------------------------------------
         trainings.trainings.clear();
         NodeList tNodes = doc.getElementsByTagName("Training");
 
@@ -315,14 +285,8 @@ public class Database {
             trainings.trainings.put(id, t);
         }
 
-        // ---------------------------------------------------------
-        // RELATIONEN SYNCHRONISIEREN
-        // ---------------------------------------------------------
         syncAllRelations();
 
-        // ---------------------------------------------------------
-        // ALLES SPEICHERN
-        // ---------------------------------------------------------
         muscles.save();
         exercises.save();
         trainings.save();
@@ -383,7 +347,6 @@ public class Database {
 
         long last = m.getLastTraining();
 
-        // nie trainiert → vollständig regeneriert
         if (last == 0L) return 1.0f;
 
         long now = System.currentTimeMillis();
@@ -402,17 +365,14 @@ public class Database {
 
     public void syncAllRelations() {
 
-        // 1. Muskel->Übung Listen leeren
         for (Muscle m : muscles.muscles.values()) {
             m.exerciseIds.clear();
         }
 
-        // 2. Ungültige muscleIds aus Übungen entfernen
         for (Exercise ex : exercises.exercises.values()) {
             ex.muscleIds.removeIf(id -> !muscles.muscles.containsKey(id));
         }
 
-        // 3. Beziehungen beidseitig setzen
         for (Exercise ex : exercises.exercises.values()) {
             for (String mId : ex.muscleIds) {
                 Muscle m = muscles.muscles.get(mId);
@@ -426,10 +386,6 @@ public class Database {
         exercises.save();
     }
 
-
-    // ---------------------------------------------------------
-    // DELETE EXERCISE
-    // ---------------------------------------------------------
 
     public void delExercise(String id) {
 
@@ -445,10 +401,6 @@ public class Database {
         muscles.save();
         trainings.save();
     }
-
-    // ---------------------------------------------------------
-    // DELETE MUSCLE
-    // ---------------------------------------------------------
 
     public void delMuscle(String id) {
 
@@ -466,10 +418,6 @@ public class Database {
     }
 
 
-    // ---------------------------------------------------------
-    // SYNC EXERCISE
-    // ---------------------------------------------------------
-
     public void syncExercise(Exercise ex) {
 
         for (Muscle m : muscles.muscles.values()) {
@@ -486,10 +434,6 @@ public class Database {
         exercises.save();
         muscles.save();
     }
-
-    // ---------------------------------------------------------
-    // SYNC MUSCLE
-    // ---------------------------------------------------------
 
     public void syncMuscle(Muscle m) {
 

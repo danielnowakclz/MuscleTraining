@@ -1,0 +1,30 @@
+<resources>
+
+    <!-- Spacing Scale -->
+    <dimen name="space_xs">4dp</dimen>
+    <dimen name="space_s">8dp</dimen>
+    <dimen name="space_m">12dp</dimen>
+    <dimen name="space_l">16dp</dimen>
+    <dimen name="space_xl">24dp</dimen>
+    <dimen name="space_xxl">32dp</dimen>
+
+    <!-- Text Sizes -->
+    <dimen name="text_headline">22sp</dimen>
+    <dimen name="text_title">18sp</dimen>
+    <dimen name="text_label">16sp</dimen>
+    <dimen name="text_body">14sp</dimen>
+    <dimen name="text_hint">12sp</dimen>
+    <dimen name="text_caption">11sp</dimen>
+
+    <!-- Radius -->
+    <dimen name="radius_s">6dp</dimen>
+    <dimen name="radius_m">10dp</dimen>
+    <dimen name="radius_l">16dp</dimen>
+
+    <!-- Button Height -->
+    <dimen name="button_height">48dp</dimen>
+
+    <!-- Card Elevation -->
+    <dimen name="card_elevation">4dp</dimen>
+
+</resources>

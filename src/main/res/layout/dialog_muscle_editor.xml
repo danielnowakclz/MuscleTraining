@@ -12,7 +12,7 @@
 
         <!-- NAME -->
         <TextView
-            android:text="Name des Muskels"
+            android:text="@string/label_muscle_name"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_width="match_parent"
@@ -20,7 +20,7 @@
 
         <EditText
             android:id="@+id/edit_name"
-            android:hint="z. B. Pectoralis Major"
+            android:hint="@string/hint_muscle_name_example"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:padding="12dp"
@@ -30,7 +30,7 @@
 
         <!-- KATEGORIE -->
         <TextView
-            android:text="Kategorie"
+            android:text="@string/label_category"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginTop="20dp"
@@ -47,7 +47,7 @@
 
         <!-- POSITION AUF DEM KÖRPER -->
         <TextView
-            android:text="Position auf dem Körper"
+            android:text="@string/label_body_position"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginTop="20dp"
@@ -63,7 +63,7 @@
 
             <Button
                 android:id="@+id/btn_front"
-                android:text="Vorderseite"
+                android:text="@string/btn_front"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"/>
@@ -74,7 +74,7 @@
 
             <Button
                 android:id="@+id/btn_back"
-                android:text="Rückseite"
+                android:text="@string/btn_back"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"/>
@@ -96,7 +96,7 @@
 
         <!-- ÜBUNGEN -->
         <TextView
-            android:text="Zugehörige Übungen"
+            android:text="@string/label_related_exercises"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginTop="20dp"
@@ -105,7 +105,7 @@
 
         <EditText
             android:id="@+id/edit_search_ex"
-            android:hint="Übungen suchen..."
+            android:hint="@string/hint_search_exercises"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:padding="12dp"
@@ -128,7 +128,7 @@
 
             <Button
                 android:id="@+id/btn_delete"
-                android:text="Löschen"
+                android:text="@string/btn_delete"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
@@ -140,7 +140,7 @@
 
             <Button
                 android:id="@+id/btn_save"
-                android:text="Speichern"
+                android:text="@string/btn_save"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
@@ -149,7 +149,7 @@
 
         <Button
             android:id="@+id/btn_cancel"
-            android:text="Abbrechen"
+            android:text="@string/btn_cancel"
             android:layout_marginTop="12dp"
             android:layout_width="match_parent"
             android:layout_height="48dp"

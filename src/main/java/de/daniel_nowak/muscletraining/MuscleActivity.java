@@ -16,9 +16,7 @@ import de.daniel_nowak.muscletraining.model.Muscle;
 public class MuscleActivity extends BaseActivity {
 
     private ListView listView;
-    private Button btnAdd;
 
-    private ArrayAdapter<Muscle> adapter;
     private List<Muscle> muscleList = new ArrayList<>();
 
     @Override
@@ -27,10 +25,10 @@ public class MuscleActivity extends BaseActivity {
         setContentView(R.layout.activity_muscles);
 
         setupToolbar(R.id.toolbar);
-        applyEdgeToEdge();
+        applyOrientationLayout();
 
         listView = findViewById(R.id.list_muscles);
-        btnAdd = findViewById(R.id.btn_add);
+        Button btnAdd = findViewById(R.id.btn_add);
 
         loadMuscles();
 
@@ -47,7 +45,7 @@ public class MuscleActivity extends BaseActivity {
 
         btnAdd.setOnClickListener(v -> {
             String id = UUID.randomUUID().toString();
-            db.muscles.add(id, "Neuer Muskel", Muscle.Category.CORE);
+            db.muscles.add(id, getString(R.string.default_new_muscle_name), Muscle.Category.CORE);
             Muscle m = db.muscles.muscles.get(id);
             openEditor(m);
         });
@@ -61,7 +59,7 @@ public class MuscleActivity extends BaseActivity {
         muscleList = new ArrayList<>(db.muscles.muscles.values());
         Collections.sort(muscleList, Comparator.comparing(Muscle::getName));
 
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, muscleList);
+        ArrayAdapter<Muscle> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, muscleList);
         listView.setAdapter(adapter);
 
         listView.post(() -> listView.setSelection(0));

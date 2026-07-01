@@ -14,7 +14,6 @@ public class NoInterceptScrollView extends ScrollView {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
 
-        // Wenn mehr als 1 Finger → NICHT abfangen
         if (ev.getPointerCount() > 1) {
             return false;
         }

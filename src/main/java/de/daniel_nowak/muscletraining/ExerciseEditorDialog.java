@@ -187,7 +187,7 @@ public class ExerciseEditorDialog extends Dialog {
         try {
             String name = editName.getText().toString().trim();
             if (name.isEmpty()) {
-                Toast.makeText(getContext(), "Name darf nicht leer sein", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.toast_name_not_empty, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -203,17 +203,17 @@ public class ExerciseEditorDialog extends Dialog {
             int repsStep = Integer.parseInt(editRepsStep.getText().toString());
 
             if (minW <= 0 || maxW <= 0 || stepW <= 0) {
-                Toast.makeText(getContext(), "Gewichte müssen > 0 sein", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.toast_weights_positive, Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (setsMin <= 0 || setsMax <= 0) {
-                Toast.makeText(getContext(), "Sätze müssen > 0 sein", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.toast_sets_positive, Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (repsMin <= 0 || repsMax <= 0 || repsStep <= 0) {
-                Toast.makeText(getContext(), "Wiederholungen müssen > 0 sein", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.toast_reps_positive, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -237,7 +237,7 @@ public class ExerciseEditorDialog extends Dialog {
             dismiss();
 
         } catch (Exception e) {
-            Toast.makeText(getContext(), "Bitte alle Felder korrekt ausfüllen", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.toast_fill_all_fields_correctly, Toast.LENGTH_SHORT).show();
         }
     }
 

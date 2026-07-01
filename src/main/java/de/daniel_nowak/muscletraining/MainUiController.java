@@ -29,35 +29,15 @@ public class MainUiController {
             a.updater.update();
         });
 
-        a.btnSetsMinus.setOnClickListener(v -> {
-            a.adjustSets(false);
-            a.updater.update();
-        });
+        a.btnSetsMinus.setOnClickListener(v -> a.adjustSets(false));
+        a.btnSetsPlus.setOnClickListener(v -> a.adjustSets(true));
 
-        a.btnSetsPlus.setOnClickListener(v -> {
-            a.adjustSets(true);
-            a.updater.update();
-        });
+        a.btnRepsMinus.setOnClickListener(v -> a.adjustReps(false));
+        a.btnRepsPlus.setOnClickListener(v -> a.adjustReps(true));
 
-        a.btnRepsMinus.setOnClickListener(v -> {
-            a.adjustReps(false);
-            a.updater.update();
-        });
+        a.btnWeightMinus.setOnClickListener(v -> a.adjustWeight(false));
+        a.btnWeightPlus.setOnClickListener(v -> a.adjustWeight(true));
 
-        a.btnRepsPlus.setOnClickListener(v -> {
-            a.adjustReps(true);
-            a.updater.update();
-        });
-
-        a.btnWeightMinus.setOnClickListener(v -> {
-            a.adjustWeight(false);
-            a.updater.update();
-        });
-
-        a.btnWeightPlus.setOnClickListener(v -> {
-            a.adjustWeight(true);
-            a.updater.update();
-        });
 
         a.btnSave.setOnClickListener(v -> a.saveTraining());
     }
@@ -72,13 +52,16 @@ public class MainUiController {
 
                 switch (value) {
                     case 0:
-                        a.txtDifficultyLabel.setText("Leicht");
+                        a.txtDifficultyLabel.setText(R.string.difficulty_hard);
                         break;
                     case 1:
-                        a.txtDifficultyLabel.setText("Angenehm");
+                        a.txtDifficultyLabel.setText(R.string.difficulty_repeatable);
                         break;
                     case 2:
-                        a.txtDifficultyLabel.setText("Schwer");
+                        a.txtDifficultyLabel.setText(R.string.difficulty_pleasant);
+                        break;
+                    case 3:
+                        a.txtDifficultyLabel.setText(R.string.difficulty_easy);
                         break;
                 }
             }
@@ -91,7 +74,6 @@ public class MainUiController {
 
     public void setupSeekbar() {
 
-        // Farbverlauf für die ETL-Skala
         GradientDrawable gradient = new GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
                 new int[]{0xFF4CAF50, 0xFFFFEB3B, 0xFFF44336}
@@ -104,20 +86,17 @@ public class MainUiController {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-                // Sicherheit: keine Daten → nichts tun
                 if (a.etlCombos == null || a.etlCombos.isEmpty()) return;
                 if (progress < 0 || progress >= a.etlCombos.size()) return;
 
                 RecommendationService.Recommendation c = a.etlCombos.get(progress);
 
-                // Eingabefelder NUR aktualisieren, wenn der User bewegt
                 if (fromUser) {
                     a.inputSets.setText(String.valueOf(c.sets));
                     a.inputReps.setText(String.valueOf(c.reps));
                     a.inputWeight.setText(a.formatWeight(c.weight));
                 }
 
-                // Intensität IMMER aktualisieren
                 a.updateIntensityLabel(c.etl);
             }
 

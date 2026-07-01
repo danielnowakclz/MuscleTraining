@@ -2,63 +2,57 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- Ansicht -->
-    <item
-        android:id="@+id/menu_group_view"
-        android:title="Ansicht">
+    <item android:title="@string/menu_view">
         <menu>
             <item
                 android:id="@+id/menu_training"
-                android:title="Training"
+                android:title="@string/menu_training"
                 android:icon="@drawable/ic_training" />
             <item
                 android:id="@+id/menu_exercises"
-                android:title="Übungen"
+                android:title="@string/menu_exercises"
                 android:icon="@drawable/ic_exercises" />
             <item
                 android:id="@+id/menu_muscles"
-                android:title="Muskeln"
+                android:title="@string/menu_muscles"
                 android:icon="@drawable/ic_muscles" />
         </menu>
     </item>
 
     <!-- Training -->
-    <item
-        android:id="@+id/menu_group_training"
-        android:title="Training">
+    <item android:title="@string/menu_training">
         <menu>
             <item
                 android:id="@+id/menu_create_training"
-                android:title="Training erstellen"
+                android:title="@string/menu_create_training"
                 android:icon="@drawable/ic_add" />
             <item
                 android:id="@+id/menu_delete_training"
-                android:title="Training löschen"
+                android:title="@string/menu_delete_training"
                 android:icon="@drawable/ic_delete" />
         </menu>
     </item>
 
     <!-- Daten -->
-    <item
-        android:id="@+id/menu_group_data"
-        android:title="Daten">
+    <item android:title="@string/menu_data">
         <menu>
             <item
                 android:id="@+id/menu_add_demo"
-                android:title="Demo-Daten hinzufügen"
+                android:title="@string/menu_add_demo"
                 android:icon="@drawable/ic_demo" />
             <item
                 android:id="@+id/menu_import_xml"
-                android:title="Importieren (XML)"
+                android:title="@string/menu_import_xml"
                 android:icon="@drawable/ic_import"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/menu_export_xml"
-                android:title="Exportieren (XML)"
+                android:title="@string/menu_export_xml"
                 android:icon="@drawable/ic_export"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/menu_delete_all"
-                android:title="Alle Daten löschen"
+                android:title="@string/menu_delete_all"
                 android:icon="@drawable/ic_delete_all" />
 
         </menu>

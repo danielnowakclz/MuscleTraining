@@ -44,21 +44,8 @@ public class MuscleEditorDialog extends Dialog {
 
     private Spinner spinnerCategory;
 
-    private static final Map<Muscle.Category, String> CATEGORY_LABELS_DE = new HashMap<>();
-    private static final Map<String, Muscle.Category> CATEGORY_FROM_LABEL = new HashMap<>();
-
-    static {
-        CATEGORY_LABELS_DE.put(Muscle.Category.ARM, "Arme");
-        CATEGORY_LABELS_DE.put(Muscle.Category.SHOULDER, "Schultern");
-        CATEGORY_LABELS_DE.put(Muscle.Category.CHEST, "Brust");
-        CATEGORY_LABELS_DE.put(Muscle.Category.BACK, "Rücken");
-        CATEGORY_LABELS_DE.put(Muscle.Category.CORE, "Rumpf");
-        CATEGORY_LABELS_DE.put(Muscle.Category.LEG, "Beine");
-
-        for (Map.Entry<Muscle.Category, String> e : CATEGORY_LABELS_DE.entrySet()) {
-            CATEGORY_FROM_LABEL.put(e.getValue(), e.getKey());
-        }
-    }
+    private final Map<Muscle.Category, String> categoryLabels = new HashMap<>();
+    private final Map<String, Muscle.Category> labelToCategory = new HashMap<>();
 
     public MuscleEditorDialog(Context ctx, Database db, Muscle muscle, Runnable onSaveCallback) {
         super(ctx);
@@ -86,16 +73,27 @@ public class MuscleEditorDialog extends Dialog {
         btnBack = findViewById(R.id.btn_back);
 
         // Kategorien laden
+        categoryLabels.put(Muscle.Category.ARM, getContext().getString(R.string.category_arms));
+        categoryLabels.put(Muscle.Category.SHOULDER, getContext().getString(R.string.category_shoulders));
+        categoryLabels.put(Muscle.Category.CHEST, getContext().getString(R.string.category_chest));
+        categoryLabels.put(Muscle.Category.BACK, getContext().getString(R.string.category_back));
+        categoryLabels.put(Muscle.Category.CORE, getContext().getString(R.string.category_core));
+        categoryLabels.put(Muscle.Category.LEG, getContext().getString(R.string.category_legs));
+
+        for (Map.Entry<Muscle.Category, String> e : categoryLabels.entrySet()) {
+            labelToCategory.put(e.getValue(), e.getKey());
+        }
+
         ArrayAdapter<String> catAdapter = new ArrayAdapter<>(
                 getContext(),
                 android.R.layout.simple_spinner_item,
-                CATEGORY_LABELS_DE.values().toArray(new String[0])
+                new ArrayList<>(categoryLabels.values())
         );
         catAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(catAdapter);
 
-        String currentLabel = CATEGORY_LABELS_DE.get(muscle.category);
-        int index = new ArrayList<>(CATEGORY_LABELS_DE.values()).indexOf(currentLabel);
+        String currentLabel = categoryLabels.get(muscle.category);
+        int index = new ArrayList<>(categoryLabels.values()).indexOf(currentLabel);
         spinnerCategory.setSelection(index);
 
         // Übungen laden
@@ -193,7 +191,7 @@ public class MuscleEditorDialog extends Dialog {
         muscle.setName(name);
 
         String label = spinnerCategory.getSelectedItem().toString();
-        muscle.category = CATEGORY_FROM_LABEL.get(label);
+        muscle.category = labelToCategory.get(label);
 
         muscle.exerciseIds.clear();
         muscle.exerciseIds.addAll(adapter.getSelected());

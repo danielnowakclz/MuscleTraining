@@ -15,10 +15,8 @@ public class PlanDatabase {
     private static final String FILE_NAME = "plan.db";
     private final File file;
 
-    // Reihenfolge bleibt erhalten, keine Duplikate
     public LinkedHashSet<String> plan = new LinkedHashSet<>();
 
-    // NEU: Zeitstempel der letzten Planerstellung
     public long lastPlanTime = 0L;
 
     public PlanDatabase(Context context) {
@@ -36,7 +34,6 @@ public class PlanDatabase {
             while ((line = br.readLine()) != null) {
                 line = line.trim();
 
-                // NEU: Zeitstempel-Zeile erkennen
                 if (line.startsWith("lastPlanTime=")) {
                     try {
                         lastPlanTime = Long.parseLong(
@@ -58,10 +55,8 @@ public class PlanDatabase {
     public void save() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
 
-            // NEU: Zeitstempel zuerst schreiben
             bw.write("lastPlanTime=" + lastPlanTime + "\n");
 
-            // Bestehendes Verhalten: IDs schreiben
             for (String id : plan) {
                 bw.write(id + "\n");
             }
@@ -73,7 +68,6 @@ public class PlanDatabase {
     public void setPlan(Collection<String> ids) {
         plan.clear();
         plan.addAll(ids);
-        // NEU: Zeitstempel hier setzen
         lastPlanTime = System.currentTimeMillis();
         save();
     }

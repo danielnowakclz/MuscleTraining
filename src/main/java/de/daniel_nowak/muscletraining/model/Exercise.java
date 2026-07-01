@@ -20,7 +20,7 @@ public class Exercise {
     private int repsMax = 15;
     private int repsStep = 1;
 
-    private long lastTraining = 0l;
+    private long lastTraining = 0L;
     private int lastSets = 0;
     private int lastReps = 0;
     private float lastWeight = 0f;

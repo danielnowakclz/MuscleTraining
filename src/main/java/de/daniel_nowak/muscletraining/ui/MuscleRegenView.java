@@ -15,13 +15,13 @@ public class MuscleRegenView extends View {
 
     public enum Side { FRONT, BACK }
 
-    private Bitmap frontBitmap;
-    private Bitmap backBitmap;
+    private final Bitmap frontBitmap;
+    private final Bitmap backBitmap;
 
-    private RectF dstRect = new RectF();
+    private final RectF dstRect = new RectF();
     private Side currentSide = Side.FRONT;
 
-    private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
 
     private Map<String, Muscle> muscleMap = new HashMap<>();
     private Map<String, Float> regenMap = new HashMap<>();
@@ -34,10 +34,6 @@ public class MuscleRegenView extends View {
 
         paint.setStyle(Paint.Style.FILL);
     }
-
-    // ---------------------------------------------------------
-    // PUBLIC API
-    // ---------------------------------------------------------
 
     public void setSide(Side s) {
         currentSide = s;
@@ -54,10 +50,6 @@ public class MuscleRegenView extends View {
         regenMap = map;
         invalidate();
     }
-
-    // ---------------------------------------------------------
-    // LAYOUT
-    // ---------------------------------------------------------
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -82,10 +74,6 @@ public class MuscleRegenView extends View {
         dstRect.set(left, top, left + scaledW, top + scaledH);
     }
 
-    // ---------------------------------------------------------
-    // DRAW
-    // ---------------------------------------------------------
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -95,7 +83,6 @@ public class MuscleRegenView extends View {
 
         canvas.drawBitmap(bmp, null, dstRect, paint);
 
-        // Heatmap zeichnen
         for (Muscle m : muscleMap.values()) {
 
             Float regen = regenMap.get(m.getId());
@@ -120,10 +107,6 @@ public class MuscleRegenView extends View {
             }
         }
     }
-
-    // ---------------------------------------------------------
-    // HELPER
-    // ---------------------------------------------------------
 
     private int getColorForRegen(float r) {
         if (r < 40f) return Color.RED;

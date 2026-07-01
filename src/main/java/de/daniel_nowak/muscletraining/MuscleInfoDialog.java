@@ -68,7 +68,7 @@ public class MuscleInfoDialog extends Dialog {
         long last = muscle.getLastTraining();
 
         if (last == 0L) {
-            txtLast.setText("–");
+            txtLast.setText(R.string.placeholder_dash);
         } else {
             txtLast.setText(sdf.format(new Date(last)));
         }
@@ -86,7 +86,7 @@ public class MuscleInfoDialog extends Dialog {
         // WARNUNG / REGENERATION 2.1
         // ---------------------------------------------------------
         if (last == 0L) {
-            txtWarning.setText("–");
+            txtWarning.setText(R.string.placeholder_dash);
             txtWarning.setTextColor(0xFF777777);
         } else {
 
@@ -94,15 +94,15 @@ public class MuscleInfoDialog extends Dialog {
             int regenInt = Math.round(regen);
 
             if (regenInt < 40) {
-                txtWarning.setText("🔴 Zu früh: " + regenInt + "% regeneriert");
+                txtWarning.setText(getContext().getString(R.string.warning_too_early_percent, regenInt));
                 txtWarning.setTextColor(0xFFFF4444);
             }
             else if (regenInt < 70) {
-                txtWarning.setText("🟡 Vorsicht: " + regenInt + "% regeneriert");
+                txtWarning.setText(getContext().getString(R.string.warning_caution_percent, regenInt));
                 txtWarning.setTextColor(0xFFFFBB33);
             }
             else {
-                txtWarning.setText("🟢 OK: " + regenInt + "% regeneriert");
+                txtWarning.setText(getContext().getString(R.string.warning_ok_percent, regenInt));
                 txtWarning.setTextColor(0xFF99CC00);
             }
         }

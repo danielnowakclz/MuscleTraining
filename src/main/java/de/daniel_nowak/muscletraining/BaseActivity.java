@@ -1,23 +1,22 @@
 package de.daniel_nowak.muscletraining;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ImageSpan;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.WindowInsets;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowMetrics;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -28,22 +27,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.Comparator;
 import java.util.stream.Collectors;
-
 
 import de.daniel_nowak.muscletraining.data.Database;
 import de.daniel_nowak.muscletraining.model.Exercise;
 import de.daniel_nowak.muscletraining.model.Muscle;
-import de.daniel_nowak.muscletraining.model.Training;
 import de.daniel_nowak.muscletraining.ui.MuscleRegenView;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-    protected Toolbar toolbar;
     protected Database db;
 
     protected Set<String> selectedExercises = new HashSet<>();
@@ -53,9 +47,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         db = new Database(this);
 
-        // NICHTS mehr mit Trainingsplan hier machen!
-        selectedExercises.clear();
         selectedExercises.addAll(db.plan.plan);
+
     }
 
     @Override
@@ -75,9 +68,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         if (toolbar != null) {
-            toolbar.setTitleTextColor(Color.WHITE);
-            toolbar.setSubtitleTextColor(Color.WHITE);
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 toolbar.setOutlineAmbientShadowColor(Color.WHITE);
                 toolbar.setOutlineSpotShadowColor(Color.WHITE);
@@ -92,16 +82,19 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void applyAutoSubtitle() {
         String name = this.getClass().getSimpleName();
 
-        if (name.equals("MainActivity")) {
-            setToolbarSubtitle("Training");
-        }
-        else if (name.equals("ExerciseActivity")) {
-            setToolbarSubtitle("Übungen");
-        }
-        else if (name.equals("MuscleActivity")) {
-            setToolbarSubtitle("Muskeln");
-        } else {
-            setToolbarSubtitle("");
+        switch (name) {
+            case "MainActivity":
+                setToolbarSubtitle(getString(R.string.subtitle_training));
+                break;
+            case "ExerciseActivity":
+                setToolbarSubtitle(getString(R.string.subtitle_exercises));
+                break;
+            case "MuscleActivity":
+                setToolbarSubtitle(getString(R.string.subtitle_muscles));
+                break;
+            default:
+                setToolbarSubtitle("");
+                break;
         }
     }
 
@@ -111,7 +104,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         toolbar.setSubtitle(text);
 
-        // Subtitle kleiner + transparent
         toolbar.setSubtitleTextAppearance(this, R.style.ToolbarSubtitleStyle);
 
         try {
@@ -120,34 +112,49 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-
-
-
-    protected void applyEdgeToEdge() {
+    private boolean isLandscape() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            getWindow().setDecorFitsSystemWindows(false);
+            WindowMetrics metrics = getWindowManager().getCurrentWindowMetrics();
+            int width = metrics.getBounds().width();
+            int height = metrics.getBounds().height();
+            return width > height;
+        } else {
+            return getResources().getConfiguration().orientation
+                    == Configuration.ORIENTATION_LANDSCAPE;
+        }
+    }
+
+
+    private int dp(int value) {
+        return Math.round(value * getResources().getDisplayMetrics().density);
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        applyOrientationLayout();
+    }
+
+
+    protected void applyOrientationLayout() {
+        View container = findViewById(R.id.container);
+        if (container == null) return;
+
+        ConstraintLayout.LayoutParams params =
+                (ConstraintLayout.LayoutParams) container.getLayoutParams();
+
+        if (isLandscape()) {
+            params.leftMargin = dp(48);
+            params.rightMargin = dp(48);
+        } else {
+            params.leftMargin = dp(12);
+            params.rightMargin = dp(12);
         }
 
-        View root = findViewById(android.R.id.content);
-
-        root.setOnApplyWindowInsetsListener((v, insets) -> {
-            int top = 0;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    top = insets.getInsets(WindowInsets.Type.statusBars()).top;
-                }
-            }
-            int bottom = 0;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    bottom = insets.getInsets(WindowInsets.Type.navigationBars()).bottom;
-                }
-            }
-
-            v.setPadding(0, top, 0, bottom);
-            return insets;
-        });
+        container.setLayoutParams(params);
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -160,62 +167,53 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         int id = item.getItemId();
 
-        // Training
         if (id == R.id.menu_training) {
             navigateTo(MainActivity.class);
             return true;
         }
 
-        // Übungen
         if (id == R.id.menu_exercises) {
             navigateTo(ExerciseActivity.class);
             return true;
         }
 
-        // Muskeln
         if (id == R.id.menu_muscles) {
             navigateTo(MuscleActivity.class);
             return true;
         }
 
-        // Training erstellen
         if (id == R.id.menu_create_training) {
             createTrainingPlan();
             db.plan.setPlan(selectedExercises);
-            Toast.makeText(this, "Training erstellt", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_training_created, Toast.LENGTH_SHORT).show();
             return true;
         }
 
-        // Training löschen
         if (id == R.id.menu_delete_training) {
             selectedExercises.clear();
             db.plan.clear();
             onMenuRefresh();
-            Toast.makeText(this, "Training gelöscht", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_training_deleted, Toast.LENGTH_SHORT).show();
             return true;
         }
 
-        // XML EXPORT
         if (id == R.id.menu_export_xml) {
             exportXmlDialog();
             return true;
         }
 
-        // XML IMPORT
         if (id == R.id.menu_import_xml) {
             importXmlDialog();
             return true;
         }
 
 
-        // Demo-Daten
         if (id == R.id.menu_add_demo) {
             addDemoData();
             onMenuRefresh();
             return true;
         }
 
-        // Alles löschen
         if (id == R.id.menu_delete_all) {
             deleteAllData();
             onMenuRefresh();
@@ -247,12 +245,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (resultCode != RESULT_OK || data == null) return;
 
         if (requestCode == 1001) {
-            // EXPORT
             exportXmlToUri(data.getData());
         }
 
         if (requestCode == 1002) {
-            // IMPORT
             importXmlFromUri(data.getData());
         }
     }
@@ -263,9 +259,9 @@ public abstract class BaseActivity extends AppCompatActivity {
             try (OutputStream os = getContentResolver().openOutputStream(uri)) {
                 os.write(xml.getBytes(java.nio.charset.StandardCharsets.UTF_8));
             }
-            Toast.makeText(this, "Export erfolgreich", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_export_success, Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
-            Toast.makeText(this, "Fehler beim Export", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_export_error, Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }
@@ -283,20 +279,18 @@ public abstract class BaseActivity extends AppCompatActivity {
             try (InputStream is = getContentResolver().openInputStream(uri)) {
                 db.importFromXml(is);
             }
-            Toast.makeText(this, "Import erfolgreich", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_import_success, Toast.LENGTH_SHORT).show();
             onMenuRefresh();
         } catch (Exception e) {
-            Toast.makeText(this, "Fehler beim Import", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_import_error, Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }
 
 
     public String formatWeight(float w) {
-        // Immer Punkt statt Komma
         String s = String.format(java.util.Locale.US, "%.1f", w);
 
-        // ".0" entfernen
         if (s.endsWith(".0")) {
             s = s.substring(0, s.length() - 2);
         }
@@ -311,7 +305,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         db.trainings.load();
 
         onMenuRefresh();
-        Toast.makeText(this, "Demo-Daten hinzugefügt", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.toast_demo_data_added, Toast.LENGTH_SHORT).show();
     }
 
     public void deleteAllData() {
@@ -329,7 +323,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         selectedExercises.clear();
 
-        // Heatmap leeren (falls MainActivity aktiv ist)
         if (this instanceof MainActivity) {
             MuscleRegenView regenView = findViewById(R.id.view_regen);
             if (regenView != null) {
@@ -341,22 +334,18 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
         onMenuRefresh();
-        Toast.makeText(this, "Alle Daten gelöscht", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.toast_all_data_deleted, Toast.LENGTH_SHORT).show();
     }
 
-    // Jede Activity kann das überschreiben
     protected void onMenuRefresh() {
-        // Default: nichts
     }
 
     protected void createTrainingPlan() {
 
         selectedExercises.clear();
 
-        // 1. Pool aller Übungen
         List<Exercise> pool = new ArrayList<>(db.exercises.exercises.values());
 
-        // 2. Zielkategorien
         Muscle.Category[] targetCats = {
                 Muscle.Category.ARM,
                 Muscle.Category.SHOULDER,
@@ -366,10 +355,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                 Muscle.Category.LEG
         };
 
-        // 3. Kategorien, die wir schon haben
         Set<Muscle.Category> usedCategories = new HashSet<>();
 
-        // 4. Für jede Kategorie eine Übung wählen
         for (Muscle.Category targetCat : targetCats) {
 
             Exercise best = null;
@@ -377,32 +364,21 @@ public abstract class BaseActivity extends AppCompatActivity {
 
             for (Exercise ex : pool) {
 
-                // ---------------------------------------------------------
-                // Kategorie bestimmen (aus allen Muskeln der Übung)
-                // ---------------------------------------------------------
                 Set<Muscle.Category> cats = ex.muscleIds.stream()
                         .map(id -> db.muscles.muscles.get(id))
                         .filter(Objects::nonNull)
                         .map(m -> m.category)
                         .collect(Collectors.toSet());
 
-                // passt die Übung zur Zielkategorie?
                 if (!cats.contains(targetCat)) continue;
 
-                // Kategorie schon benutzt?
                 if (cats.stream().anyMatch(usedCategories::contains)) continue;
 
-                // ---------------------------------------------------------
-                // A) Regeneration (Minimum aller Muskeln)
-                // ---------------------------------------------------------
                 float regen = ex.muscleIds.stream()
                         .map(id -> db.calculateRegeneration(id) * 100f)
                         .min(Float::compare)
                         .orElse(100f);
 
-                // ---------------------------------------------------------
-                // B) Muskelrotation (schlechtester Muskel)
-                // ---------------------------------------------------------
                 long muscleLast = ex.muscleIds.stream()
                         .map(id -> db.muscles.muscles.get(id))
                         .filter(Objects::nonNull)
@@ -413,35 +389,23 @@ public abstract class BaseActivity extends AppCompatActivity {
                 float hoursMuscle = hoursSince(muscleLast);
                 float muscleRotationScore = Math.min(100f, (hoursMuscle / 72f) * 100f);
 
-                // ---------------------------------------------------------
-                // C) Volumen (letzte Belastung)
-                // ---------------------------------------------------------
-                float lastVolume = ex.getLastVolume(); // sets * reps * weight
+                float lastVolume = ex.getLastVolume();
                 float maxVolume = db.getMaxVolumeForCategory(targetCat);
 
                 float volumeScore = (maxVolume <= 0f)
                         ? 100f
                         : Math.max(0f, 100f - (lastVolume / maxVolume * 100f));
 
-                // ---------------------------------------------------------
-                // D) Übungsrotation (Hard Rotation)
-                // ---------------------------------------------------------
                 long exerciseLast = ex.getLastTraining();
                 float hoursEx = hoursSince(exerciseLast);
-                float exerciseRotationScore = Math.min(100f, (hoursEx / 168f) * 100f); // 7 Tage
+                float exerciseRotationScore = Math.min(100f, (hoursEx / 168f) * 100f);
 
-                // ---------------------------------------------------------
-                // Gesamtscore
-                // ---------------------------------------------------------
                 float score =
                         regen * 0.40f +
                                 muscleRotationScore * 0.20f +
                                 volumeScore * 0.20f +
                                 exerciseRotationScore * 0.20f;
 
-                // ---------------------------------------------------------
-                // Beste Übung wählen
-                // ---------------------------------------------------------
                 if (score > bestScore) {
                     bestScore = score;
                     best = ex;
@@ -452,17 +416,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 
                 selectedExercises.add(best.getId());
 
-                // Kategorien merken
                 best.muscleIds.stream()
                         .map(id -> db.muscles.muscles.get(id))
                         .filter(Objects::nonNull)
                         .map(m -> m.category)
                         .forEach(usedCategories::add);
 
-                // Primärmuskeln extrahieren
                 Set<String> primaryMuscles = new HashSet<>(best.muscleIds);
 
-                // Übungen entfernen, die Primärmuskeln teilen
                 Exercise finalBest = best;
                 pool.removeIf(ex ->
                         ex.getId().equals(finalBest.getId()) ||
@@ -475,9 +436,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         onMenuRefresh();
     }
 
-    // ---------------------------------------------------------
-// Hilfsfunktion
-// ---------------------------------------------------------
     private float hoursSince(long time) {
         if (time <= 0L) return 9999f;
         long diff = System.currentTimeMillis() - time;
