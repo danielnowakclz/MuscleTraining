@@ -85,15 +85,15 @@ public class GroupDatabase {
 
             String id = ex.getId().toLowerCase();
 
-            if (id.startsWith("kh")) {
+            if (id.startsWith("kh") && !gKH.exerciseIds.contains(ex.getId())) {
                 gKH.exerciseIds.add(ex.getId());
             }
 
-            if (id.startsWith("kb")) {
+            if (id.startsWith("kb") && !gKB.exerciseIds.contains(ex.getId())) {
                 gKB.exerciseIds.add(ex.getId());
             }
 
-            if (id.startsWith("cf")) {
+            if (id.startsWith("cf") && !gCF.exerciseIds.contains(ex.getId())) {
                 gCF.exerciseIds.add(ex.getId());
             }
         }
@@ -110,15 +110,15 @@ public class GroupDatabase {
 
             String id = ex.getId().toLowerCase();
 
-            if (id.startsWith("kh")) {
+            if (id.startsWith("kh") && !ex.groupIds.contains("group_kh")) {
                 ex.groupIds.add("group_kh");
             }
 
-            if (id.startsWith("kb")) {
+            if (id.startsWith("kb") && !ex.groupIds.contains("group_kb")) {
                 ex.groupIds.add("group_kb");
             }
 
-            if (id.startsWith("cf")) {
+            if (id.startsWith("cf") && !ex.groupIds.contains("group_cf")) {
                 ex.groupIds.add("group_cf");
             }
         }

@@ -83,7 +83,7 @@
     <string name="label_group_name">Name der Gruppierung</string>
     <string name="hint_group_name_example">z. B. Ort, Typ, Wochentag</string>
     <string name="label_group_exercises">Übungen in dieser Gruppe</string>
-    <string name="btn_delete_group">Gruppierung löschen</string>
+    <string name="btn_delete_group">Löschen</string>
 
     <!-- Muscle Info Dialog -->
     <string name="label_last_trained_colon">Zuletzt trainiert:</string>
