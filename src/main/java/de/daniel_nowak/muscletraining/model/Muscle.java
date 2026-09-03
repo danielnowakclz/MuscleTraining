@@ -89,6 +89,12 @@ public class Muscle {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
+    public long getFullRegeneratedTime() {
+        // Regenerationszeit in Stunden → Millisekunden
+        long regenMillis = (long)(getRegenerationHours() * 3600f * 1000f);
+        return lastTraining + regenMillis;
+    }
+
     @Override
     public String toString() {
         return getName() != null ? getName() : "(Unbenannt)";

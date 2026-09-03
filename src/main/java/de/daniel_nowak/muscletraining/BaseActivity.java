@@ -8,9 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowMetrics;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,9 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import de.daniel_nowak.muscletraining.data.Database;
 import de.daniel_nowak.muscletraining.model.Exercise;
@@ -55,6 +51,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
+        // WICHTIG: Trainingsplan NICHT erzeugen, wenn wir in der GroupActivity sind
+        if (this instanceof GroupActivity) {
+            return;
+        }
+
         float ageHours = hoursSince(db.plan.lastPlanTime);
 
         if (db.plan.plan.isEmpty() || ageHours > 6f) {
@@ -62,6 +63,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             db.plan.setPlan(selectedExercises);
         }
     }
+
 
     protected void setupToolbar(int toolbarId) {
         MaterialToolbar toolbar = findViewById(toolbarId);
@@ -91,6 +93,9 @@ public abstract class BaseActivity extends AppCompatActivity {
                 break;
             case "MuscleActivity":
                 setToolbarSubtitle(getString(R.string.subtitle_muscles));
+                break;
+            case "GroupActivity":
+                setToolbarSubtitle(getString(R.string.subtitle_groups));
                 break;
             default:
                 setToolbarSubtitle("");
@@ -186,6 +191,11 @@ public abstract class BaseActivity extends AppCompatActivity {
             createTrainingPlan();
             db.plan.setPlan(selectedExercises);
             Toast.makeText(this, R.string.toast_training_created, Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        if (id == R.id.menu_grouping) {
+            navigateTo(GroupActivity.class);
             return true;
         }
 
@@ -342,100 +352,113 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void createTrainingPlan() {
 
-        selectedExercises.clear();
+        // ---------------------------------------------------------
+        // 0) Gruppenfilter anwenden
+        // ---------------------------------------------------------
+        Set<String> allowedGroups = new HashSet<>(db.plan.selectedGroupIds);
 
-        List<Exercise> pool = new ArrayList<>(db.exercises.exercises.values());
+        // Wenn Gruppen gewählt wurden → nur Übungen aus diesen Gruppen behalten
+        if (!allowedGroups.isEmpty()) {
 
-        Muscle.Category[] targetCats = {
-                Muscle.Category.ARM,
-                Muscle.Category.SHOULDER,
-                Muscle.Category.CHEST,
-                Muscle.Category.BACK,
-                Muscle.Category.CORE,
-                Muscle.Category.LEG
-        };
+            db.exercises.exercises.values().removeIf(ex -> {
 
-        Set<Muscle.Category> usedCategories = new HashSet<>();
+                // Übung hat keine Gruppen → raus
+                if (ex.groupIds == null || ex.groupIds.isEmpty()) {
+                    return true;
+                }
 
-        for (Muscle.Category targetCat : targetCats) {
+                // Übung hat Gruppen → mindestens eine muss erlaubt sein
+                for (String gId : ex.groupIds) {
+                    if (allowedGroups.contains(gId)) {
+                        return false; // behalten
+                    }
+                }
 
-            Exercise best = null;
-            float bestScore = -1f;
+                return true; // keine erlaubte Gruppe → raus
+            });
+        }
 
-            for (Exercise ex : pool) {
+        // ---------------------------------------------------------
+        // 1) ExercisePool aufbauen
+        // ---------------------------------------------------------
+        List<Exercise> exercisePool = new ArrayList<>();
+        Set<String> poolIds = new HashSet<>();
 
-                Set<Muscle.Category> cats = ex.muscleIds.stream()
-                        .map(id -> db.muscles.muscles.get(id))
-                        .filter(Objects::nonNull)
-                        .map(m -> m.category)
-                        .collect(Collectors.toSet());
+        // 1) Alle Muskeln nach Regeneration sortieren (älteste zuerst)
+        List<Muscle> sortedMuscles = new ArrayList<>(db.muscles.muscles.values());
+        sortedMuscles.sort((a, b) -> Long.compare(a.getFullRegeneratedTime(), b.getFullRegeneratedTime()));
 
-                if (!cats.contains(targetCat)) continue;
+        // 2) Für jeden Muskel Übungen sammeln
+        for (Muscle muscle : sortedMuscles) {
 
-                if (cats.stream().anyMatch(usedCategories::contains)) continue;
+            List<Exercise> tempPool = new ArrayList<>();
 
-                float regen = ex.muscleIds.stream()
-                        .map(id -> db.calculateRegeneration(id) * 100f)
-                        .min(Float::compare)
-                        .orElse(100f);
-
-                long muscleLast = ex.muscleIds.stream()
-                        .map(id -> db.muscles.muscles.get(id))
-                        .filter(Objects::nonNull)
-                        .mapToLong(Muscle::getLastTraining)
-                        .min()
-                        .orElse(0L);
-
-                float hoursMuscle = hoursSince(muscleLast);
-                float muscleRotationScore = Math.min(100f, (hoursMuscle / 72f) * 100f);
-
-                float lastVolume = ex.getLastVolume();
-                float maxVolume = db.getMaxVolumeForCategory(targetCat);
-
-                float volumeScore = (maxVolume <= 0f)
-                        ? 100f
-                        : Math.max(0f, 100f - (lastVolume / maxVolume * 100f));
-
-                long exerciseLast = ex.getLastTraining();
-                float hoursEx = hoursSince(exerciseLast);
-                float exerciseRotationScore = Math.min(100f, (hoursEx / 168f) * 100f);
-
-                float score =
-                        regen * 0.40f +
-                                muscleRotationScore * 0.20f +
-                                volumeScore * 0.20f +
-                                exerciseRotationScore * 0.20f;
-
-                if (score > bestScore) {
-                    bestScore = score;
-                    best = ex;
+            for (String exId : muscle.exerciseIds) {
+                Exercise ex = db.exercises.exercises.get(exId);
+                if (ex != null) {
+                    tempPool.add(ex);
                 }
             }
 
-            if (best != null) {
+            // Übungen nach Rotation sortieren
+            tempPool.sort((a, b) -> Long.compare(a.getLastTraining(), b.getLastTraining()));
 
-                selectedExercises.add(best.getId());
-
-                best.muscleIds.stream()
-                        .map(id -> db.muscles.muscles.get(id))
-                        .filter(Objects::nonNull)
-                        .map(m -> m.category)
-                        .forEach(usedCategories::add);
-
-                Set<String> primaryMuscles = new HashSet<>(best.muscleIds);
-
-                Exercise finalBest = best;
-                pool.removeIf(ex ->
-                        ex.getId().equals(finalBest.getId()) ||
-                                ex.muscleIds.stream().anyMatch(primaryMuscles::contains)
-                );
+            // In globalen Pool übernehmen (ohne Duplikate)
+            for (Exercise ex : tempPool) {
+                if (!poolIds.contains(ex.getId())) {
+                    poolIds.add(ex.getId());
+                    exercisePool.add(ex);
+                }
             }
+        }
+
+        // Wenn keine Übungen verfügbar sind → Plan bleibt leer
+        if (exercisePool.isEmpty()) {
+            selectedExercises.clear();
+            db.plan.setPlan(selectedExercises);
+            onMenuRefresh();
+            return;
+        }
+
+        // ---------------------------------------------------------
+        // 3) Finalen Trainingsplan erzeugen
+        // ---------------------------------------------------------
+        List<Exercise> finalPlan = new ArrayList<>();
+        Set<String> usedMuscles = new HashSet<>();
+
+        while (!exercisePool.isEmpty()) {
+
+            // 3.1) Älteste Übung auswählen
+            Exercise oldest = exercisePool.get(0);
+            finalPlan.add(oldest);
+
+            // 3.2) Muskeln dieser Übung merken
+            for (String muscleId : oldest.muscleIds) {
+                usedMuscles.add(muscleId);
+            }
+
+            // 3.3) Alle Übungen entfernen, die einen dieser Muskeln trainieren
+            exercisePool.removeIf(ex -> {
+                for (String mId : ex.muscleIds) {
+                    if (usedMuscles.contains(mId)) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+        }
+
+        // ---------------------------------------------------------
+        // 4) Finalen Plan speichern
+        // ---------------------------------------------------------
+        selectedExercises.clear();
+        for (Exercise ex : finalPlan) {
+            selectedExercises.add(ex.getId());
         }
 
         db.plan.setPlan(selectedExercises);
         onMenuRefresh();
     }
-
     private float hoursSince(long time) {
         if (time <= 0L) return 9999f;
         long diff = System.currentTimeMillis() - time;

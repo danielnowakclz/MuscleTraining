@@ -174,114 +174,148 @@ public class MuscleDatabase {
         return m;
     }
 
-    public Muscle addDemo(String id, String name, Muscle.Category category) {
-        Muscle m = new Muscle(id, name);
+    private Muscle addDemo(String id, String name, Muscle.Category category) {
+        Muscle m = muscles.get(id);
+        if (null == m) m = new Muscle(id, name);
+        else m.setName(name);
         m.category = category;
         muscles.put(id, m);
         return m;
     }
+
+    private void addIfMissing(Muscle m, String side, float x, float y) {
+        for (int i = 0; i < m.sideList.size(); i++) {
+            if (m.sideList.get(i).equals(side)
+                    && m.posXList.get(i) == x
+                    && m.posYList.get(i) == y) {
+                return; // existiert bereits → nichts tun
+            }
+        }
+
+        // fehlt → hinzufügen
+        m.sideList.add(side);
+        m.posXList.add(x);
+        m.posYList.add(y);
+    }
+
 
     public void addDemoData() {
 
         Muscle shoulders = addDemo("shoulders",
                 context.getString(R.string.muscle_shoulders),
                 Muscle.Category.SHOULDER);
-        shoulders.sideList.add("front"); shoulders.posXList.add(0.23f); shoulders.posYList.add(0.18f);
-        shoulders.sideList.add("front"); shoulders.posXList.add(0.32f); shoulders.posYList.add(0.22f);
-        shoulders.sideList.add("front"); shoulders.posXList.add(0.77f); shoulders.posYList.add(0.18f);
-        shoulders.sideList.add("front"); shoulders.posXList.add(0.68f); shoulders.posYList.add(0.22f);
 
         Muscle chest = addDemo("chest",
                 context.getString(R.string.muscle_chest),
                 Muscle.Category.CHEST);
-        chest.sideList.add("front"); chest.posXList.add(0.38f); chest.posYList.add(0.27f);
-        chest.sideList.add("front"); chest.posXList.add(0.62f); chest.posYList.add(0.27f);
 
         Muscle biceps = addDemo("biceps",
                 context.getString(R.string.muscle_biceps),
                 Muscle.Category.ARM);
-        biceps.sideList.add("front"); biceps.posXList.add(0.26f); biceps.posYList.add(0.32f);
-        biceps.sideList.add("front"); biceps.posXList.add(0.74f); biceps.posYList.add(0.32f);
 
         Muscle abs_straight = addDemo("abs_straight",
                 context.getString(R.string.muscle_abs_straight),
                 Muscle.Category.CORE);
-        abs_straight.sideList.add("front"); abs_straight.posXList.add(0.50f); abs_straight.posYList.add(0.39f);
-        abs_straight.sideList.add("front"); abs_straight.posXList.add(0.50f); abs_straight.posYList.add(0.44f);
 
         Muscle abs_oblique = addDemo("abs_oblique",
                 context.getString(R.string.muscle_abs_oblique),
                 Muscle.Category.CORE);
-        abs_oblique.sideList.add("front"); abs_oblique.posXList.add(0.36f); abs_oblique.posYList.add(0.44f);
-        abs_oblique.sideList.add("front"); abs_oblique.posXList.add(0.36f); abs_oblique.posYList.add(0.49f);
-        abs_oblique.sideList.add("front"); abs_oblique.posXList.add(0.64f); abs_oblique.posYList.add(0.44f);
-        abs_oblique.sideList.add("front"); abs_oblique.posXList.add(0.64f); abs_oblique.posYList.add(0.49f);
 
         Muscle core_rotators = addDemo("core_rotators",
                 context.getString(R.string.muscle_core_rotators),
                 Muscle.Category.CORE);
-        core_rotators.sideList.add("front"); core_rotators.posXList.add(0.44f); core_rotators.posYList.add(0.48f);
-        core_rotators.sideList.add("front"); core_rotators.posXList.add(0.56f); core_rotators.posYList.add(0.48f);
 
         Muscle core_stabilizers = addDemo("core_stabilizers",
                 context.getString(R.string.muscle_core_stabilizers),
                 Muscle.Category.CORE);
-        core_stabilizers.sideList.add("front"); core_stabilizers.posXList.add(0.47f); core_stabilizers.posYList.add(0.52f);
-        core_stabilizers.sideList.add("front"); core_stabilizers.posXList.add(0.53f); core_stabilizers.posYList.add(0.52f);
 
         Muscle adductors = addDemo("adductors",
                 context.getString(R.string.muscle_adductors),
                 Muscle.Category.LEG);
-        adductors.sideList.add("front"); adductors.posXList.add(0.47f); adductors.posYList.add(0.64f);
-        adductors.sideList.add("front"); adductors.posXList.add(0.53f); adductors.posYList.add(0.64f);
 
         Muscle abductors = addDemo("abductors",
                 context.getString(R.string.muscle_abductors),
                 Muscle.Category.LEG);
-        abductors.sideList.add("front"); abductors.posXList.add(0.38f); abductors.posYList.add(0.65f);
-        abductors.sideList.add("front"); abductors.posXList.add(0.62f); abductors.posYList.add(0.65f);
 
         Muscle quadriceps = addDemo("quadriceps",
                 context.getString(R.string.muscle_quadriceps),
                 Muscle.Category.LEG);
-        quadriceps.sideList.add("front"); quadriceps.posXList.add(0.44f); quadriceps.posYList.add(0.69f);
-        quadriceps.sideList.add("front"); quadriceps.posXList.add(0.56f); quadriceps.posYList.add(0.69f);
 
         Muscle neck = addDemo("neck",
                 context.getString(R.string.muscle_neck),
                 Muscle.Category.BACK);
-        neck.sideList.add("back"); neck.posXList.add(0.48f); neck.posYList.add(0.17f);
-        neck.sideList.add("back"); neck.posXList.add(0.57f); neck.posYList.add(0.17f);
 
         Muscle back_upper = addDemo("back_upper",
                 context.getString(R.string.muscle_back_upper),
                 Muscle.Category.BACK);
-        back_upper.sideList.add("back"); back_upper.posXList.add(0.40f); back_upper.posYList.add(0.25f);
-        back_upper.sideList.add("back"); back_upper.posXList.add(0.62f); back_upper.posYList.add(0.29f);
 
         Muscle back_lower = addDemo("back_lower",
                 context.getString(R.string.muscle_back_lower),
                 Muscle.Category.BACK);
-        back_lower.sideList.add("back"); back_lower.posXList.add(0.48f); back_lower.posYList.add(0.47f);
-        back_lower.sideList.add("back"); back_lower.posXList.add(0.57f); back_lower.posYList.add(0.47f);
 
         Muscle triceps = addDemo("triceps",
                 context.getString(R.string.muscle_triceps),
                 Muscle.Category.ARM);
-        triceps.sideList.add("back"); triceps.posXList.add(0.40f); triceps.posYList.add(0.33f);
-        triceps.sideList.add("back"); triceps.posXList.add(0.70f); triceps.posYList.add(0.33f);
 
         Muscle gluteus = addDemo("gluteus",
                 context.getString(R.string.muscle_gluteus),
                 Muscle.Category.LEG);
-        gluteus.sideList.add("back"); gluteus.posXList.add(0.48f); gluteus.posYList.add(0.56f);
-        gluteus.sideList.add("back"); gluteus.posXList.add(0.62f); gluteus.posYList.add(0.56f);
 
         Muscle hamstrings = addDemo("hamstrings",
                 context.getString(R.string.muscle_hamstrings),
                 Muscle.Category.LEG);
-        hamstrings.sideList.add("back"); hamstrings.posXList.add(0.48f); hamstrings.posYList.add(0.67f);
-        hamstrings.sideList.add("back"); hamstrings.posXList.add(0.62f); hamstrings.posYList.add(0.67f);
+
+        addIfMissing(shoulders, "front", 0.25287357f, 0.19692308f);
+        addIfMissing(shoulders, "back",  0.29655173f, 0.20923077f);
+        addIfMissing(shoulders, "front", 0.74482757f, 0.19692308f);
+        addIfMissing(shoulders, "back",  0.7011494f,  0.20923077f);
+
+        addIfMissing(abs_oblique, "front", 0.3586207f, 0.40923077f);
+        addIfMissing(abs_oblique, "front", 0.3586207f, 0.45846155f);
+        addIfMissing(abs_oblique, "front", 0.63908046f, 0.40923077f);
+        addIfMissing(abs_oblique, "front", 0.63908046f, 0.45846155f);
+
+        addIfMissing(triceps, "back", 0.21609196f, 0.29846153f);
+        addIfMissing(triceps, "back", 0.7816092f,  0.29846153f);
+
+        addIfMissing(chest, "front", 0.37931034f, 0.2697436f);
+        addIfMissing(chest, "front", 0.6183908f,  0.2697436f);
+
+        addIfMissing(core_rotators, "front", 0.46206897f, 0.44923076f);
+        addIfMissing(core_rotators, "front", 0.5356322f,  0.44923076f);
+
+        addIfMissing(adductors, "front", 0.4597701f,  0.58358973f);
+        addIfMissing(adductors, "front", 0.537931f,   0.58358973f);
+
+        addIfMissing(gluteus, "back", 0.4091954f, 0.5292308f);
+        addIfMissing(gluteus, "back", 0.58850574f, 0.5292308f);
+
+        addIfMissing(neck, "back", 0.4091954f, 0.16923077f);
+        addIfMissing(neck, "back", 0.58850574f, 0.16923077f);
+
+        addIfMissing(abductors, "front", 0.32413793f, 0.5774359f);
+        addIfMissing(abductors, "front", 0.67356324f, 0.5774359f);
+
+        addIfMissing(abs_straight, "front", 0.5f, 0.39f);
+        addIfMissing(abs_straight, "front", 0.5f, 0.44f);
+
+        addIfMissing(quadriceps, "front", 0.39310345f, 0.57641023f);
+        addIfMissing(quadriceps, "front", 0.6045977f,  0.57641023f);
+
+        addIfMissing(back_lower, "back", 0.43218392f, 0.45948717f);
+        addIfMissing(back_lower, "back", 0.56551725f, 0.45948717f);
+
+        addIfMissing(hamstrings, "back", 0.3632184f,  0.60820514f);
+        addIfMissing(hamstrings, "back", 0.63448274f, 0.60820514f);
+
+        addIfMissing(back_upper, "back", 0.445977f,    0.28f);
+        addIfMissing(back_upper, "back", 0.55172414f,  0.28f);
+
+        addIfMissing(core_stabilizers, "front", 0.46896553f, 0.4471795f);
+        addIfMissing(core_stabilizers, "front", 0.52873564f, 0.4471795f);
+
+        addIfMissing(biceps, "front", 0.23678161f, 0.30974358f);
+        addIfMissing(biceps, "front", 0.7609195f,  0.30974358f);
 
         save();
     }

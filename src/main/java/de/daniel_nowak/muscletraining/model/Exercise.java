@@ -102,9 +102,6 @@ public class Exercise {
         this.lastWeight = lastWeight;
     }
 
-    public float getLastVolume() { return lastSets * lastReps * lastWeight;
-    }
-
     public int getLastDifficulty() {
         return lastDifficulty;
     }
@@ -112,4 +109,6 @@ public class Exercise {
     public void setLastDifficulty(int lastDifficulty) {
         this.lastDifficulty = lastDifficulty;
     }
+
+    public List<String> groupIds = new ArrayList<>();
 }

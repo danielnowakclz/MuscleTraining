@@ -27,6 +27,10 @@
                 android:title="@string/menu_create_training"
                 android:icon="@drawable/ic_add" />
             <item
+                android:id="@+id/menu_grouping"
+                android:title="@string/menu_grouping"
+                android:icon="@drawable/ic_grouping" />
+            <item
                 android:id="@+id/menu_delete_training"
                 android:title="@string/menu_delete_training"
                 android:icon="@drawable/ic_delete" />

@@ -44,8 +44,7 @@ public class MainUiUpdater {
         updateRecommendation(ex, muscles);
         updateHeatmap();
 
-        a.selectedDifficulty=2
-        ;
+        a.selectedDifficulty=2;
         a.seekDifficulty.setProgress(a.selectedDifficulty);
 
         enableControls();

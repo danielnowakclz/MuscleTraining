@@ -20,6 +20,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import de.daniel_nowak.muscletraining.model.Exercise;
+import de.daniel_nowak.muscletraining.model.Group;
 import de.daniel_nowak.muscletraining.model.Muscle;
 import de.daniel_nowak.muscletraining.model.Training;
 
@@ -30,16 +31,20 @@ public class Database {
     public final TrainingDatabase trainings;
     public final PlanDatabase plan;
 
+    public final GroupDatabase groups;
+
     public Database(Context context) {
         muscles = new MuscleDatabase(context);
         exercises = new ExerciseDatabase(context);
         trainings = new TrainingDatabase(context);
         plan = new PlanDatabase(context);
+        groups = new GroupDatabase(context);
 
         muscles.load();
         exercises.load();
         trainings.load();
         plan.load();
+        groups.load();
     }
 
     public Training addTraining(Exercise ex, int sets, int reps, float weight, int difficulty) {
@@ -77,34 +82,10 @@ public class Database {
         return t;
     }
 
-    public float getMaxVolumeForCategory(Muscle.Category cat) {
-
-        float max = 0f;
-
-        for (Training t : trainings.trainings.values()) {
-
-            Exercise ex = exercises.exercises.get(t.getExerciseId());
-            if (ex == null) continue;
-
-            Set<Muscle.Category> cats = ex.muscleIds.stream()
-                    .map(id -> muscles.muscles.get(id))
-                    .filter(Objects::nonNull)
-                    .map(m -> m.category)
-                    .collect(Collectors.toSet());
-
-            if (!cats.contains(cat)) continue;
-
-            float vol = t.getSets() * t.getReps() * t.getWeight();
-            if (vol > max) max = vol;
-        }
-
-        return max;
-    }
-
-
     public void addDemoData() {
         muscles.addDemoData();
         exercises.addDemoData();
+        groups.addDemoData(this);
         syncAllRelations();
     }
 
@@ -162,9 +143,23 @@ public class Database {
             sb.append(String.join(",", ex.muscleIds));
             sb.append("</MuscleIds>\n");
 
+            sb.append("      <GroupIds>");
+            sb.append(String.join(",", ex.groupIds));
+            sb.append("</GroupIds>\n");
+
+
             sb.append("    </Exercise>\n");
         }
         sb.append("  </Exercises>\n");
+
+        sb.append("  <Groups>\n");
+        for (Group g : groups.groups.values()) {
+            sb.append("    <Group id=\"").append(g.getId()).append("\">\n");
+            sb.append("      <Name>").append(escapeXml(g.getName())).append("</Name>\n");
+            sb.append("      <ExerciseIds>").append(String.join(",", g.exerciseIds)).append("</ExerciseIds>\n");
+            sb.append("    </Group>\n");
+        }
+        sb.append("  </Groups>\n");
 
         sb.append("  <Trainings>\n");
         for (Training t : trainings.trainings.values()) {
@@ -258,6 +253,8 @@ public class Database {
             ex.setLastDifficulty(parseInt(getText(e, "LastDifficulty")));
 
             ex.muscleIds = splitList(getText(e, "MuscleIds"));
+            ex.groupIds = splitList(getText(e, "GroupIds"));
+            ex.groupIds.removeIf(x -> x == null || x.trim().isEmpty());
 
             exercises.exercises.put(id, ex);
         }
@@ -284,6 +281,25 @@ public class Database {
 
             trainings.trainings.put(id, t);
         }
+
+        groups.groups.clear();
+        NodeList gNodes = doc.getElementsByTagName("Group");
+
+        for (int i = 0; i < gNodes.getLength(); i++) {
+            Element e = (Element) gNodes.item(i);
+
+            String id = e.getAttribute("id");
+            String name = getText(e, "Name");
+
+            Group g = new Group(id, name);
+
+            g.exerciseIds = splitList(getText(e, "ExerciseIds"));
+            g.exerciseIds.removeIf(x -> x == null || x.trim().isEmpty());
+
+            groups.groups.put(id, g);
+        }
+
+        groups.save();
 
         syncAllRelations();
 
@@ -338,7 +354,6 @@ public class Database {
                 .replace("\"", "&quot;")
                 .replace("'", "&apos;");
     }
-
 
     public float calculateRegeneration(String muscleId) {
 

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<de.daniel_nowak.muscletraining.ui.NoInterceptScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- NAME -->
+        <TextView
+            android:text="@string/label_group_name"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/edit_name"
+            android:hint="@string/hint_group_name_example"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:background="@drawable/edittext_rounded"
+            android:textSize="16sp"
+            android:layout_marginTop="6dp"/>
+
+        <!-- ÜBUNGEN -->
+        <TextView
+            android:text="@string/label_group_exercises"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/edit_search_ex"
+            android:hint="@string/hint_search_exercises"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:background="@drawable/edittext_rounded"
+            android:textSize="16sp"
+            android:layout_marginTop="6dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_exercises"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="12dp"/>
+
+        <!-- BUTTONS -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp">
+
+            <Button
+                android:id="@+id/btn_delete"
+                android:text="@string/btn_delete_group"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                style="@style/PlusMinusButton.Rounded.Danger" />
+
+            <Space
+                android:layout_width="16dp"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btn_save"
+                android:text="@string/btn_save"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                style="@style/PlusMinusButton.Rounded" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:text="@string/btn_cancel"
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            style="@style/PlusMinusButton.Rounded.Secondary" />
+
+    </LinearLayout>
+</de.daniel_nowak.muscletraining.ui.NoInterceptScrollView>

@@ -131,6 +131,13 @@ public class ExerciseDatabase {
                         ex.muscleIds = new ArrayList<>(Arrays.asList(p.get(15).split(",")));
                 } catch (Exception ignored) {
                 }
+                try {
+                    ex.groupIds = new ArrayList<>(Arrays.asList(p.get(16).split(",")));
+                    ex.groupIds.removeIf(x -> x == null || x.trim().isEmpty());
+                } catch (Exception ignored) {
+                    ex.groupIds = new ArrayList<>();
+                }
+
 
                 exercises.put(ex.getId(), ex);
 
@@ -147,6 +154,7 @@ public class ExerciseDatabase {
             for (Exercise ex : exercises.values()) {
 
                 String muscleList = String.join(",", ex.muscleIds);
+                String groupList = String.join(",", ex.groupIds);
 
                 bw.write(
                         ex.getId() + ";" +
@@ -164,9 +172,11 @@ public class ExerciseDatabase {
                                 ex.getLastReps() + ";" +
                                 ex.getLastWeight() + ";" +
                                 ex.getLastDifficulty() + ";" +
-                                muscleList +
+                                muscleList + ";" +
+                                groupList +
                                 "\n"
                 );
+
             }
 
         } catch (Exception e) {
@@ -182,12 +192,14 @@ public class ExerciseDatabase {
     }
 
     private Exercise addDemo(String id, String name) {
-        Exercise ex = add(id, name);
-        if (name.startsWith("KH")) {
+        Exercise ex = exercises.get(id);
+        if (null == ex) ex = new Exercise(id, name);
+        else ex.setName(name);
+        if (id.startsWith("kh")) {
             ex.setSetsMin(2);
             ex.setSetsMax(5);
             ex.setRepsMin(8);
-            ex.setRepsMax(30);
+            ex.setRepsMax(50);
             ex.setRepsStep(2);
             ex.setWeightMin(5.0f);
             ex.setWeightMax(32.0f);
@@ -196,25 +208,59 @@ public class ExerciseDatabase {
             ex.setSetsMin(2);
             ex.setSetsMax(5);
             ex.setRepsMin(8);
-            ex.setRepsMax(30);
+            ex.setRepsMax(50);
             ex.setRepsStep(2);
             ex.setWeightMin(2.0f);
             ex.setWeightMax(18.0f);
             ex.setWeightStep(2.0f);
         }
+        exercises.put(id, ex);
         return ex;
     }
 
+    private Exercise addDemo2(
+            String id,
+            String name,
+            float weightMin,
+            float weightMax,
+            float weightStep,
+            int setsMin,
+            int setsMax,
+            int repsMin,
+            int repsMax,
+            int repsStep,
+            String... muscles
+    ) {
+        Exercise ex = exercises.get(id);
+        if (null == ex) ex = new Exercise(id, name);
+        else ex.setName(name);
+
+        ex.setWeightMin(weightMin);
+        ex.setWeightMax(weightMax);
+        ex.setWeightStep(weightStep);
+
+        ex.setSetsMin(setsMin);
+        ex.setSetsMax(setsMax);
+
+        ex.setRepsMin(repsMin);
+        ex.setRepsMax(repsMax);
+        ex.setRepsStep(repsStep);
+
+        ex.muscleIds.addAll(Arrays.asList(muscles));
+
+        exercises.put(id, ex);
+        return ex;
+    }
+
+
     public void addDemoData() {
 
-        exercises.clear();
-
         addDemo("kh01", context.getString(R.string.exercise_kh01)).muscleIds.addAll(Arrays.asList(
-                "biceps", "shoulders", "forearms"
+                "biceps", "shoulders"
         ));
 
         addDemo("kh03", context.getString(R.string.exercise_kh03)).muscleIds.addAll(Arrays.asList(
-                "biceps", "forearms"
+                "biceps"
         ));
 
         addDemo("kh02", context.getString(R.string.exercise_kh02)).muscleIds.addAll(Arrays.asList(
@@ -226,7 +272,7 @@ public class ExerciseDatabase {
         ));
 
         addDemo("kh06", context.getString(R.string.exercise_kh06)).muscleIds.addAll(Arrays.asList(
-                "shoulders", "trapezius"
+                "shoulders", "back_upper"
         ));
 
         addDemo("kh11", context.getString(R.string.exercise_kh11)).muscleIds.addAll(Arrays.asList(
@@ -262,7 +308,7 @@ public class ExerciseDatabase {
         ));
 
         addDemo("kh20", context.getString(R.string.exercise_kh20)).muscleIds.addAll(Arrays.asList(
-                "abs_straight", "hip_flexors", "core_stabilizers"
+                "abs_straight", "quadriceps", "core_stabilizers"
         ));
 
         addDemo("kh19", context.getString(R.string.exercise_kh19)).muscleIds.addAll(Arrays.asList(
@@ -350,7 +396,7 @@ public class ExerciseDatabase {
         ));
 
         addDemo("kb40", context.getString(R.string.exercise_kb40)).muscleIds.addAll(Arrays.asList(
-                "abs_straight", "core_stabilizers", "hip_flexors"
+                "abs_straight", "core_stabilizers", "quadriceps"
         ));
 
         addDemo("kb39", context.getString(R.string.exercise_kb39)).muscleIds.addAll(Arrays.asList(
@@ -362,7 +408,7 @@ public class ExerciseDatabase {
         ));
 
         addDemo("kb12", context.getString(R.string.exercise_kb12)).muscleIds.addAll(Arrays.asList(
-                "core_stabilizers", "shoulders", "grip", "back_upper"
+                "core_stabilizers", "shoulders", "back_upper"
         ));
 
         addDemo("kb41", context.getString(R.string.exercise_kb41)).muscleIds.addAll(Arrays.asList(
@@ -384,6 +430,174 @@ public class ExerciseDatabase {
         addDemo("kb46", context.getString(R.string.exercise_kb46)).muscleIds.addAll(Arrays.asList(
                 "adductors", "quadriceps", "gluteus", "core_stabilizers"
         ));
+
+        addDemo2("cf1",  context.getString(R.string.exercise_cf01),
+                10f, 120f, 10f,
+                2, 5,
+                8, 50, 2,
+                "hamstrings", "gluteus");
+
+        addDemo2("cf02", context.getString(R.string.exercise_cf02),
+                10f, 120f, 10f,
+                2, 5,
+                8, 50, 2,
+                "quadriceps");
+
+        addDemo2("cf03", context.getString(R.string.exercise_cf03),
+                10f, 120f, 10f,
+                2, 5,
+                8, 50, 2,
+                "quadriceps", "gluteus", "hamstrings", "core_stabilizers", "back_lower");
+
+        addDemo2("cf04", context.getString(R.string.exercise_cf04),
+                10f, 120f, 10f,
+                2, 5,
+                8, 50, 2,
+                "triceps", "shoulders");
+
+        addDemo2("cf05", context.getString(R.string.exercise_cf05),
+                10f, 120f, 10f,
+                2, 5,
+                8, 50, 2,
+                "biceps");
+
+        addDemo2("cf06", context.getString(R.string.exercise_cf06),
+                10f, 120f, 10f,
+                2, 5,
+                8, 50, 2,
+                "shoulders", "triceps");
+
+        addDemo2("cf07", context.getString(R.string.exercise_cf07),
+                10f, 120f, 10f,
+                2, 5,
+                8, 50, 2,
+                "back_upper", "back_lower", "shoulders", "biceps");
+
+        addDemo2("cf08", context.getString(R.string.exercise_cf08),
+                10f, 120f, 10f,
+                2, 5,
+                8, 50, 2,
+                "back_upper", "shoulders", "biceps");
+
+        addDemo2("cf09", context.getString(R.string.exercise_cf09),
+                10f, 120f, 10f,
+                2, 5,
+                8, 50, 2,
+                "abs_straight");
+
+        addDemo2("cf10", context.getString(R.string.exercise_cf10),
+                10f, 120f, 10f,
+                2, 5,
+                8, 50, 2,
+                "chest", "shoulders", "triceps");
+
+        addDemo2("cf11", context.getString(R.string.exercise_cf11),
+                5f, 145f, 10f,
+                2, 5,
+                8, 50, 2,
+                "abductors");
+
+        addDemo2("cf12", context.getString(R.string.exercise_cf12),
+                5f, 145f, 10f,
+                2, 5,
+                8, 50, 2,
+                "adductors");
+
+        addDemo2("cf13", context.getString(R.string.exercise_cf13),
+                15f, 195f, 10f,
+                2, 5,
+                8, 50, 2,
+                "quadriceps", "gluteus", "hamstrings");
+
+        addDemo2("cf14", context.getString(R.string.exercise_cf14),
+                5f, 80f, 7.5f,
+                2, 5,
+                8, 50, 2,
+                "hamstrings", "gluteus");
+
+        addDemo2("cf15", context.getString(R.string.exercise_cf15),
+                5f, 95f, 10f,
+                2, 5,
+                8, 50, 2,
+                "gluteus");
+
+        addDemo2("cf16", context.getString(R.string.exercise_cf16),
+                5f, 75f, 85f,
+                2, 5,
+                8, 50, 2,
+                "back_upper", "shoulders", "biceps", "triceps");
+
+        addDemo2("cf17", context.getString(R.string.exercise_cf17),
+                5f, 145f, 10f,
+                2, 5,
+                8, 50, 2,
+                "shoulders", "back_upper");
+
+        addDemo2("cf18", context.getString(R.string.exercise_cf18),
+                5f, 130f, 7.5f,
+                2, 5,
+                8, 50, 2,
+                "back_upper", "back_lower", "biceps", "shoulders");
+
+        addDemo2("cf19", context.getString(R.string.exercise_cf19),
+                5f, 95f, 10f,
+                2, 5,
+                8, 50, 2,
+                "shoulders", "triceps");
+
+        addDemo2("cf20", context.getString(R.string.exercise_cf20),
+                5f, 95f, 10f,
+                2, 5,
+                8, 50, 2,
+                "shoulders");
+
+        addDemo2("cf21", context.getString(R.string.exercise_cf21),
+                5f, 145f, 10f,
+                2, 5,
+                8, 50, 2,
+                "back_upper", "back_lower", "biceps", "shoulders");
+
+        addDemo2("cf22", context.getString(R.string.exercise_cf22),
+                5f, 145f, 10f,
+                2, 5,
+                8, 50, 2,
+                "back_upper", "shoulders", "biceps");
+
+        addDemo2("cf23", context.getString(R.string.exercise_cf23),
+                5f, 95f, 10f,
+                2, 5,
+                8, 50, 2,
+                "core_rotators", "abs_oblique");
+
+        addDemo2("cf24", context.getString(R.string.exercise_cf24),
+                5f, 10f, 95f,
+                2, 5,
+                8, 50, 2,
+                "biceps");
+
+        addDemo2("cf25", context.getString(R.string.exercise_cf25),
+                5f, 10f, 95f,
+                2, 5,
+                8, 50, 2,
+                "quadriceps");
+
+        addDemo2("cf26", context.getString(R.string.exercise_cf26),
+                5f, 10f, 95f,
+                2, 5,
+                8, 50, 2,
+                "hamstrings");
+
+        addDemo2("cf27", context.getString(R.string.exercise_cf27),
+                15f, 10f, 145f,
+                2, 5,
+                8, 50, 2,
+                "back_lower", "gluteus");
+
+        addDemo2("cf28", context.getString(R.string.exercise_cf28),
+                5f, 95f, 10f,
+                2, 5,
+                8, 50, 2,
+                "abs_straight");
 
         save();
     }
