@@ -258,7 +258,7 @@ public class ExerciseDatabase {
                 ex.muscleIds.add(m);
             }
         }
-        
+
         exercises.put(id, ex);
         return ex;
     }

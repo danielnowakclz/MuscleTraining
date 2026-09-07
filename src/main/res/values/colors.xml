@@ -33,4 +33,5 @@
     <color name="tertiary_container_dark">#484B00</color>
 
     <color name="background_dark">#121212</color>
+    <color name="ic_launcher_background">#212121</color> <!-- secondary -->
 </resources>

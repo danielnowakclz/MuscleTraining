@@ -44,6 +44,7 @@
     <string name="subtitle_training">Training</string>
     <string name="subtitle_exercises">Übungen</string>
     <string name="subtitle_muscles">Muskeln</string>
+    <string name="subtitle_groups">Gruppen</string>
 
     <!-- Exercise Activity -->
     <string name="btn_new_exercise">Neue Übung</string>
@@ -84,6 +85,7 @@
     <string name="hint_group_name_example">z. B. Ort, Typ, Wochentag</string>
     <string name="label_group_exercises">Übungen in dieser Gruppe</string>
     <string name="btn_delete_group">Löschen</string>
+    <string name="btn_new_group">Neue Gruppe</string>
 
     <!-- Muscle Info Dialog -->
     <string name="label_last_trained_colon">Zuletzt trainiert:</string>
@@ -108,6 +110,7 @@
     <string name="menu_import_xml">Importieren (XML)</string>
     <string name="menu_export_xml">Exportieren (XML)</string>
     <string name="menu_delete_all">Alle Daten löschen</string>
+    <string name="menu_grouping">Übungsgruppen</string>
 
     <!-- Toasts -->
     <string name="toast_training_created">Training erstellt</string>
@@ -191,41 +194,40 @@
     <string name="muscle_triceps">Trizeps</string>
     <string name="muscle_gluteus">Gluteus</string>
     <string name="muscle_hamstrings">Hamstrings</string>
-    <string name="menu_grouping">Gruppierung</string>
 
-    <string name="btn_new_group">Neue Gruppe</string>
-    <string name="subtitle_groups">Gruppen</string>
+    <string name="exercise_cf01">Seated Leg Curl</string>
+    <string name="exercise_cf02">Leg Extension</string>
+    <string name="exercise_cf03">Squat</string>
+    <string name="exercise_cf04">Triceps Press</string>
+    <string name="exercise_cf05">Biceps Curl</string>
+    <string name="exercise_cf06">Shoulder Press</string>
+    <string name="exercise_cf07">Seated Row</string>
+    <string name="exercise_cf08">Lat Pulldown</string>
+    <string name="exercise_cf09">Ab Crunch</string>
+    <string name="exercise_cf10">Chest Press</string>
+    <string name="exercise_cf11">Abduktion</string>
+    <string name="exercise_cf12">Adduktion</string>
+    <string name="exercise_cf13">Beinpresse sitzend</string>
+    <string name="exercise_cf14">Leg Curl</string>
+    <string name="exercise_cf15">Glutaeus</string>
+    <string name="exercise_cf16">Dip/Klimmzug unterstützt</string>
+    <string name="exercise_cf17">Butterfly / Hinterer Deltoideus</string>
+    <string name="exercise_cf18">Low Row</string>
+    <string name="exercise_cf19">Schulterdrücken</string>
+    <string name="exercise_cf20">Seitheben</string>
+    <string name="exercise_cf22">Latzug</string>
+    <string name="exercise_cf21">Rudern</string>
+    <string name="exercise_cf23">Rumpfdrehung</string>
+    <string name="exercise_cf24">Armbeuger</string>
+    <string name="exercise_cf25">Beinstrecker</string>
+    <string name="exercise_cf26">Beinbeuger sitzend</string>
+    <string name="exercise_cf27">Rückenstrecker</string>
+    <string name="exercise_cf28">Crunch</string>
 
-    <string name="exercise_cf01">CF01: Seated Leg Curl</string>
-    <string name="exercise_cf02">CF02: Leg Extension</string>
-    <string name="exercise_cf03">CF03: Squat</string>
-    <string name="exercise_cf04">CF04: Triceps Press</string>
-    <string name="exercise_cf05">CF05: Biceps Curl</string>
-    <string name="exercise_cf06">CF06: Shoulder Press</string>
-    <string name="exercise_cf07">CF07: Seated Row</string>
-    <string name="exercise_cf08">CF08: Lat Pulldown</string>
-    <string name="exercise_cf09">CF09: Ab Crunch</string>
-    <string name="exercise_cf10">CF10: Chest Press</string>
-    <string name="exercise_cf11">CF11: Abduktion</string>
-    <string name="exercise_cf12">CF12: Adduktion</string>
-    <string name="exercise_cf13">CF13: Beinpresse sitzend</string>
-    <string name="exercise_cf14">CF14: Leg Curl</string>
-    <string name="exercise_cf15">CF15: Glutaeus</string>
-    <string name="exercise_cf16">CF16: Dip/Klimmzug unterstützt</string>
-    <string name="exercise_cf17">CF17: Butterfly / Hinterer Deltoideus</string>
-    <string name="exercise_cf18">CF18: Low Row</string>
-    <string name="exercise_cf19">CF19: Schulterdrücken</string>
-    <string name="exercise_cf20">CF20: Seitheben</string>
-    <string name="exercise_cf22">CF22: Latzug</string>
-    <string name="exercise_cf21">CF21: Rudern</string>
-    <string name="exercise_cf23">CF23: Rumpfdrehung</string>
-    <string name="exercise_cf24">CF24: Armbeuger</string>
-    <string name="exercise_cf25">CF25: Beinstrecker</string>
-    <string name="exercise_cf26">CF26: Beinbeuger sitzend</string>
-    <string name="exercise_cf27">CF27: Rückenstrecker</string>
-    <string name="exercise_cf28">CF28: Crunch</string>
+    <!-- Demo Gruppen -->
     <string name="group_ks">Kurzhantel</string>
     <string name="group_kb">Kettlebell</string>
     <string name="group_cf">Studio</string>
+    <string name="group_ht">Heimtraining</string>
 
 </resources>

@@ -80,6 +80,11 @@ public class GroupDatabase {
         Group gCF = groups.get("group_cf");
         if (null == gCF) gCF = new Group("group_cf",context.getString(R.string.group_cf));
 
+        // Gruppe: Studio
+        Group gHT = groups.get("group_ht");
+        if (null == gHT) gHT = new Group("group_ht",context.getString(R.string.group_ht));
+
+
         // Alle Übungen durchgehen und zuordnen
         for (Exercise ex : db.exercises.exercises.values()) {
 
@@ -96,12 +101,17 @@ public class GroupDatabase {
             if (id.startsWith("cf") && !gCF.exerciseIds.contains(ex.getId())) {
                 gCF.exerciseIds.add(ex.getId());
             }
+
+            if ((id.startsWith("kh") | (id.startsWith("kb"))) && !gHT.exerciseIds.contains(ex.getId())) {
+                gHT.exerciseIds.add(ex.getId());
+            }
         }
 
         // Gruppen speichern
         groups.put(gKH.getId(), gKH);
         groups.put(gKB.getId(), gKB);
         groups.put(gCF.getId(), gCF);
+        groups.put(gHT.getId(), gHT);
 
         save();
 
@@ -114,8 +124,16 @@ public class GroupDatabase {
                 ex.groupIds.add("group_kh");
             }
 
+            if (id.startsWith("kh") && !ex.groupIds.contains("group_ht")) {
+                ex.groupIds.add("group_ht");
+            }
+
             if (id.startsWith("kb") && !ex.groupIds.contains("group_kb")) {
                 ex.groupIds.add("group_kb");
+            }
+
+            if (id.startsWith("kb") && !ex.groupIds.contains("group_ht")) {
+                ex.groupIds.add("group_ht");
             }
 
             if (id.startsWith("cf") && !ex.groupIds.contains("group_cf")) {
